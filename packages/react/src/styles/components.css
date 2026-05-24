@@ -951,3 +951,264 @@
     display: none;
   }
 }
+
+/* ─────── CmdKOverlay (T3) ─────── */
+.tln-cmdk-back {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  z-index: var(--z-cmdk, 9000);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 14vh;
+  animation: tln-fade-in 120ms var(--ease-out, ease-out);
+}
+.tln-cmdk-modal {
+  width: 640px;
+  max-width: calc(100% - 40px);
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  overflow: hidden;
+  box-shadow: var(--shadow-3);
+  display: flex;
+  flex-direction: column;
+  max-height: 70vh;
+}
+.tln-cmdk-search {
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  height: 52px;
+  border-bottom: 1px solid var(--line);
+  gap: 12px;
+  flex-shrink: 0;
+}
+.tln-cmdk-search input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--fg-0);
+}
+.tln-cmdk-search input::placeholder { color: var(--fg-3); }
+.tln-cmdk-esc {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 2px 6px;
+  flex-shrink: 0;
+}
+.tln-cmdk-list { overflow: auto; padding: 6px 0; }
+.tln-cmdk-group-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 8px 20px 4px;
+}
+.tln-cmdk-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  cursor: pointer;
+  color: var(--fg-2);
+}
+.tln-cmdk-item:hover,
+.tln-cmdk-item--active { background: var(--bg-hover); color: var(--fg-0); }
+.tln-cmdk-item__icon { display: flex; align-items: center; color: var(--fg-3); flex-shrink: 0; }
+.tln-cmdk-item__name { flex: 1; font-size: var(--text-base); }
+.tln-cmdk-item__hint {
+  color: var(--fg-3);
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.tln-cmdk-item__kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+}
+.tln-cmdk-empty {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--fg-3);
+  font-size: 13px;
+}
+.tln-cmdk-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  flex-shrink: 0;
+}
+
+/* ─────── TweaksPanel (T3) ─────── */
+.tln-tweaks {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 25;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  box-shadow: var(--shadow-2);
+  width: 240px;
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
+.tln-tweaks--collapsed { width: auto; }
+.tln-tweaks__head {
+  height: 36px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+  background: transparent;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  color: inherit;
+  font-family: inherit;
+}
+.tln-tweaks--collapsed .tln-tweaks__head { border-bottom: 0; }
+.tln-tweaks__label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-2);
+  flex: 1;
+}
+.tln-tweaks__chev { color: var(--fg-3); transition: transform var(--dur-base); }
+.tln-tweaks--collapsed .tln-tweaks__chev { transform: rotate(180deg); }
+.tln-tweaks__body {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tln-tweaks__row { display: flex; flex-direction: column; gap: 6px; }
+.tln-tweaks__key {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.tln-tweaks__swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.tln-tweaks__swatch {
+  height: 24px;
+  border-radius: var(--r-1);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  position: relative;
+  transition: transform var(--dur-fast);
+}
+.tln-tweaks__swatch:hover { transform: translateY(-1px); }
+.tln-tweaks__swatch[aria-pressed='true'] {
+  outline: 2px solid var(--fg-0);
+  outline-offset: 2px;
+}
+
+/* ─────── SandboxStateBar (T3) ─────── */
+.tln-state-bar { display: flex; flex-direction: column; gap: 16px; }
+.tln-state-bar__track {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg-3);
+}
+.tln-state-bar__segment { transition: flex 280ms var(--ease-out, ease-out); }
+.tln-state-bar__legend {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px 16px;
+}
+.tln-state-bar__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+}
+.tln-state-bar__swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.tln-state-bar__legend-label { color: var(--fg-2); flex: 1; }
+.tln-state-bar__legend-count {
+  font-family: var(--font-mono);
+  color: var(--fg-0);
+  font-size: 12px;
+  font-weight: 500;
+}
+.tln-state-bar__legend-count--zero { color: var(--fg-3); }
+
+/* ─────── LoginLayout (T3) ─────── */
+.tln-login-layout {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: var(--bg-1);
+}
+@media (max-width: 900px) {
+  .tln-login-layout { grid-template-columns: 1fr; }
+  .tln-login-layout__left { display: none; }
+}
+.tln-login-layout__left {
+  background: var(--bg-0);
+  position: relative;
+  overflow: hidden;
+  padding: 48px 56px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+}
+.tln-login-layout__left::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
+  pointer-events: none;
+  mask-image: radial-gradient(at 30% 40%, black 0%, transparent 70%);
+}
+.tln-login-layout__right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: var(--bg-1);
+}

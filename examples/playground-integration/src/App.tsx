@@ -6,6 +6,7 @@ import {
   PageHeader, FilterBar, StatCard, StatCardGrid,
   ResRow, TerminalChrome, RecordingPlayer,
   FormSection, FormGrid, MemberRow,
+  CmdKOverlay, TweaksPanel, SandboxStateBar, LoginLayout,
 } from '@talon-sandbox/react';
 import type { TableColumn } from '@talon-sandbox/react';
 
@@ -378,6 +379,54 @@ export default function App() {
           />
         </div>
       </section>
+
+      {/* CmdKOverlay */}
+      <section>
+        <h2 style={h2Style}>CmdKOverlay</h2>
+        <CmdKOverlayDemo />
+      </section>
+
+      {/* TweaksPanel */}
+      <section>
+        <h2 style={h2Style}>TweaksPanel</h2>
+        <TweaksPanelDemo />
+      </section>
+
+      {/* SandboxStateBar */}
+      <section>
+        <h2 style={h2Style}>SandboxStateBar</h2>
+        <SandboxStateBar
+          counts={{
+            running: 14,
+            'pulling-image': 2,
+            provisioning: 1,
+            idle: 5,
+            paused: 3,
+            terminating: 1,
+            failed: 2,
+            evicted: 1,
+          }}
+        />
+      </section>
+
+      {/* LoginLayout */}
+      <section>
+        <h2 style={h2Style}>LoginLayout</h2>
+        <div style={{ height: 320, position: 'relative', overflow: 'hidden', border: '1px solid var(--line, #333)', borderRadius: 8 }}>
+          <LoginLayout
+            left={
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <strong style={{ fontFamily: 'monospace' }}>talon</strong>
+                <p style={{ marginTop: 'auto', fontSize: 13, opacity: 0.7 }}>Agent sandbox runtime — 90ms cold start</p>
+              </div>
+            }
+          >
+            <div style={{ textAlign: 'center', fontFamily: 'monospace', fontSize: 13 }}>
+              ← form card slot
+            </div>
+          </LoginLayout>
+        </div>
+      </section>
     </div>
   );
 }
@@ -398,6 +447,53 @@ function FilterBarDemo() {
       onChange={setFilter}
       search={{ value: search, onChange: setSearch, placeholder: 'Search sandboxes…' }}
     />
+  );
+}
+
+function CmdKOverlayDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)} kbd="⌘K">Open CmdK</Button>
+      <CmdKOverlay
+        open={open}
+        onClose={() => setOpen(false)}
+        items={[
+          { group: 'Navigation', name: 'Dashboard', hint: 'g d', kbd: 'G D', action: () => {} },
+          { group: 'Navigation', name: 'Sandboxes', hint: 'g s', kbd: 'G S', action: () => {} },
+          { group: 'Actions', name: 'New Sandbox', kbd: 'C N', action: () => {} },
+          { group: 'Actions', name: 'Sign out', action: () => {} },
+        ]}
+      />
+    </>
+  );
+}
+
+function TweaksPanelDemo() {
+  const [theme, setTheme] = useState<string>('ink');
+  const [mode, setMode] = useState<string>('dark');
+  const [density, setDensity] = useState<string>('standard');
+  const [font, setFont] = useState<string>('geist');
+  const [lang, setLang] = useState<string>('en');
+  return (
+    <div style={{ position: 'relative', height: 260 }}>
+      <div style={{ position: 'absolute', right: 0, bottom: 0 }}>
+        <TweaksPanel
+          theme={theme as any}
+          mode={mode as any}
+          density={density as any}
+          font={font as any}
+          lang={lang as any}
+          onSet={(k, v) => {
+            if (k === 'theme') setTheme(v);
+            else if (k === 'mode') setMode(v);
+            else if (k === 'density') setDensity(v);
+            else if (k === 'font') setFont(v);
+            else if (k === 'lang') setLang(v);
+          }}
+        />
+      </div>
+    </div>
   );
 }
 
