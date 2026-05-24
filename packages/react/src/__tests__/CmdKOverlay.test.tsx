@@ -25,14 +25,14 @@ describe('CmdKOverlay', () => {
 
   test('filters items on query input', () => {
     render(<CmdKOverlay open onClose={vi.fn()} items={items} />);
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'dash' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'dash' } });
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(screen.queryByText('Sandboxes')).not.toBeInTheDocument();
   });
 
   test('shows empty state when no results', () => {
     render(<CmdKOverlay open onClose={vi.fn()} items={items} />);
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'zzznomatch' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'zzznomatch' } });
     expect(screen.getByText(/No results/i)).toBeInTheDocument();
   });
 
@@ -84,5 +84,33 @@ describe('CmdKOverlay', () => {
     render(<CmdKOverlay open onClose={vi.fn()} items={items} />);
     expect(screen.getByText('Navigation')).toBeInTheDocument();
     expect(screen.getByText('Actions')).toBeInTheDocument();
+  });
+
+  test('ArrowDown on empty filtered list does not set activeIdx to -1', () => {
+    const { rerender } = render(<CmdKOverlay open onClose={vi.fn()} items={items} />);
+    // Filter to empty
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'zzznomatch' } });
+    // ArrowDown should not crash or produce -1
+    fireEvent.keyDown(document, { key: 'ArrowDown' });
+    // No option should show as selected (empty list renders no options)
+    expect(document.querySelectorAll('[aria-selected="true"]').length).toBe(0);
+    rerender(<CmdKOverlay open onClose={vi.fn()} items={items} />);
+  });
+
+  test('input has aria-controls pointing to listbox id', () => {
+    render(<CmdKOverlay open onClose={vi.fn()} items={items} />);
+    const input = screen.getByRole('combobox');
+    const controlsId = input.getAttribute('aria-controls');
+    expect(controlsId).toBeTruthy();
+    expect(document.getElementById(controlsId!)).toBeInTheDocument();
+  });
+
+  test('input aria-activedescendant matches active option id', () => {
+    render(<CmdKOverlay open onClose={vi.fn()} items={items} />);
+    const input = screen.getByRole('combobox');
+    const activeDescId = input.getAttribute('aria-activedescendant');
+    expect(activeDescId).toBeTruthy();
+    expect(document.getElementById(activeDescId!)).toBeInTheDocument();
+    expect(document.getElementById(activeDescId!)).toHaveAttribute('aria-selected', 'true');
   });
 });

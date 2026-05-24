@@ -14,5 +14,6 @@ export interface TweaksPanelProps {
   font: TweaksFont;
   lang: TweaksLang;
   onSet: (key: 'theme' | 'mode' | 'density' | 'font' | 'lang', value: string) => void;
+  defaultOpen?: boolean;
   className?: string;
 }

@@ -67,4 +67,15 @@ describe('TweaksPanel', () => {
     fireEvent.click(screen.getByRole('button', { name: /tweaks/i }));
     expect(screen.getByRole('button', { name: /tweaks/i })).toHaveAttribute('aria-expanded', 'false');
   });
+
+  test('head button has no aria-controls attribute', () => {
+    render(<TweaksPanel {...defaultProps} />);
+    expect(screen.getByRole('button', { name: /tweaks/i })).not.toHaveAttribute('aria-controls');
+  });
+
+  test('defaultOpen=false starts collapsed', () => {
+    render(<TweaksPanel {...defaultProps} defaultOpen={false} />);
+    expect(screen.queryByText('Theme')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /tweaks/i })).toHaveAttribute('aria-expanded', 'false');
+  });
 });

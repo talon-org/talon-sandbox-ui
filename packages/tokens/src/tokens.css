@@ -258,10 +258,11 @@
   --dur-slow: 280ms;
 
   /* ── z-index ── */
-  --z-cmdk: 35;
+  --z-tweaks: 25;
   --z-drawer: 40;
   --z-dialog: 50;
   --z-toast: 60;
+  --z-cmdk: 70;
 
   /* ── Selection (for ::selection) ── */
   --selection-bg: rgba(125, 151, 255, 0.22);

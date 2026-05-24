@@ -22,9 +22,10 @@ export function TweaksPanel({
   font,
   lang,
   onSet,
+  defaultOpen = true,
   className,
 }: TweaksPanelProps) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(defaultOpen);
 
   return (
     <div className={cx('tln-tweaks', !open && 'tln-tweaks--collapsed', className)}>
@@ -33,7 +34,6 @@ export function TweaksPanel({
         className="tln-tweaks__head"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        aria-controls="tln-tweaks-body"
       >
         <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
           <path d="M8 2L14 14H2L8 2Z"/>
@@ -50,7 +50,7 @@ export function TweaksPanel({
       </button>
 
       {open && (
-        <div id="tln-tweaks-body" className="tln-tweaks__body">
+        <div className="tln-tweaks__body">
           <div className="tln-tweaks__row">
             <span className="tln-tweaks__key">Theme</span>
             <div className="tln-tweaks__swatches">
