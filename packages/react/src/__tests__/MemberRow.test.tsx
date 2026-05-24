@@ -39,4 +39,22 @@ describe('MemberRow', () => {
     const { container } = render(<MemberRow email="x@y.com" />);
     expect(container.querySelector('.tln-member-row')).toBeInTheDocument();
   });
+
+  // I4 — avatar as ReactNode
+  test('renders ReactNode avatar directly', () => {
+    const { container } = render(
+      <MemberRow email="x@y.com" avatar={<img src="/avatar.png" alt="avatar" />} />,
+    );
+    expect(container.querySelector('img[alt="avatar"]')).toBeInTheDocument();
+  });
+
+  test('renders initials when avatar is a string', () => {
+    const { getByText } = render(<MemberRow email="bob@example.com" avatar="BB" />);
+    expect(getByText('BB')).toBeInTheDocument();
+  });
+
+  test('falls back to email initial when no avatar prop', () => {
+    const { getByText } = render(<MemberRow email="charlie@x.com" />);
+    expect(getByText('C')).toBeInTheDocument();
+  });
 });

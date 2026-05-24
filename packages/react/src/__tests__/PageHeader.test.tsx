@@ -29,4 +29,22 @@ describe('PageHeader', () => {
     const { container } = render(<PageHeader title="T" noBorder />);
     expect(container.firstChild).toHaveClass('tln-page-header--no-border');
   });
+
+  // I5 — headingLevel
+  test('renders title inside h1 by default', () => {
+    const { container } = render(<PageHeader title="My Title" />);
+    expect(container.querySelector('h1')).toBeInTheDocument();
+    expect(container.querySelector('h1')?.textContent).toContain('My Title');
+  });
+
+  test('renders title inside h2 when headingLevel=2', () => {
+    const { container } = render(<PageHeader title="Section" headingLevel={2} />);
+    expect(container.querySelector('h2')).toBeInTheDocument();
+    expect(container.querySelector('h2')?.textContent).toContain('Section');
+  });
+
+  test('renders title inside h3 when headingLevel=3', () => {
+    const { container } = render(<PageHeader title="Sub" headingLevel={3} />);
+    expect(container.querySelector('h3')).toBeInTheDocument();
+  });
 });

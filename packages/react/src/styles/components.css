@@ -843,3 +843,111 @@
   font-family: var(--font-mono);
   font-size: 10.5px; color: var(--fg-3);
 }
+
+/* ─────── FilterBar / sbx-filters (C2) ─────── */
+.sbx-filters {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.sbx-filters .group,
+.tln-filterbar__group {
+  display: flex; gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: 2px;
+  background: var(--bg-2);
+}
+.sbx-filter {
+  border: 0; background: transparent;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-2);
+  padding: 0 9px; height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.sbx-filter:hover { color: var(--fg-1); background: var(--bg-hover); }
+.sbx-filter[aria-pressed='true'] {
+  color: var(--fg-0);
+  background: var(--bg-3);
+  box-shadow: 0 0 0 1px var(--line-strong) inset;
+}
+.sbx-filter .num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+}
+.sbx-filter[aria-pressed='true'] .num { color: var(--acc-strong); }
+
+/* N3 — FilterBar group label */
+.tln-filterbar__group-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-3);
+  align-self: center;
+  padding: 0 4px 0 2px;
+}
+
+/* ─────── FormSection / form-sect (C2) ─────── */
+.tln-form-section,
+.form-sect {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.tln-form-section:first-of-type,
+.form-sect:first-of-type { border-top: 0; padding-top: 0; }
+.tln-form-section__title,
+.form-sect-title {
+  font-size: 13px; color: var(--fg-0);
+  font-weight: 500;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 4px;
+}
+.tln-form-section__title .ic,
+.form-sect-title .ic { color: var(--fg-3); }
+.tln-form-section__title .hint,
+.form-sect-title .hint {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-3);
+}
+
+/* ─────── FormGrid (C2) ─────── */
+.tln-form-grid,
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.tln-form-grid.tln-form-grid--cols-1,
+.tln-form-grid.full,
+.form-grid.full { grid-template-columns: 1fr; }
+
+/* ─────── RecordingPlayer frame kinds (Deviation 1) ─────── */
+.tln-rec-player .frame--cmd   { color: var(--acc); }
+.tln-rec-player .frame--out   { color: var(--fg-1); }
+.tln-rec-player .frame--ok    { color: var(--ok); }
+.tln-rec-player .frame--err   { color: var(--danger, var(--err)); }
+.tln-rec-player .frame--agent { color: var(--magenta, var(--fg-2)); font-style: italic; }
+
+/* N2 — RecordingPlayer responsive */
+@media (max-width: 720px) {
+  .tln-rec-player {
+    grid-template-columns: 1fr;
+  }
+  .tln-rec-player__sidebar,
+  .tln-rec-player__side {
+    display: none;
+  }
+}

@@ -2,6 +2,10 @@ import { forwardRef } from 'react';
 import { cx } from '../../primitives/clsx.js';
 import type { StatCardProps, StatCardGridProps } from './StatCard.types.js';
 
+function iconColorVar(c: string): string {
+  return `var(--${c === 'neutral' ? 'fg-3' : c})`;
+}
+
 export const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
   { label, value, unit, delta, deltaKind = 'neutral', icon, iconColor, className },
   ref,
@@ -13,7 +17,7 @@ export const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatC
           {icon && (
             <span
               className="tln-stat-card__icon"
-              style={iconColor ? { color: iconColor } : undefined}
+              style={iconColor ? { color: iconColorVar(iconColor) } : undefined}
             >
               {icon}
             </span>
@@ -28,6 +32,13 @@ export const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatC
               deltaKind === 'down' && 'tln-stat-card__delta--down',
               deltaKind === 'neutral' && 'tln-stat-card__delta--neutral',
             )}
+            aria-label={
+              deltaKind === 'up'
+                ? `上升 ${delta}`
+                : deltaKind === 'down'
+                  ? `下降 ${delta}`
+                  : delta
+            }
           >
             {delta}
           </span>

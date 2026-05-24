@@ -70,4 +70,26 @@ describe('FilterBar', () => {
     );
     expect(getByText('10')).toBeInTheDocument();
   });
+
+  // N3 — group label rendering
+  test('renders group label when provided', () => {
+    const labeledGroups = [
+      {
+        label: 'Status',
+        items: [{ value: 'all', label: 'All', count: 5 }],
+      },
+    ];
+    const { getByText } = render(
+      <FilterBar groups={labeledGroups} value="all" onChange={() => {}} />,
+    );
+    expect(getByText('Status')).toBeInTheDocument();
+    expect(getByText('Status').className).toContain('tln-filterbar__group-label');
+  });
+
+  test('does not render group label span when label is absent', () => {
+    const { container } = render(
+      <FilterBar groups={groups} value="all" onChange={() => {}} />,
+    );
+    expect(container.querySelector('.tln-filterbar__group-label')).not.toBeInTheDocument();
+  });
 });

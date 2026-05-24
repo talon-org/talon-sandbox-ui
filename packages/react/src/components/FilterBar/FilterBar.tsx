@@ -10,6 +10,9 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(function Fil
     <div ref={ref} className={cx('tln-filterbar', 'sbx-filters', className)}>
       {groups.map((group, gi) => (
         <div key={gi} className="tln-filterbar__group group">
+          {group.label && (
+            <span className="tln-filterbar__group-label">{group.label}</span>
+          )}
           {group.items.map((item) => (
             <button
               key={item.value}

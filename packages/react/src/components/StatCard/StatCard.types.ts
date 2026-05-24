@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 export type StatCardDeltaKind = 'up' | 'down' | 'neutral';
 
+export type StatCardIconColor = 'acc' | 'ok' | 'warn' | 'danger' | 'neutral';
+
 export interface StatCardProps {
   label: ReactNode;
   value: ReactNode;
@@ -9,7 +11,7 @@ export interface StatCardProps {
   delta?: string;
   deltaKind?: StatCardDeltaKind;
   icon?: ReactNode;
-  iconColor?: string;
+  iconColor?: StatCardIconColor;
   className?: string;
 }
 

@@ -7,4 +7,6 @@ export interface PageHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 't
   desc?: ReactNode;
   actions?: ReactNode;
   noBorder?: boolean;
+  /** Heading element level for the title. Default: 1 (renders <h1>). */
+  headingLevel?: 1 | 2 | 3;
 }

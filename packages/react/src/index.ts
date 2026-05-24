@@ -64,8 +64,8 @@ export type { ResRowProps, ResRowColor } from './components/ResRow/index.js';
 export { TerminalChrome } from './components/TerminalChrome/index.js';
 export type { TerminalChromeProps, TerminalChromeSandbox } from './components/TerminalChrome/index.js';
 
-export { RecordingPlayer } from './components/RecordingPlayer/index.js';
-export type { RecordingPlayerProps, RecordingFrame, AgentStep, RecordingMeta } from './components/RecordingPlayer/index.js';
+export { RecordingPlayer, binarySearch } from './components/RecordingPlayer/index.js';
+export type { RecordingPlayerProps, RecordingFrame, AgentStep, RecordingMeta, FrameKind } from './components/RecordingPlayer/index.js';
 
 export { FormSection, FormGrid } from './components/FormSection/index.js';
 export type { FormSectionProps, FormGridProps } from './components/FormSection/index.js';

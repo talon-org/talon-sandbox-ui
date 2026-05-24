@@ -3,9 +3,11 @@ import { cx } from '../../primitives/clsx.js';
 import type { PageHeaderProps } from './PageHeader.types.js';
 
 export const PageHeader = forwardRef<HTMLDivElement, PageHeaderProps>(function PageHeader(
-  { eyebrow, title, num, desc, actions, noBorder = false, className, ...rest },
+  { eyebrow, title, num, desc, actions, noBorder = false, headingLevel, className, ...rest },
   ref,
 ) {
+  const Heading = `h${headingLevel ?? 1}` as 'h1' | 'h2' | 'h3';
+
   return (
     <div
       ref={ref}
@@ -15,10 +17,10 @@ export const PageHeader = forwardRef<HTMLDivElement, PageHeaderProps>(function P
       <div className="tln-page-header__row">
         <div style={{ minWidth: 0 }}>
           {eyebrow && <div className="tln-page-header__eyebrow">{eyebrow}</div>}
-          <div className="tln-page-header__title">
+          <Heading className="tln-page-header__title">
             {title}
             {num != null && <span className="tln-page-header__num">{num}</span>}
-          </div>
+          </Heading>
           {desc && <div className="tln-page-header__desc">{desc}</div>}
         </div>
         {actions && <div className="tln-page-header__actions">{actions}</div>}

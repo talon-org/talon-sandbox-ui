@@ -1,2 +1,2 @@
-export { RecordingPlayer } from './RecordingPlayer.js';
-export type { RecordingPlayerProps, RecordingFrame, AgentStep, RecordingMeta } from './RecordingPlayer.types.js';
+export { RecordingPlayer, binarySearch } from './RecordingPlayer.js';
+export type { RecordingPlayerProps, RecordingFrame, AgentStep, RecordingMeta, FrameKind } from './RecordingPlayer.types.js';

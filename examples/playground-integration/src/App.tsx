@@ -7,7 +7,7 @@ import {
   ResRow, TerminalChrome, RecordingPlayer,
   FormSection, FormGrid, MemberRow,
 } from '@talon-sandbox/react';
-import type { TableColumn, RecordingFrame, AgentStep } from '@talon-sandbox/react';
+import type { TableColumn } from '@talon-sandbox/react';
 
 const variants = ['primary', 'default', 'ghost', 'danger'] as const;
 const sizes = ['sm', 'md', 'lg'] as const;
@@ -360,15 +360,20 @@ export default function App() {
         <div style={{ maxWidth: 480 }}>
           <MemberRow
             email="alice@acme.com"
-            role={<Badge variant="info">admin</Badge>}
+            role={<Badge variant="magenta">admin</Badge>}
             joinedAt="3 days ago"
             actions={<Button size="sm" variant="ghost" iconOnly aria-label="More">…</Button>}
           />
           <MemberRow
-            avatar="BB"
             email="bob@acme.com"
-            role={<Badge>member</Badge>}
+            role={<Badge variant="info">member</Badge>}
             joinedAt="1 month ago"
+            actions={<Button size="sm" variant="ghost" iconOnly aria-label="More">…</Button>}
+          />
+          <MemberRow
+            email="carol@acme.com"
+            role={<Badge variant="neutral">viewer</Badge>}
+            joinedAt="2 weeks ago"
             actions={<Button size="sm" variant="ghost" iconOnly aria-label="More">…</Button>}
           />
         </div>
@@ -396,29 +401,34 @@ function FilterBarDemo() {
   );
 }
 
-const demoFrames: RecordingFrame[] = [
-  { time: 0, text: '$ npm install' },
-  { time: 2, text: 'added 412 packages in 8.2s' },
-  { time: 5, text: '$ npm run dev' },
-];
-const demoSteps: AgentStep[] = [
-  { time: 0, title: 'Install dependencies' },
-  { time: 5, title: 'Start dev server' },
-];
-
 function RecordingPlayerDemo() {
   const [t, setT] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [speed, setSpeed] = useState(1);
   return (
     <div style={{ height: 320, border: '1px solid var(--line, #333)', borderRadius: 8, overflow: 'hidden' }}>
       <RecordingPlayer
         recording={{ id: 'rec_demo', name: 'Demo Recording', duration: 30 }}
-        frames={demoFrames}
-        steps={demoSteps}
+        frames={[
+          { time: 0, text: '$ npm install', kind: 'cmd' },
+          { time: 2, text: 'added 412 packages in 8.2s', kind: 'out' },
+          { time: 5, text: '$ npm run dev', kind: 'cmd' },
+          { time: 7, text: 'ready in 1.2s', kind: 'ok' },
+          { time: 10, text: 'error: port 3000 in use', kind: 'err' },
+          { time: 12, text: '↳ agent: retrying on port 3001', kind: 'agent' },
+        ]}
+        steps={[
+          { time: 0, title: 'Install dependencies' },
+          { time: 5, title: 'Start dev server' },
+          { time: 12, title: 'Agent recovery' },
+        ]}
         currentTime={t}
         onSeek={setT}
         isPlaying={playing}
         onTogglePlay={() => setPlaying((p) => !p)}
+        speed={speed}
+        onSpeedChange={setSpeed}
+        speedOptions={[0.5, 1, 2]}
         onBack={() => alert('back')}
       />
     </div>
