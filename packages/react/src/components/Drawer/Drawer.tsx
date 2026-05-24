@@ -1,9 +1,15 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../primitives/clsx.js';
+import { useFocusTrap } from '../../primitives/useFocusTrap.js';
 import type { DrawerProps } from './Drawer.types.js';
 
-export function Drawer({ open, onClose, side = 'right', width = 560, children, className }: DrawerProps) {
+export function Drawer({ open, onClose, title, side = 'right', width = 560, children, className }: DrawerProps) {
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+
+  useFocusTrap(drawerRef, open);
+
   const handleEscape = useCallback(
     (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); },
     [onClose],
@@ -30,13 +36,15 @@ export function Drawer({ open, onClose, side = 'right', width = 560, children, c
         aria-hidden="true"
       />
       <div
+        ref={drawerRef}
         className={cx('tln-drawer', className)}
         role="dialog"
         aria-modal="true"
+        aria-labelledby={titleId}
         style={{ width: typeof width === 'number' ? `${width}px` : width, ...positionStyle }}
       >
         <div className="tln-drawer-head">
-          <div className="tln-drawer-title" />
+          <div className="tln-drawer-title" id={titleId}>{title}</div>
           <button
             type="button"
             className="tln-btn tln-btn-ghost tln-btn-sm tln-btn-icon"

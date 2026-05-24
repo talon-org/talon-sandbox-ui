@@ -10,6 +10,14 @@ export function Tabs({ value, onChange, items, className }: TabsProps) {
     } else if (e.key === 'ArrowLeft') {
       const prev = items[(idx - 1 + items.length) % items.length];
       if (prev) onChange(prev.value);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      const first = items[0];
+      if (first) onChange(first.value);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      const last = items[items.length - 1];
+      if (last) onChange(last.value);
     }
   };
 

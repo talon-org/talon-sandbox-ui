@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 
-export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'neutral';
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'magenta' | 'teal';
 export type BadgeSize = 'sm' | 'md';
 export type BadgeStatus = 'running' | 'stopped' | 'error' | 'pending';
 

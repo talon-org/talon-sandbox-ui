@@ -32,9 +32,7 @@ describe('Table', () => {
   test('onRowClick fires with row data', () => {
     const onRowClick = vi.fn();
     render(<Table columns={cols} data={data} rowKey="id" onRowClick={onRowClick} />);
-    // click anywhere in the first data row
     const rows = screen.getAllByRole('row');
-    // rows[0] is the header, rows[1] is first data row
     fireEvent.click(rows[1]!);
     expect(onRowClick).toHaveBeenCalledWith(data[0]);
   });
@@ -45,5 +43,36 @@ describe('Table', () => {
     ];
     render(<Table columns={colsWithRender} data={data} rowKey="id" />);
     expect(screen.getAllByTestId('strong-id')[0]).toBeInTheDocument();
+  });
+
+  test('empty data renders default "暂无数据" text', () => {
+    render(<Table columns={cols} data={[]} />);
+    expect(screen.getByText('暂无数据')).toBeInTheDocument();
+  });
+
+  test('empty data renders custom emptyState when provided', () => {
+    render(
+      <Table
+        columns={cols}
+        data={[]}
+        emptyState={<span data-testid="custom-empty">No items</span>}
+      />
+    );
+    expect(screen.getByTestId('custom-empty')).toBeInTheDocument();
+    expect(screen.queryByText('暂无数据')).not.toBeInTheDocument();
+  });
+
+  test('rowKey omitted falls back to index as key (no crash)', () => {
+    // Should render without throwing even without rowKey
+    render(<Table columns={cols} data={data} />);
+    expect(screen.getByText('Alpha')).toBeInTheDocument();
+  });
+
+  test('rowKey as function returns custom string key', () => {
+    const rowKey = vi.fn((row: typeof data[0], idx: number) => `custom-${idx}`);
+    render(<Table columns={cols} data={data} rowKey={rowKey} />);
+    expect(rowKey).toHaveBeenCalledTimes(2);
+    expect(rowKey).toHaveBeenCalledWith(data[0], 0);
+    expect(rowKey).toHaveBeenCalledWith(data[1], 1);
   });
 });

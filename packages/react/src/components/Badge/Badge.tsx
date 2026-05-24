@@ -8,6 +8,8 @@ const VARIANT_CLASS: Record<string, string> = {
   danger: 'err',
   info: 'info',
   neutral: 'muted',
+  magenta: 'magenta',
+  teal: 'teal',
 };
 
 const STATUS_CLASS: Record<BadgeStatus, string> = {

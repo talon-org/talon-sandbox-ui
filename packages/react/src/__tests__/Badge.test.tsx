@@ -32,6 +32,16 @@ describe('Badge', () => {
     const { container } = render(<Badge>x</Badge>);
     expect(container.querySelector('.dot')).not.toBeInTheDocument();
   });
+
+  test('magenta variant applies magenta class', () => {
+    const { container } = render(<Badge variant="magenta">m</Badge>);
+    expect(container.firstChild).toHaveClass('magenta');
+  });
+
+  test('teal variant applies teal class', () => {
+    const { container } = render(<Badge variant="teal">t</Badge>);
+    expect(container.firstChild).toHaveClass('teal');
+  });
 });
 
 describe('StatusBadge', () => {

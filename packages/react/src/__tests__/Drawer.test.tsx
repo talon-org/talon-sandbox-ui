@@ -38,4 +38,37 @@ describe('Drawer', () => {
     render(<Drawer open onClose={vi.fn()}>x</Drawer>);
     expect(document.querySelector('.tln-drawer')).toBeInTheDocument();
   });
+
+  test('renders title when provided', () => {
+    render(<Drawer open onClose={vi.fn()} title="My Drawer">x</Drawer>);
+    expect(screen.getByText('My Drawer')).toBeInTheDocument();
+  });
+
+  test('aria-labelledby points to title element', () => {
+    render(<Drawer open onClose={vi.fn()} title="Labeled Drawer">x</Drawer>);
+    const dialog = screen.getByRole('dialog');
+    const labelId = dialog.getAttribute('aria-labelledby');
+    expect(labelId).toBeTruthy();
+    const titleEl = document.getElementById(labelId!);
+    expect(titleEl?.textContent).toBe('Labeled Drawer');
+  });
+
+  test('focus enters drawer when opened', () => {
+    render(<Drawer open onClose={vi.fn()} title="D"><button>inside</button></Drawer>);
+    const dialog = screen.getByRole('dialog');
+    expect(dialog.contains(document.activeElement)).toBe(true);
+  });
+
+  test('focus is restored to trigger element when drawer closes', () => {
+    const trigger = document.createElement('button');
+    trigger.textContent = 'Open Drawer';
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const { rerender } = render(<Drawer open onClose={vi.fn()} title="D">x</Drawer>);
+    rerender(<Drawer open={false} onClose={vi.fn()} title="D">x</Drawer>);
+    expect(document.activeElement).toBe(trigger);
+
+    document.body.removeChild(trigger);
+  });
 });

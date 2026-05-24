@@ -48,4 +48,20 @@ describe('Tabs', () => {
     const { container } = render(<Tabs value="a" onChange={vi.fn()} items={items} />);
     expect(container.firstChild).toHaveClass('tln-tabs');
   });
+
+  test('keyboard Home navigates to first tab', () => {
+    const onChange = vi.fn();
+    render(<Tabs value="c" onChange={onChange} items={items} />);
+    const tabC = screen.getByRole('tab', { name: 'C' });
+    fireEvent.keyDown(tabC, { key: 'Home' });
+    expect(onChange).toHaveBeenCalledWith('a');
+  });
+
+  test('keyboard End navigates to last tab', () => {
+    const onChange = vi.fn();
+    render(<Tabs value="a" onChange={onChange} items={items} />);
+    const tabA = screen.getByRole('tab', { name: 'A' });
+    fireEvent.keyDown(tabA, { key: 'End' });
+    expect(onChange).toHaveBeenCalledWith('c');
+  });
 });
