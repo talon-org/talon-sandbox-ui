@@ -13,6 +13,9 @@ mkdirSync(dist, { recursive: true });
 const files = ['tokens.css', 'tokens.json', 'tailwind.v4.css', 'tailwind.preset.cjs'];
 for (const f of files) cpSync(resolve(src, f), resolve(dist, f));
 
+// Copy bundled fonts so they ship with the npm package
+cpSync(resolve(src, 'fonts'), resolve(dist, 'fonts'), { recursive: true });
+
 // Emit JS + d.ts shims for the JSON tokens
 const tokens = JSON.parse(readFileSync(resolve(src, 'tokens.json'), 'utf8'));
 const jsBody =
