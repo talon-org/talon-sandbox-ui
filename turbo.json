@@ -12,8 +12,7 @@
     },
     "test": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"],
-      "_todo_coverage": "TODO(coverage): outputs already includes coverage/** — enable vitest --coverage in package scripts to activate"
+      "outputs": ["coverage/**"]
     },
     "lint": {
       "outputs": []
