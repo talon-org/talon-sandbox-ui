@@ -48,3 +48,27 @@ export type { ProgressBarProps } from './components/ProgressBar/index.js';
 
 export { CodeBlock } from './components/CodeBlock/index.js';
 export type { CodeBlockProps } from './components/CodeBlock/index.js';
+
+export { PageHeader } from './components/PageHeader/index.js';
+export type { PageHeaderProps } from './components/PageHeader/index.js';
+
+export { FilterBar } from './components/FilterBar/index.js';
+export type { FilterBarProps, FilterBarGroup, FilterBarItem, FilterBarSearch } from './components/FilterBar/index.js';
+
+export { StatCard, StatCardGrid } from './components/StatCard/index.js';
+export type { StatCardProps, StatCardGridProps, StatCardDeltaKind } from './components/StatCard/index.js';
+
+export { ResRow } from './components/ResRow/index.js';
+export type { ResRowProps, ResRowColor } from './components/ResRow/index.js';
+
+export { TerminalChrome } from './components/TerminalChrome/index.js';
+export type { TerminalChromeProps, TerminalChromeSandbox } from './components/TerminalChrome/index.js';
+
+export { RecordingPlayer } from './components/RecordingPlayer/index.js';
+export type { RecordingPlayerProps, RecordingFrame, AgentStep, RecordingMeta } from './components/RecordingPlayer/index.js';
+
+export { FormSection, FormGrid } from './components/FormSection/index.js';
+export type { FormSectionProps, FormGridProps } from './components/FormSection/index.js';
+
+export { MemberRow } from './components/MemberRow/index.js';
+export type { MemberRowProps } from './components/MemberRow/index.js';

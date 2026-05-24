@@ -3,8 +3,11 @@ import {
   Button, Input, Select, Textarea, Switch, Segmented,
   Card, Badge, StatusBadge, Table, KV, Tabs, EmptyState,
   Dialog, Drawer, toast, ToastViewport, ProgressBar, CodeBlock,
+  PageHeader, FilterBar, StatCard, StatCardGrid,
+  ResRow, TerminalChrome, RecordingPlayer,
+  FormSection, FormGrid, MemberRow,
 } from '@talon-sandbox/react';
-import type { TableColumn } from '@talon-sandbox/react';
+import type { TableColumn, RecordingFrame, AgentStep } from '@talon-sandbox/react';
 
 const variants = ['primary', 'default', 'ghost', 'danger'] as const;
 const sizes = ['sm', 'md', 'lg'] as const;
@@ -267,6 +270,157 @@ export default function App() {
           {`const client = new TalonClient({ apiKey: 'sk-...' });\nawait client.sandboxes.create({ runtime: 'node:20' });`}
         </CodeBlock>
       </section>
+
+      {/* PageHeader */}
+      <section>
+        <h2 style={h2Style}>PageHeader</h2>
+        <PageHeader
+          eyebrow="SANDBOXES"
+          title="Sandboxes"
+          num={12}
+          desc="Isolated execution environments for agent workloads."
+          actions={<Button variant="primary">+ New Sandbox</Button>}
+        />
+      </section>
+
+      {/* FilterBar */}
+      <section>
+        <h2 style={h2Style}>FilterBar</h2>
+        <FilterBarDemo />
+      </section>
+
+      {/* StatCard + StatCardGrid */}
+      <section>
+        <h2 style={h2Style}>StatCard / StatCardGrid</h2>
+        <StatCardGrid cols={4}>
+          <StatCard label="Active Sandboxes" value={24} delta="+3" deltaKind="up" />
+          <StatCard label="vCPU Used" value={12.4} unit="vCPU" delta="-1.2" deltaKind="down" />
+          <StatCard label="Memory" value={48} unit="GiB" delta="0%" deltaKind="neutral" />
+          <StatCard label="Egress" value={2.1} unit="MB/s" />
+        </StatCardGrid>
+      </section>
+
+      {/* ResRow */}
+      <section>
+        <h2 style={h2Style}>ResRow</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 480 }}>
+          <ResRow label="vCPU" used={1.24} max={2} unit="vCPU" />
+          <ResRow label="Memory" used={1542} max={4096} unit="MiB" color="ok" />
+          <ResRow label="Disk" used={8} max={12} unit="GiB" color="warn" />
+          <ResRow label="Egress" used={3.2} max={5} unit="MB/s" color="danger" />
+        </div>
+      </section>
+
+      {/* TerminalChrome */}
+      <section>
+        <h2 style={h2Style}>TerminalChrome</h2>
+        <div style={{ height: 240, border: '1px solid var(--line, #333)', borderRadius: 8, overflow: 'hidden' }}>
+          <TerminalChrome
+            sandbox={{ id: 'sb-demo01', name: 'main shell' }}
+            onBack={() => alert('back')}
+            recording={false}
+            onToggleRecord={() => {}}
+            bottomStatus={<span>80 × 24 · utf-8 · connected</span>}
+          >
+            <div style={{ fontFamily: 'monospace', fontSize: 13, padding: 8, color: '#d4d7e0' }}>
+              $ talon status
+            </div>
+          </TerminalChrome>
+        </div>
+      </section>
+
+      {/* RecordingPlayer */}
+      <section>
+        <h2 style={h2Style}>RecordingPlayer</h2>
+        <RecordingPlayerDemo />
+      </section>
+
+      {/* FormSection + FormGrid */}
+      <section>
+        <h2 style={h2Style}>FormSection / FormGrid</h2>
+        <div style={{ maxWidth: 520 }}>
+          <FormSection title="Basic" hint="required">
+            <FormGrid cols={2}>
+              <Input placeholder="Name" />
+              <Input placeholder="Image" />
+            </FormGrid>
+          </FormSection>
+          <FormSection title="Resources">
+            <FormGrid cols={2}>
+              <Input placeholder="vCPU" type="number" />
+              <Input placeholder="Memory (MiB)" type="number" />
+            </FormGrid>
+          </FormSection>
+        </div>
+      </section>
+
+      {/* MemberRow */}
+      <section>
+        <h2 style={h2Style}>MemberRow</h2>
+        <div style={{ maxWidth: 480 }}>
+          <MemberRow
+            email="alice@acme.com"
+            role={<Badge variant="info">admin</Badge>}
+            joinedAt="3 days ago"
+            actions={<Button size="sm" variant="ghost" iconOnly aria-label="More">…</Button>}
+          />
+          <MemberRow
+            avatar="BB"
+            email="bob@acme.com"
+            role={<Badge>member</Badge>}
+            joinedAt="1 month ago"
+            actions={<Button size="sm" variant="ghost" iconOnly aria-label="More">…</Button>}
+          />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function FilterBarDemo() {
+  const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
+  return (
+    <FilterBar
+      groups={[{
+        items: [
+          { value: 'all', label: 'All', count: 12 },
+          { value: 'running', label: 'Running', count: 8 },
+          { value: 'stopped', label: 'Stopped', count: 4 },
+        ],
+      }]}
+      value={filter}
+      onChange={setFilter}
+      search={{ value: search, onChange: setSearch, placeholder: 'Search sandboxes…' }}
+    />
+  );
+}
+
+const demoFrames: RecordingFrame[] = [
+  { time: 0, text: '$ npm install' },
+  { time: 2, text: 'added 412 packages in 8.2s' },
+  { time: 5, text: '$ npm run dev' },
+];
+const demoSteps: AgentStep[] = [
+  { time: 0, title: 'Install dependencies' },
+  { time: 5, title: 'Start dev server' },
+];
+
+function RecordingPlayerDemo() {
+  const [t, setT] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  return (
+    <div style={{ height: 320, border: '1px solid var(--line, #333)', borderRadius: 8, overflow: 'hidden' }}>
+      <RecordingPlayer
+        recording={{ id: 'rec_demo', name: 'Demo Recording', duration: 30 }}
+        frames={demoFrames}
+        steps={demoSteps}
+        currentTime={t}
+        onSeek={setT}
+        isPlaying={playing}
+        onTogglePlay={() => setPlaying((p) => !p)}
+        onBack={() => alert('back')}
+      />
     </div>
   );
 }
