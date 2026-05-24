@@ -27,7 +27,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
       className={cls}
       rows={rows}
       disabled={disabled}
-      aria-invalid={invalid || undefined}
+      aria-invalid={invalid}
       {...rest}
     />
   );

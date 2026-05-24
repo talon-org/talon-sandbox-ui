@@ -508,18 +508,24 @@
   align-items: center;
   position: absolute;
   color: var(--fg-3);
+  /* prefix/suffix containers themselves don't intercept clicks,
+     but inner interactive elements (button, a) do */
+}
+.tln-input-prefix > svg, .tln-input-prefix > .ic,
+.tln-input-suffix > svg, .tln-input-suffix > .ic {
   pointer-events: none;
 }
 .tln-input-prefix { left: 9px; }
 .tln-input-suffix { right: 9px; }
 .tln-input-wrap:has(.tln-input-prefix) .tln-input { padding-left: 32px; }
 .tln-input-wrap:has(.tln-input-suffix) .tln-input { padding-right: 32px; }
-.tln-switch-sm { width: 22px; height: 12px; }
-.tln-switch-sm .knob { width: 8px; height: 8px; }
-.tln-switch-sm[aria-checked='true'] .knob { transform: translateX(10px); }
+.tln-switch-sm { width: var(--switch-w-sm, 22px); height: var(--switch-h-sm, 12px); }
+.tln-switch-sm .knob { width: var(--s-4); height: var(--s-4); }
+.tln-switch-sm[aria-checked='true'] .knob { transform: translateX(var(--switch-travel-sm, 10px)); }
 .tln-switch-disabled { opacity: 0.45; cursor: not-allowed; }
-.tln-seg-sm button { height: 18px; font-size: 9.5px; padding: 0 7px; }
-.tln-seg-lg button { height: 28px; font-size: 11.5px; padding: 0 12px; }
+.tln-seg-sm button { height: var(--seg-h-sm, 18px); font-size: var(--text-2xs, 9.5px); padding: 0 var(--s-3); }
+.tln-seg-lg button { height: var(--ctrl-h-md); font-size: var(--text-sm); padding: 0 var(--s-5); }
+.tln-seg-disabled { opacity: var(--alpha-disabled, 0.5); pointer-events: none; }
 
 /* ─────── Misc helpers ─────── */
 .tln-row { display: flex; align-items: center; gap: 8px; }
@@ -541,4 +547,39 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 500;
+}
+
+/* ─────── Toast viewport (fixed top-right) ─────── */
+.tln-toast-viewport {
+  position: fixed; top: 20px; right: 20px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: var(--z-toast, 9000);
+  pointer-events: none;
+}
+.tln-toast-viewport .tln-toast {
+  pointer-events: auto;
+}
+
+/* ─────── Drawer left-side variant ─────── */
+.tln-drawer.tln-drawer-left {
+  left: 0; right: auto;
+  border-left: none;
+  border-right: 1px solid var(--line);
+  animation: tln-slide-in-left 240ms var(--ease-out);
+}
+@keyframes tln-slide-in-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes tln-slide-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes tln-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes tln-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
 }

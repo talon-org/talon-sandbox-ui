@@ -11,4 +11,15 @@ export interface SwitchProps {
   size?: SwitchSize;
   /** Additional className. */
   className?: string;
+  /**
+   * Native checkbox name for form submission.
+   * When set, a hidden <input type="checkbox"> is rendered so the switch
+   * participates in form data collection (FormData / submit events).
+   */
+  name?: string;
+  /**
+   * Native checkbox value submitted with the form.
+   * Defaults to the browser default "on" if omitted.
+   */
+  value?: string;
 }

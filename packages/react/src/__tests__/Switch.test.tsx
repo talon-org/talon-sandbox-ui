@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, test, expect, vi } from 'vitest';
 import { Switch } from '../components/Switch/Switch.js';
@@ -32,5 +32,29 @@ describe('Switch', () => {
     render(<Switch disabled onChange={fn} />);
     await userEvent.click(screen.getByRole('switch'));
     expect(fn).not.toHaveBeenCalled();
+  });
+
+  // C1 — form submission: hidden checkbox renders with correct name/checked state
+  test('name prop: renders a hidden checkbox with the given name when checked', () => {
+    const { container } = render(
+      <form>
+        <Switch name="enabled" checked={true} onChange={() => {}} />
+      </form>,
+    );
+    const checkbox = container.querySelector('input[type="checkbox"][name="enabled"]') as HTMLInputElement;
+    expect(checkbox).not.toBeNull();
+    expect(checkbox.checked).toBe(true);
+    expect(checkbox.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  test('name prop: hidden checkbox is unchecked when switch is off', () => {
+    const { container } = render(
+      <form>
+        <Switch name="enabled" checked={false} onChange={() => {}} />
+      </form>,
+    );
+    const checkbox = container.querySelector('input[type="checkbox"][name="enabled"]') as HTMLInputElement;
+    expect(checkbox).not.toBeNull();
+    expect(checkbox.checked).toBe(false);
   });
 });

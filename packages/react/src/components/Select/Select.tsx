@@ -15,7 +15,7 @@ import type { SelectProps } from './Select.types.js';
  * </Select>
  */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
-  { size = 'md', invalid = false, className, disabled, children, ...rest },
+  { size = 'md', invalid = false, mono, className, disabled, children, ...rest },
   ref,
 ) {
   const cls = cx(
@@ -23,6 +23,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     size === 'sm' && 'tln-select-sm',
     size === 'lg' && 'tln-select-lg',
     invalid && 'error',
+    mono && 'mono',
     className,
   );
 
@@ -31,7 +32,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       ref={ref}
       className={cls}
       disabled={disabled}
-      aria-invalid={invalid || undefined}
+      aria-invalid={invalid}
       {...rest}
     >
       {children}

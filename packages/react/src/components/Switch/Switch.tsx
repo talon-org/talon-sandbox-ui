@@ -17,6 +17,8 @@ export function Switch({
   disabled = false,
   size = 'md',
   className,
+  name,
+  value,
 }: SwitchProps) {
   const cls = cx(
     'tln-switch',
@@ -46,6 +48,18 @@ export function Switch({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
+      {name != null && (
+        <input
+          type="checkbox"
+          name={name}
+          value={value}
+          checked={checked}
+          onChange={() => {}}
+          aria-hidden="true"
+          tabIndex={-1}
+          style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
+        />
+      )}
       <span className="knob" />
     </div>
   );
