@@ -58,7 +58,7 @@ importers:
   packages/react:
     dependencies:
       '@talon-sandbox/tokens':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tokens
       clsx:
         specifier: ^2.1.1

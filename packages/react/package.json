@@ -34,7 +34,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@talon-sandbox/tokens": "workspace:*",
+    "@talon-sandbox/tokens": "workspace:^",
     "clsx": "^2.1.1"
   },
   "devDependencies": {

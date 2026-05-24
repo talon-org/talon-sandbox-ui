@@ -1,0 +1,75 @@
+name: Release to npm
+
+on:
+  push:
+    tags:
+      - 'tokens-v*'
+      - 'react-v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve target package from tag
+        id: target
+        run: |
+          tag="${GITHUB_REF##refs/tags/}"
+          case "$tag" in
+            tokens-v*)
+              echo "name=@talon-sandbox/tokens" >> "$GITHUB_OUTPUT"
+              echo "dir=packages/tokens" >> "$GITHUB_OUTPUT"
+              echo "version=${tag#tokens-v}" >> "$GITHUB_OUTPUT"
+              ;;
+            react-v*)
+              echo "name=@talon-sandbox/react" >> "$GITHUB_OUTPUT"
+              echo "dir=packages/react" >> "$GITHUB_OUTPUT"
+              echo "version=${tag#react-v}" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "::error::Tag '$tag' does not match tokens-v* or react-v*"
+              exit 1
+              ;;
+          esac
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Verify package.json version matches tag
+        run: |
+          pkg_version=$(node -p "require('./${{ steps.target.outputs.dir }}/package.json').version")
+          if [ "$pkg_version" != "${{ steps.target.outputs.version }}" ]; then
+            echo "::error::Tag version (${{ steps.target.outputs.version }}) does not match package.json version ($pkg_version) in ${{ steps.target.outputs.dir }}"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (with deps)
+        run: pnpm --filter "${{ steps.target.outputs.name }}..." run build
+
+      - name: Test
+        run: pnpm --filter "${{ steps.target.outputs.name }}" run test
+
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd "${{ steps.target.outputs.dir }}"
+          pnpm publish --access public --no-git-checks --provenance
