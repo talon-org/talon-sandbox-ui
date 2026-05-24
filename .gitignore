@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.tmp/
+.turbo/
+*.log
+.DS_Store
+coverage/
+*.tsbuildinfo
+.changeset/.cache
+.idea/
+.vscode/*
+!.vscode/extensions.json
