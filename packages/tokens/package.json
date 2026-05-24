@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Talon Sandbox design tokens (CSS vars / JSON / Tailwind preset).",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talon-org/talon-sandbox-ui.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/talon-org/talon-sandbox-ui#readme",
+  "bugs": {
+    "url": "https://github.com/talon-org/talon-sandbox-ui/issues"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
