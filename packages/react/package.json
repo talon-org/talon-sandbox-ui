@@ -14,7 +14,6 @@
       "require": "./dist/index.cjs"
     },
     "./styles": "./dist/styles.css",
-    "./tailwind-preset": "../tokens/dist/tailwind.preset.cjs",
     "./package.json": "./package.json"
   },
   "sideEffects": [
