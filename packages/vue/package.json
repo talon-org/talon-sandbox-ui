@@ -1,0 +1,18 @@
+{
+  "name": "@talon-sandbox/vue",
+  "version": "0.0.0",
+  "description": "Vue 3 components for the Talon Sandbox design system. (Phase 2 placeholder)",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "echo 'Phase 2 - not yet implemented'",
+    "test": "echo 'Phase 2 - not yet implemented'",
+    "typecheck": "echo 'Phase 2 - not yet implemented'"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
