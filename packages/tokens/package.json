@@ -1,0 +1,36 @@
+{
+  "name": "@talon-sandbox/tokens",
+  "version": "0.1.0",
+  "description": "Talon Sandbox design tokens (CSS vars / JSON / Tailwind preset).",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./css": "./dist/tokens.css",
+    "./json": "./dist/tokens.json",
+    "./tailwind-v4": "./dist/tailwind.v4.css",
+    "./preset": "./dist/tailwind.preset.cjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.6",
+    "typescript": "^5.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

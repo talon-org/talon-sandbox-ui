@@ -1,0 +1,86 @@
+/*
+ * Talon Sandbox UI - Tailwind CSS v4 @theme mapping
+ *
+ * Usage:
+ *   @import "tailwindcss";
+ *   @import "@talon-sandbox/tokens/css";
+ *   @import "@talon-sandbox/tokens/tailwind-v4";
+ */
+
+@theme inline {
+  /* Colors - surfaces */
+  --color-bg-0:     var(--bg-0);
+  --color-bg-1:     var(--bg-1);
+  --color-bg-2:     var(--bg-2);
+  --color-bg-3:     var(--bg-3);
+  --color-bg-4:     var(--bg-4);
+  --color-bg-input: var(--bg-input);
+  --color-bg-hover: var(--bg-hover);
+
+  /* Colors - lines */
+  --color-line:          var(--line);
+  --color-line-soft:     var(--line-soft);
+  --color-line-strong:   var(--line-strong);
+  --color-line-emphasis: var(--line-emphasis);
+
+  /* Colors - text */
+  --color-fg-0: var(--fg-0);
+  --color-fg-1: var(--fg-1);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-fg-4: var(--fg-4);
+
+  /* Colors - accent */
+  --color-acc:        var(--acc);
+  --color-acc-fg:     var(--acc-fg);
+  --color-acc-soft:   var(--acc-soft);
+  --color-acc-line:   var(--acc-line);
+  --color-acc-strong: var(--acc-strong);
+  --color-acc-dim:    var(--acc-dim);
+
+  /* Colors - status */
+  --color-ok:          var(--ok);
+  --color-ok-soft:     var(--ok-soft);
+  --color-warn:        var(--warn);
+  --color-warn-soft:   var(--warn-soft);
+  --color-err:         var(--err);
+  --color-err-soft:    var(--err-soft);
+  --color-info:        var(--info);
+  --color-info-soft:   var(--info-soft);
+  --color-magenta:     var(--magenta);
+  --color-magenta-soft:var(--magenta-soft);
+  --color-teal-status: var(--teal);
+  --color-teal-soft:   var(--teal-soft);
+
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* Spacing */
+  --spacing-s-0:  var(--s-0);
+  --spacing-s-1:  var(--s-1);
+  --spacing-s-2:  var(--s-2);
+  --spacing-s-3:  var(--s-3);
+  --spacing-s-4:  var(--s-4);
+  --spacing-s-5:  var(--s-5);
+  --spacing-s-6:  var(--s-6);
+  --spacing-s-7:  var(--s-7);
+  --spacing-s-8:  var(--s-8);
+  --spacing-s-9:  var(--s-9);
+  --spacing-s-10: var(--s-10);
+  --spacing-s-11: var(--s-11);
+  --spacing-s-12: var(--s-12);
+
+  /* Border radius */
+  --radius-tln-1:    var(--r-1);
+  --radius-tln-2:    var(--r-2);
+  --radius-tln-3:    var(--r-3);
+  --radius-tln-4:    var(--r-4);
+  --radius-tln-5:    var(--r-5);
+  --radius-tln-full: var(--r-full);
+
+  /* Control heights */
+  --height-ctrl-sm: var(--ctrl-h-sm);
+  --height-ctrl-md: var(--ctrl-h-md);
+  --height-ctrl-lg: var(--ctrl-h-lg);
+}

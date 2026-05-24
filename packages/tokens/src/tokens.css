@@ -1,0 +1,542 @@
+/* ============================================================
+   Talon · design tokens
+   ────────────────────────────────────────────────────────────
+   Default theme   : Ink (dark, ink-blue accent · the agent's mark)
+   Switchable      : [data-theme="onyx|pewter|iron|phosphor|indigo|violet|sky|teal"]
+   Mode            : [data-mode="light"] (default: dark)
+   Density         : [data-density="compact|relaxed"] (default: standard)
+   Font            : [data-font="plex|jetbrains|system"] (default: geist)
+   ────────────────────────────────────────────────────────────
+   Composes: any [data-mode] × [data-theme] × [data-density] × [data-font]
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ════════════════════════════════════════════════════════════
+   ┌─ DEFAULT THEME · INK (dark)
+   │  Cool near-black + lifted ink blue. The mark an agent leaves.
+   └─────────────────────────────────────────────────────────── */
+:root {
+  /* ── Surfaces ── */
+  --bg-0: #000000;           /* true black: page edge, terminal */
+  --bg-1: #0a0a0b;           /* primary background */
+  --bg-2: #131316;           /* raised: cards, table rows */
+  --bg-3: #1d1d22;           /* elevated: drawer, dialog, popover */
+  --bg-4: #2a2a30;           /* highest: tooltip, item hover */
+  --bg-input: #0d0d0f;       /* form fields */
+  --bg-hover: rgba(255, 255, 255, 0.03);
+  --bg-active: rgba(255, 255, 255, 0.06);
+
+  /* ── Lines ── */
+  --line-soft: rgba(255, 255, 255, 0.05);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+  --line-emphasis: rgba(255, 255, 255, 0.22);
+
+  /* ── Text ── */
+  --fg-0: #e8e6df;           /* highest emphasis · cream-white, not pure */
+  --fg-1: #c8c6c0;           /* body */
+  --fg-2: #86868a;           /* secondary */
+  --fg-3: #56565a;           /* tertiary, placeholder */
+  --fg-4: #38383d;           /* disabled, decorative */
+
+  /* ── Accent · ink blue ──
+     Lifted to L≈74% so it reads on near-black without glowing.
+     Light variant uses the deep saturated form. */
+  --acc: #7d97ff;
+  --acc-fg: #07080b;
+  --acc-soft: rgba(125, 151, 255, 0.12);
+  --acc-line: rgba(125, 151, 255, 0.32);
+  --acc-strong: #9badff;
+  --acc-dim: rgba(125, 151, 255, 0.5);
+
+  /* ── Status (independent of theme) ── */
+  --ok: #5fc99e;
+  --ok-soft: rgba(95, 201, 158, 0.14);
+  --warn: #f0a050;
+  --warn-soft: rgba(240, 160, 80, 0.14);
+  --err: #f06262;
+  --err-soft: rgba(240, 98, 98, 0.14);
+  --info: #7dc8e0;
+  --info-soft: rgba(125, 200, 224, 0.14);
+  --magenta: #c89af0;
+  --magenta-soft: rgba(200, 154, 240, 0.14);
+  --teal: #5fd4b8;
+  --teal-soft: rgba(95, 212, 184, 0.14);
+
+  /* ── Typography ── */
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  --text-xs:   11px;
+  --text-sm:   12px;
+  --text-base: 13px;
+  --text-md:   14px;
+  --text-lg:   16px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  32px;
+  --text-4xl:  44px;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.4;
+  --leading-normal: 1.55;
+
+  --tracking-tight: -0.015em;
+  --tracking-headline: -0.025em;
+  --tracking-normal: 0;
+  --tracking-mono-caps: 0.08em;
+
+  /* ── Spacing (4px base) ── */
+  --s-0: 0;  --s-1: 2px; --s-2: 4px; --s-3: 6px; --s-4: 8px;
+  --s-5: 12px; --s-6: 16px; --s-7: 20px; --s-8: 24px; --s-9: 32px;
+  --s-10: 40px; --s-11: 48px; --s-12: 64px;
+
+  /* ── Density-dependent metrics (standard default) ── */
+  --row-h: 36px;
+  --ctrl-h-sm: 24px;
+  --ctrl-h-md: 28px;
+  --ctrl-h-lg: 32px;
+  --pad-card: 20px;
+  --pad-section: 28px;
+  --gap-section: 32px;
+  --sidebar-w: 232px;
+  --topbar-h: 48px;
+
+  /* ── Radius (Linear-ish, slightly rounder) ── */
+  --r-1: 4px;
+  --r-2: 6px;
+  --r-3: 8px;
+  --r-4: 12px;
+  --r-5: 16px;
+  --r-full: 999px;
+
+  /* ── Shadow (used sparingly: drawer / dialog / cmd-k) ── */
+  --shadow-1: 0 1px 0 rgba(0,0,0,0.4);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-3: 0 24px 60px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.35);
+
+  /* ── Motion ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 90ms;
+  --dur-base: 160ms;
+  --dur-slow: 280ms;
+
+  /* ── z-index ── */
+  --z-cmdk: 35;
+  --z-drawer: 40;
+  --z-dialog: 50;
+  --z-toast: 60;
+
+  /* ── Selection (for ::selection) ── */
+  --selection-bg: rgba(125, 151, 255, 0.22);
+}
+
+/* ════════════════════════════════════════════════════════════
+   ┌─ DARK · alternates (override [data-theme])
+   └─────────────────────────────────────────────────────────── */
+
+/* ONYX · solar yellow (the previous default, kept as alternate) */
+[data-theme='onyx'] {
+  --acc: #e6cf4a;
+  --acc-fg: #0a0a0b;
+  --acc-soft: rgba(230, 207, 74, 0.12);
+  --acc-line: rgba(230, 207, 74, 0.32);
+  --acc-strong: #ecd866;
+  --acc-dim: rgba(230, 207, 74, 0.5);
+  --selection-bg: rgba(230, 207, 74, 0.25);
+}
+
+/* PEWTER · glacier blue */
+[data-theme='pewter'] {
+  --bg-0: #06080c;
+  --bg-1: #0a0c10;
+  --bg-2: #14161d;
+  --bg-3: #1c1f28;
+  --bg-4: #262a35;
+  --bg-input: #0c0e13;
+  --bg-hover: rgba(220, 230, 250, 0.03);
+  --bg-active: rgba(220, 230, 250, 0.06);
+  --line-soft: rgba(220, 230, 250, 0.05);
+  --line: rgba(220, 230, 250, 0.08);
+  --line-strong: rgba(220, 230, 250, 0.14);
+  --line-emphasis: rgba(220, 230, 250, 0.22);
+  --fg-0: #dadce3;
+  --fg-1: #b4b8c2;
+  --fg-2: #7c8395;
+  --fg-3: #525866;
+  --fg-4: #383d49;
+  --acc: #b8d6f0;
+  --acc-fg: #0a0c10;
+  --acc-soft: rgba(184, 214, 240, 0.12);
+  --acc-line: rgba(184, 214, 240, 0.30);
+  --acc-strong: #d4e6f5;
+  --acc-dim: rgba(184, 214, 240, 0.5);
+  --selection-bg: rgba(184, 214, 240, 0.22);
+}
+
+/* IRON · ember red */
+[data-theme='iron'] {
+  --bg-0: #050403;
+  --bg-1: #0c0b08;
+  --bg-2: #181612;
+  --bg-3: #24221c;
+  --bg-4: #2f2c24;
+  --bg-input: #0e0d0a;
+  --bg-hover: rgba(245, 230, 210, 0.03);
+  --bg-active: rgba(245, 230, 210, 0.06);
+  --line-soft: rgba(245, 230, 210, 0.05);
+  --line: rgba(245, 230, 210, 0.08);
+  --line-strong: rgba(245, 230, 210, 0.14);
+  --line-emphasis: rgba(245, 230, 210, 0.22);
+  --fg-0: #dcd6cb;
+  --fg-1: #beb9ab;
+  --fg-2: #898478;
+  --fg-3: #5a5648;
+  --fg-4: #3d3a32;
+  --acc: #e85d4a;
+  --acc-fg: #f2ece0;
+  --acc-soft: rgba(232, 93, 74, 0.12);
+  --acc-line: rgba(232, 93, 74, 0.30);
+  --acc-strong: #ee8472;
+  --acc-dim: rgba(232, 93, 74, 0.5);
+  /* Iron's accent IS red — move status err to a coral pink to disambiguate */
+  --err: #f598a8;
+  --err-soft: rgba(245, 152, 168, 0.14);
+  --selection-bg: rgba(232, 93, 74, 0.25);
+}
+
+/* PHOSPHOR · acid lime */
+[data-theme='phosphor'] {
+  --bg-0: #000000;
+  --bg-1: #07090a;
+  --bg-2: #11150f;
+  --bg-3: #1a1f17;
+  --bg-4: #232a1f;
+  --bg-input: #0a0d09;
+  --bg-hover: rgba(210, 255, 180, 0.03);
+  --bg-active: rgba(210, 255, 180, 0.06);
+  --line-soft: rgba(210, 255, 180, 0.05);
+  --line: rgba(210, 255, 180, 0.08);
+  --line-strong: rgba(210, 255, 180, 0.14);
+  --line-emphasis: rgba(210, 255, 180, 0.22);
+  --fg-0: #dadcd6;
+  --fg-1: #b8bcb1;
+  --fg-2: #7a8074;
+  --fg-3: #4f554a;
+  --fg-4: #353a30;
+  --acc: #b6e63e;
+  --acc-fg: #07090a;
+  --acc-soft: rgba(182, 230, 62, 0.12);
+  --acc-line: rgba(182, 230, 62, 0.30);
+  --acc-strong: #c8ee5d;
+  --acc-dim: rgba(182, 230, 62, 0.5);
+  /* Phosphor's accent is itself green — push ok to a teal so they don't blur */
+  --ok: #5cd6c4;
+  --ok-soft: rgba(92, 214, 196, 0.14);
+  --selection-bg: rgba(182, 230, 62, 0.22);
+}
+
+/* ─────────────────────────────────────────────
+   Hue themes — share Onyx surfaces, only swap accent.
+   Dark accent uses a lighter shade (L≈68–72%) for
+   readability on near-black. Light variants below
+   use the user's pure hsl(* * 54%) anchors.
+   ───────────────────────────────────────────── */
+
+/* INDIGO · hsl(232 96% 54%) anchor */
+[data-theme='indigo'] {
+  --acc: #8194f0;
+  --acc-fg: #0a0a0b;
+  --acc-soft: rgba(129, 148, 240, 0.12);
+  --acc-line: rgba(129, 148, 240, 0.32);
+  --acc-strong: #9aaaf5;
+  --acc-dim: rgba(129, 148, 240, 0.5);
+  --selection-bg: rgba(129, 148, 240, 0.25);
+}
+
+/* VIOLET · hsl(262 84% 54%) anchor */
+[data-theme='violet'] {
+  --acc: #b298f0;
+  --acc-fg: #0a0a0b;
+  --acc-soft: rgba(178, 152, 240, 0.12);
+  --acc-line: rgba(178, 152, 240, 0.32);
+  --acc-strong: #c4aef5;
+  --acc-dim: rgba(178, 152, 240, 0.5);
+  --selection-bg: rgba(178, 152, 240, 0.25);
+}
+
+/* SKY · hsl(205 88% 54%) anchor */
+[data-theme='sky'] {
+  --acc: #5cb6ee;
+  --acc-fg: #0a0a0b;
+  --acc-soft: rgba(92, 182, 238, 0.12);
+  --acc-line: rgba(92, 182, 238, 0.32);
+  --acc-strong: #7fc4f0;
+  --acc-dim: rgba(92, 182, 238, 0.5);
+  --selection-bg: rgba(92, 182, 238, 0.25);
+}
+
+/* TEAL · hsl(174 72% 54%) anchor */
+[data-theme='teal'] {
+  --acc: #56cbb8;
+  --acc-fg: #0a0a0b;
+  --acc-soft: rgba(86, 203, 184, 0.12);
+  --acc-line: rgba(86, 203, 184, 0.32);
+  --acc-strong: #75d6c6;
+  --acc-dim: rgba(86, 203, 184, 0.5);
+  /* Teal accent close to --ok green — disambiguate ok to a leaf-green */
+  --ok: #8fc97a;
+  --ok-soft: rgba(143, 201, 122, 0.14);
+  --selection-bg: rgba(86, 203, 184, 0.25);
+}
+
+/* ════════════════════════════════════════════════════════════
+   ┌─ LIGHT MODE · Onyx default
+   │  Solar yellow stays for fills (yellow button + black text =
+   │  brand signature in both modes). -strong / -line darken to
+   │  mustard so accent text reads on paper. Surfaces become warm
+   │  paper, not bleached white — closer to Anthropic / Linear.
+   └─────────────────────────────────────────────────────────── */
+[data-mode='light'] {
+  /* WHITE-DOMINANT — pure white primary surfaces · Linear / Stripe pattern.
+     All themed light variants below only override accent; surfaces stay
+     white across the system. */
+  --bg-0: #f1f2f5;            /* page edge / sidebar tint */
+  --bg-1: #ffffff;            /* PRIMARY — pure white */
+  --bg-2: #ffffff;            /* raised cards: white + border */
+  --bg-3: #fafbfc;            /* elevated drawer / dialog / popover */
+  --bg-4: #eef0f3;
+  --bg-input: #ffffff;
+  --bg-hover: rgba(0, 0, 0, 0.035);
+  --bg-active: rgba(0, 0, 0, 0.065);
+
+  --line-soft: rgba(15, 20, 35, 0.05);
+  --line: rgba(15, 20, 35, 0.09);
+  --line-strong: rgba(15, 20, 35, 0.16);
+  --line-emphasis: rgba(15, 20, 35, 0.26);
+
+  --fg-0: #0a0c12;
+  --fg-1: #2a2d36;
+  --fg-2: #5f6371;
+  --fg-3: #888d99;
+  --fg-4: #b4b8c1;
+
+  --acc: #2b4dcc;             /* deep ink blue */
+  --acc-fg: #ffffff;
+  --acc-soft: rgba(43, 77, 204, 0.08);
+  --acc-line: rgba(43, 77, 204, 0.28);
+  --acc-strong: #1f3eb0;
+  --acc-dim: rgba(43, 77, 204, 0.5);
+
+  --ok: #2f8a4d;
+  --ok-soft: rgba(47, 138, 77, 0.10);
+  --warn: #b97515;
+  --warn-soft: rgba(185, 117, 21, 0.10);
+  --err: #c4334e;
+  --err-soft: rgba(196, 51, 78, 0.10);
+  --info: #1b6f9b;
+  --info-soft: rgba(27, 111, 155, 0.10);
+  --magenta: #6e4ed1;
+  --magenta-soft: rgba(110, 78, 209, 0.10);
+  --teal: #0f8270;
+  --teal-soft: rgba(15, 130, 112, 0.10);
+
+  --shadow-1: 0 1px 0 rgba(15, 20, 35, 0.04);
+  --shadow-2: 0 1px 3px rgba(15, 20, 35, 0.06), 0 1px 2px rgba(15, 20, 35, 0.04);
+  --shadow-3: 0 20px 48px rgba(15, 20, 35, 0.12), 0 4px 12px rgba(15, 20, 35, 0.06);
+
+  --selection-bg: rgba(43, 77, 204, 0.18);
+}
+
+/* Light × theme overrides — surfaces inherit white; only accent swaps. */
+[data-mode='light'][data-theme='onyx'] {
+  --acc: #8a6b14; --acc-fg: #ffffff;
+  --acc-soft: rgba(138, 107, 20, 0.10); --acc-line: rgba(138, 107, 20, 0.34);
+  --acc-strong: #6e5410; --acc-dim: rgba(138, 107, 20, 0.5);
+  --selection-bg: rgba(240, 215, 67, 0.40);
+}
+
+/* ════════════════════════════════════════════════════════════
+   ┌─ LIGHT × alternate themes
+   └─────────────────────────────────────────────────────────── */
+
+[data-mode='light'][data-theme='pewter'] {
+  --acc: #4a7ab3; --acc-fg: #ffffff;
+  --acc-soft: rgba(74, 122, 179, 0.10); --acc-line: rgba(74, 122, 179, 0.30);
+  --acc-strong: #3a64a0; --acc-dim: rgba(74, 122, 179, 0.5);
+  --selection-bg: rgba(74, 122, 179, 0.20);
+}
+
+[data-mode='light'][data-theme='iron'] {
+  --acc: #c54128; --acc-fg: #ffffff;
+  --acc-soft: rgba(197, 65, 40, 0.08); --acc-line: rgba(197, 65, 40, 0.32);
+  --acc-strong: #a8341e; --acc-dim: rgba(197, 65, 40, 0.5);
+  --err: #d94860; --err-soft: rgba(217, 72, 96, 0.10);
+  --selection-bg: rgba(197, 65, 40, 0.20);
+}
+
+[data-mode='light'][data-theme='phosphor'] {
+  --acc: #5e8413; --acc-fg: #ffffff;
+  --acc-soft: rgba(94, 132, 19, 0.10); --acc-line: rgba(94, 132, 19, 0.32);
+  --acc-strong: #4d6e0f; --acc-dim: rgba(94, 132, 19, 0.5);
+  --selection-bg: rgba(94, 132, 19, 0.20);
+}
+
+/* ── Hue themes · light variants ──
+   The user's pure hsl(* * 54%) anchors — saturated, dark
+   enough to read on cream paper without softening. */
+[data-mode='light'][data-theme='indigo'] {
+  --acc: #2347ee;
+  --acc-fg: #ffffff;
+  --acc-soft: rgba(35, 71, 238, 0.08);
+  --acc-line: rgba(35, 71, 238, 0.30);
+  --acc-strong: #1d3bc7;
+  --acc-dim: rgba(35, 71, 238, 0.5);
+  --selection-bg: rgba(35, 71, 238, 0.18);
+}
+[data-mode='light'][data-theme='violet'] {
+  --acc: #6839e0;
+  --acc-fg: #ffffff;
+  --acc-soft: rgba(104, 57, 224, 0.08);
+  --acc-line: rgba(104, 57, 224, 0.30);
+  --acc-strong: #5728c0;
+  --acc-dim: rgba(104, 57, 224, 0.5);
+  --selection-bg: rgba(104, 57, 224, 0.18);
+}
+[data-mode='light'][data-theme='sky'] {
+  --acc: #1f8be7;
+  --acc-fg: #ffffff;
+  --acc-soft: rgba(31, 139, 231, 0.08);
+  --acc-line: rgba(31, 139, 231, 0.30);
+  --acc-strong: #1a73c0;
+  --acc-dim: rgba(31, 139, 231, 0.5);
+  --selection-bg: rgba(31, 139, 231, 0.18);
+}
+[data-mode='light'][data-theme='teal'] {
+  --acc: #26c4b1;
+  --acc-fg: #ffffff;
+  --acc-soft: rgba(38, 196, 177, 0.10);
+  --acc-line: rgba(38, 196, 177, 0.30);
+  --acc-strong: #1ea693;
+  --acc-dim: rgba(38, 196, 177, 0.5);
+  --ok: #2f8a4a;
+  --ok-soft: rgba(47, 138, 74, 0.10);
+  --selection-bg: rgba(38, 196, 177, 0.18);
+}
+
+/* ════════════════════════════════════════════════════════════
+   ┌─ DENSITY variants
+   └─────────────────────────────────────────────────────────── */
+[data-density='compact'] {
+  --row-h: 30px;
+  --ctrl-h-sm: 22px;
+  --ctrl-h-md: 26px;
+  --ctrl-h-lg: 30px;
+  --pad-card: 14px;
+  --pad-section: 20px;
+  --gap-section: 22px;
+  --sidebar-w: 216px;
+  --topbar-h: 42px;
+}
+[data-density='relaxed'] {
+  --row-h: 44px;
+  --ctrl-h-sm: 28px;
+  --ctrl-h-md: 32px;
+  --ctrl-h-lg: 36px;
+  --pad-card: 28px;
+  --pad-section: 36px;
+  --gap-section: 44px;
+  --sidebar-w: 248px;
+  --topbar-h: 56px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ┌─ FONT variants
+   └─────────────────────────────────────────────────────────── */
+[data-font='plex'] {
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+}
+[data-font='jetbrains'] {
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+}
+[data-font='system'] {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ┌─ BASE SHELL · apply .tln to any root element to opt in
+   └─────────────────────────────────────────────────────────── */
+.tln {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--fg-1);
+  background: var(--bg-1);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'ss01', 'ss03', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+.tln *,
+.tln *::before,
+.tln *::after { box-sizing: border-box; }
+
+.tln .mono     { font-family: var(--font-mono); font-feature-settings: 'zero', 'ss02'; letter-spacing: -0.01em; }
+.tln .micro    { font-family: var(--font-mono); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: var(--tracking-mono-caps); color: var(--fg-2); font-weight: 500; }
+.tln .dim      { color: var(--fg-2); }
+.tln .dimmer   { color: var(--fg-3); }
+.tln .strong-fg { color: var(--fg-0); }
+.tln .tight    { letter-spacing: var(--tracking-tight); }
+.tln .headline { letter-spacing: var(--tracking-headline); font-weight: 600; color: var(--fg-0); }
+.tln .accent-fg { color: var(--acc-strong); }
+
+/* ── Scrollbars ── */
+.tln ::-webkit-scrollbar { width: 10px; height: 10px; }
+.tln ::-webkit-scrollbar-track { background: transparent; }
+.tln ::-webkit-scrollbar-thumb { background: transparent; border-radius: 6px; border: 3px solid transparent; background-clip: padding-box; }
+.tln :hover::-webkit-scrollbar-thumb { background: var(--line-strong); background-clip: padding-box; }
+.tln ::-webkit-scrollbar-thumb:hover { background: var(--line-emphasis); background-clip: padding-box; }
+
+/* ── Animations ── */
+@keyframes tln-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.85); }
+}
+@keyframes tln-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes tln-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes tln-spin { to { transform: rotate(360deg); } }
+@keyframes tln-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes tln-slide-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.tln .pulse   { animation: tln-pulse 1.6s var(--ease-in-out) infinite; }
+.tln .blink   { animation: tln-blink 1.05s steps(1) infinite; }
+.tln .spin    { animation: tln-spin 1s linear infinite; }
+.tln .fade-in { animation: tln-fade-in var(--dur-base) var(--ease-out); }
+
+/* ── Focus ring ── */
+.tln :focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 1px;
+  border-radius: var(--r-2);
+}
+
+/* ── Selection ── */
+.tln ::selection { background: var(--selection-bg); color: var(--fg-0); }
