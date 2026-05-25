@@ -84,3 +84,9 @@ export type { SandboxStateBarProps, SandboxState, StateCountMap } from './compon
 
 export { LoginLayout } from './components/LoginLayout/index.js';
 export type { LoginLayoutProps } from './components/LoginLayout/index.js';
+
+export { FormField } from './components/FormField/index.js';
+export type { FormFieldProps } from './components/FormField/index.js';
+
+export { useFormField } from './primitives/FormFieldContext.js';
+export type { FormFieldContextValue } from './primitives/FormFieldContext.js';
