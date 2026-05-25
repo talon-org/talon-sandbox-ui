@@ -105,3 +105,6 @@ export type { SliderProps } from './components/Slider/index.js';
 
 export { MultiSelect } from './components/MultiSelect/index.js';
 export type { MultiSelectProps, MultiSelectOption } from './components/MultiSelect/index.js';
+
+export { FormItem, useForm, useField, useStore, formOptions } from './components/FormItem/index.js';
+export type { FormItemProps, AnyFieldApi, AnyFieldMeta, FieldValidators, FieldOptions } from './components/FormItem/index.js';
