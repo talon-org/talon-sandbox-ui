@@ -96,3 +96,6 @@ export type { CheckboxProps } from './components/Checkbox/index.js';
 
 export { Radio, RadioGroup } from './components/Radio/index.js';
 export type { RadioProps, RadioGroupProps, RadioGroupOption } from './components/Radio/index.js';
+
+export { NumberInput } from './components/NumberInput/index.js';
+export type { NumberInputProps } from './components/NumberInput/index.js';

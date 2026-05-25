@@ -100,3 +100,69 @@
   margin-bottom: 2px;
 }
 .tln-radio-card__desc { font-size: 11px; color: var(--fg-3); line-height: 1.4; }
+
+/* ─────── NumberInput ─────── */
+.tln-number-wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-input);
+  overflow: hidden;
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.tln-number-wrap:focus-within {
+  border-color: var(--acc);
+  box-shadow: 0 0 0 3px var(--acc-soft);
+}
+.tln-number-wrap.error { border-color: var(--err); }
+.tln-number-wrap.error:focus-within { box-shadow: 0 0 0 3px var(--err-soft); }
+.tln-number-input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  height: var(--ctrl-h-md);
+  padding: 0 8px;
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  text-align: right;
+  min-width: 0;
+  -moz-appearance: textfield;
+}
+.tln-number-input::-webkit-inner-spin-button,
+.tln-number-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.tln-number-stepper {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line-soft);
+  flex-shrink: 0;
+}
+.tln-number-stepper button {
+  flex: 1;
+  width: 22px;
+  border: 0;
+  background: transparent;
+  color: var(--fg-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--dur-fast), background var(--dur-fast);
+  font-size: 9px;
+  padding: 0;
+}
+.tln-number-stepper button:hover { color: var(--fg-1); background: var(--bg-hover); }
+.tln-number-stepper button:disabled { opacity: 0.3; cursor: not-allowed; }
+.tln-number-unit {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  padding: 0 8px 0 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tln-number-wrap-sm .tln-number-input { height: var(--ctrl-h-sm); font-size: var(--text-sm); }
+.tln-number-wrap-lg .tln-number-input { height: var(--ctrl-h-lg); font-size: var(--text-md); }
