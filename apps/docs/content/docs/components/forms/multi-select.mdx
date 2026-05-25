@@ -1,0 +1,72 @@
+---
+title: MultiSelect
+description: Chip-based multi-select input with removable tags, optional max cap, and keyboard navigation.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { MultiSelectDemo, MultiSelectCapped } from '@/components/demos/MultiSelectDemos';
+
+## Overview
+
+`MultiSelect` renders selected values as removable chips inside an input-like container. Clicking opens a dropdown of remaining options; selected options are removed from the list and added as chips. The `×` on each chip removes that value.
+
+### When to use vs Combobox vs Select
+
+| | MultiSelect | Combobox | Select |
+|--|-------------|---------|--------|
+| **Multiple values** | Yes | No | No |
+| **Searchable** | No | Yes | No |
+| **Max selections** | Optional cap | — | — |
+| **Best for** | Region/tag pickers | Searchable single-select | Short option lists |
+
+## Live demo
+
+<Preview minHeight={120}>
+  <MultiSelectDemo />
+</Preview>
+
+## With max cap
+
+<Preview minHeight={120}>
+  <MultiSelectCapped />
+</Preview>
+
+## Usage
+
+```tsx
+import { MultiSelect } from '@talon-sandbox/react';
+
+const REGIONS = [
+  { value: 'us-east-1', label: 'us-east-1' },
+  { value: 'eu-west-1', label: 'eu-west-1' },
+];
+
+<MultiSelect
+  options={REGIONS}
+  value={selected}
+  onChange={setSelected}
+  placeholder="Select regions…"
+  max={3}
+/>
+```
+
+## Props
+
+<PropsTable path="components/MultiSelect/MultiSelect.types.ts" name="MultiSelectProps" />
+
+## Keyboard behavior
+
+| Key | Effect |
+|-----|--------|
+| `Enter` / `Space` on option | Select option |
+| `Backspace` on empty input | Remove last chip |
+| `Escape` | Close dropdown |
+| `ArrowDown` / `ArrowUp` | Navigate options |
+
+## Accessibility
+
+- The trigger input has `role="combobox"` with `aria-expanded` and `aria-haspopup="listbox"`.
+- Each option in the dropdown has `role="option"` with `aria-selected`.
+- Chips include a remove button with `aria-label="Remove [option label]"`.
+- The `max` cap is announced via `aria-live="polite"` when reached.
