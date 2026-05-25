@@ -99,3 +99,6 @@ export type { RadioProps, RadioGroupProps, RadioGroupOption } from './components
 
 export { NumberInput } from './components/NumberInput/index.js';
 export type { NumberInputProps } from './components/NumberInput/index.js';
+
+export { Slider } from './components/Slider/index.js';
+export type { SliderProps } from './components/Slider/index.js';
