@@ -1,0 +1,53 @@
+---
+title: Tabs
+description: Horizontal tab bar that swaps visible content panels. Use for 3–8 views within the same context.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { TabsDemo, TabsWithIcons } from '@/components/demos/TabsDemos';
+
+## Overview
+
+`Tabs` renders a horizontal row of tab buttons that switch the active view. Unlike `Segmented`, tabs imply that each option reveals a distinct content panel beneath the bar.
+
+### When to use vs Segmented
+
+| | Tabs | Segmented |
+|--|------|-----------|
+| **Content panel swap** | Yes | No (state only) |
+| **Option count** | 3–8 | 2–5 |
+| **Visual weight** | Standard | Compact |
+| **Example** | Overview / Logs / Settings | Dark/Light toggle |
+
+## Live demo
+
+<Preview>
+  <TabsDemo />
+</Preview>
+
+## With icons
+
+<Preview>
+  <TabsWithIcons />
+</Preview>
+
+## Props
+
+<PropsTable path="components/Tabs/Tabs.types.ts" name="TabsProps" />
+
+## Keyboard behavior
+
+| Key | Effect |
+|-----|--------|
+| `ArrowRight` | Move focus to next tab |
+| `ArrowLeft` | Move focus to previous tab |
+| `Home` | Move focus to first tab |
+| `End` | Move focus to last tab |
+| `Space` / `Enter` | Activate focused tab |
+
+## Accessibility
+
+- Container uses `role="tablist"`.
+- Each button uses `role="tab"` with `aria-selected` reflecting the active state.
+- Pair with a `<div role="tabpanel">` below the bar for the content area; set `aria-labelledby` to the active tab's `id`.
