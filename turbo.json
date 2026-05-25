@@ -23,7 +23,7 @@
     },
     "docs:build": {
       "dependsOn": ["@talon-sandbox/react#build", "@talon-sandbox/tokens#build"],
-      "outputs": ["apps/docs/out/**"],
+      "outputs": [".next/**"],
       "cache": true
     }
   }
