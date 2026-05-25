@@ -1,0 +1,71 @@
+---
+title: Slider
+description: Range input with token-based track fill, optional value badge, and custom formatter.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { SliderDemo, SliderFormatted } from '@/components/demos/SliderDemos';
+
+## Overview
+
+`Slider` wraps `<input type="range">` with Talon's visual treatment: a filled track using a CSS custom property, an optional current-value badge alongside the thumb, and a custom value formatter for display.
+
+Use `Slider` for **continuous or stepped numeric ranges** where approximate visual selection is acceptable — volume, progress, resource allocation previews.
+
+### When to use vs NumberInput
+
+| | Slider | NumberInput |
+|--|--------|-------------|
+| **Input precision** | Approximate | Exact |
+| **Visual feedback** | Track fill | Stepper buttons |
+| **Best for** | Ranges, previews | Exact resource values |
+
+## Live demo
+
+<Preview minHeight={100}>
+  <SliderDemo />
+</Preview>
+
+## Custom formatter
+
+<Preview minHeight={100}>
+  <SliderFormatted />
+</Preview>
+
+## Usage
+
+```tsx
+import { Slider } from '@talon-sandbox/react';
+
+<Slider
+  value={memory}
+  onChange={setMemory}
+  min={1}
+  max={128}
+  step={1}
+  formatValue={(v) => `${v} GiB`}
+  aria-label="Memory"
+/>
+```
+
+## Props
+
+<PropsTable path="components/Slider/Slider.types.ts" name="SliderProps" />
+
+## Keyboard behavior
+
+| Key | Effect |
+|-----|--------|
+| `ArrowRight` / `ArrowUp` | Increment by step |
+| `ArrowLeft` / `ArrowDown` | Decrement by step |
+| `PageUp` | Increment by 10 × step |
+| `PageDown` | Decrement by 10 × step |
+| `Home` | Jump to min |
+| `End` | Jump to max |
+
+## Accessibility
+
+- Wraps a native `<input type="range">` for full browser and AT support.
+- Pass `aria-label` or `aria-labelledby` to connect the slider to its label — the component does not render a visible label by default.
+- The value badge is `aria-hidden`; the native range input announces the current value via `aria-valuenow`, `aria-valuemin`, and `aria-valuemax`.
