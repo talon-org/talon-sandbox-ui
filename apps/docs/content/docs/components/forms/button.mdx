@@ -5,7 +5,7 @@ description: Primary interactive control for actions, form submission, and navig
 
 import { Preview } from '@/components/Preview';
 import { PropsTable } from '@/components/PropsTable';
-import { Button } from '@talon-sandbox/react';
+import { Button } from '@/components/TalonComponents';
 
 ## Overview
 
@@ -105,7 +105,7 @@ Use `iconOnly` for square aspect-ratio buttons. Always provide `aria-label`.
 
 ```tsx
 import { useState } from 'react';
-import { Button, Dialog, toast, ToastViewport } from '@talon-sandbox/react';
+import { Button, Dialog, toast, ToastViewport } from '@/components/TalonComponents';
 
 function DeleteSandbox({ id }: { id: string }) {
   const [open, setOpen] = useState(false);
