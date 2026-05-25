@@ -1,0 +1,57 @@
+---
+title: Input
+description: Single-line text control with adornment slots, invalid state, and monospace mode.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { Input } from '@/components/TalonComponents';
+
+## Overview
+
+`Input` wraps the native `<input>` element with design-system sizing tokens, an invalid state, monospace mode, and prefix/suffix adornment slots. Use it everywhere you'd use a bare `<input>` — it guarantees consistent height, font, and border styling across all Talon surfaces.
+
+### When to use
+
+- Single-line free text: names, IDs, URLs, search queries, API tokens.
+- With `prefix`/`suffix` for icon buttons, clear buttons, or unit labels.
+- For multi-line content use `Textarea`. For numeric values use `NumberInput`.
+
+### Gotcha: `className` placement
+
+`className` applies to the **outermost element**: the `<input>` when no adornments are present, or the `.tln-input-wrap` div when adornments are present. This means width/margin on `className` works correctly in both cases. The inner `<input>` does **not** receive `className` when wrapped.
+
+## Live demo
+
+<Preview>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 320 }}>
+    <Input placeholder="Sandbox name" />
+    <Input prefix={<span style={{ color: 'var(--fg-3)', fontSize: 13 }}>🔍</span>} placeholder="Search…" />
+    <Input invalid placeholder="Invalid value" defaultValue="bad-input" />
+    <Input mono placeholder="abc-123-xyz" />
+  </div>
+</Preview>
+
+## Sizes
+
+<Preview>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 320 }}>
+    <Input size="sm" placeholder="Small" />
+    <Input size="md" placeholder="Medium (default)" />
+    <Input size="lg" placeholder="Large" />
+  </div>
+</Preview>
+
+## Props
+
+<PropsTable path="components/Input/Input.types.ts" name="InputProps" />
+
+## Keyboard behavior
+
+Inherits native `<input>` keyboard behavior. No custom keyboard handling.
+
+## Accessibility
+
+- Always associate with a label via `<label htmlFor>` — use `FormField` for the label+input pattern.
+- `invalid` sets `aria-invalid="true"` on the underlying input element.
+- Prefix/suffix adornments are in non-interactive `<span>` wrappers — ensure any interactive elements inside have their own accessible names.
