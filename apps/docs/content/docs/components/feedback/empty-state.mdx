@@ -1,0 +1,57 @@
+---
+title: EmptyState
+description: Centered placeholder for zero-data views with icon, title, description, and action slot.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { EmptyState, Button } from '@/components/TalonComponents';
+
+## Overview
+
+`EmptyState` provides a centered visual placeholder when a list, table, or panel has no data to show. It accepts an optional icon, eyebrow label, title, description, and an action slot for a primary CTA.
+
+### When to use
+
+- Empty list pages ("No sandboxes yet").
+- Zero-results search feedback.
+- First-run onboarding prompts ("Create your first sandbox").
+- Error states where recovery requires an action.
+
+## Live demo
+
+<Preview minHeight={200}>
+  <EmptyState
+    icon={<span style={{ fontSize: 32 }}>🧊</span>}
+    title="No sandboxes yet"
+    description="Create your first sandbox to get started."
+    action={<Button size="sm">Create sandbox</Button>}
+  />
+</Preview>
+
+## With eyebrow
+
+<Preview minHeight={200}>
+  <EmptyState
+    eyebrow="Search results"
+    icon={<span style={{ fontSize: 32 }}>🔍</span>}
+    title="No matches found"
+    description='Try a different query or clear the filters.'
+  />
+</Preview>
+
+## Minimal
+
+<Preview minHeight={120}>
+  <EmptyState title="No events recorded" />
+</Preview>
+
+## Props
+
+<PropsTable path="components/EmptyState/EmptyState.types.ts" name="EmptyStateProps" />
+
+## Accessibility
+
+- `EmptyState` renders a plain `<div>` — it is not interactive by itself.
+- The `action` slot should contain a focusable element (e.g., `Button`) with an appropriate label.
+- `title` renders as text — do not rely solely on the icon to communicate the state.
