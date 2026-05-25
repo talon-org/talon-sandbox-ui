@@ -5,3 +5,40 @@
    Contains: Checkbox, Radio/RadioGroup, Slider, MultiSelect,
              FormField CSS additions.
    ============================================================ */
+
+/* ─────── Checkbox ─────── */
+.tln-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.tln-checkbox.tln-checkbox-disabled { opacity: 0.45; cursor: not-allowed; }
+.tln-checkbox__box {
+  width: 15px; height: 15px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  background: var(--bg-input);
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--dur-fast), border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.tln-checkbox:hover .tln-checkbox__box { border-color: var(--line-strong); }
+.tln-checkbox:focus-within .tln-checkbox__box {
+  border-color: var(--acc);
+  box-shadow: 0 0 0 3px var(--acc-soft);
+}
+.tln-checkbox[data-checked='true'] .tln-checkbox__box,
+.tln-checkbox[data-indeterminate='true'] .tln-checkbox__box {
+  background: var(--acc);
+  border-color: var(--acc);
+}
+.tln-checkbox__box svg { display: none; color: var(--acc-fg); }
+.tln-checkbox[data-checked='true'] .tln-checkbox__box svg.check { display: block; }
+.tln-checkbox[data-indeterminate='true'] .tln-checkbox__box svg.dash { display: block; }
+.tln-checkbox__label { font-size: var(--text-sm); color: var(--fg-1); line-height: 1.4; }
+/* sm size */
+.tln-checkbox-sm .tln-checkbox__box { width: 13px; height: 13px; }
+.tln-checkbox-sm .tln-checkbox__label { font-size: var(--text-xs, 11px); }

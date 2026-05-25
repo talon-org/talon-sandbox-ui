@@ -90,3 +90,6 @@ export type { FormFieldProps } from './components/FormField/index.js';
 
 export { useFormField } from './primitives/FormFieldContext.js';
 export type { FormFieldContextValue } from './primitives/FormFieldContext.js';
+
+export { Checkbox } from './components/Checkbox/index.js';
+export type { CheckboxProps } from './components/Checkbox/index.js';
