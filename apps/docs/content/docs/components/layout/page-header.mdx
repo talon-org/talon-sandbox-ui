@@ -1,0 +1,66 @@
+---
+title: PageHeader
+description: Top-of-page header with eyebrow, title, count badge, description, and an actions slot.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { PageHeader, Button } from '@/components/TalonComponents';
+
+## Overview
+
+`PageHeader` provides the standard title block at the top of list and detail pages. It renders a semantic heading (`h1` by default), with optional eyebrow label, count badge appended to the title, description line, and an end-aligned actions slot.
+
+## Live demo
+
+<Preview minHeight={100}>
+  <PageHeader
+    title="Sandboxes"
+    num={62}
+    desc="All sandboxes in this project"
+    actions={<Button size="sm">New sandbox</Button>}
+  />
+</Preview>
+
+## With eyebrow
+
+<Preview minHeight={100}>
+  <PageHeader
+    eyebrow="Project: Talon"
+    title="API Tokens"
+    num={4}
+    actions={<Button size="sm">Create token</Button>}
+  />
+</Preview>
+
+## No border
+
+<Preview minHeight={80}>
+  <PageHeader
+    title="Settings"
+    desc="Configure your project and team."
+    noBorder
+  />
+</Preview>
+
+## Nested heading level
+
+When `PageHeader` is used inside a card or section (not the page root), pass `headingLevel={2}` or `headingLevel={3}` to maintain correct document outline.
+
+<Preview minHeight={80}>
+  <PageHeader
+    title="Section title"
+    headingLevel={2}
+    noBorder
+  />
+</Preview>
+
+## Props
+
+<PropsTable path="components/PageHeader/PageHeader.types.ts" name="PageHeaderProps" />
+
+## Accessibility
+
+- `title` renders as an `<h1>` by default — use only once per page. Use `headingLevel` for nested headers.
+- `num` (count badge) is appended inline inside the heading — it is read as part of the heading text by screen readers.
+- `actions` slot content should have their own accessible names (e.g., `<Button>New sandbox</Button>`).

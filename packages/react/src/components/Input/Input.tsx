@@ -1,11 +1,14 @@
 import { forwardRef } from 'react';
 import { cx } from '../../primitives/clsx.js';
+import { useFormField } from '../../primitives/FormFieldContext.js';
 import type { InputProps } from './Input.types.js';
 
 /**
  * Input — single-line text control.
  *
  * CSS-only: all styles are in @talon-sandbox/react/styles (components.css).
+ * When rendered inside a FormField, auto-receives the field's generated id
+ * and invalid state via FormFieldContext.
  *
  * @example
  * import '@talon-sandbox/react/styles'
@@ -14,16 +17,26 @@ import type { InputProps } from './Input.types.js';
  * @example
  * // With prefix / suffix adornments
  * <Input prefix={<SearchIcon />} suffix={<ClearButton />} />
+ *
+ * @example
+ * // Inside FormField — id and invalid wired automatically
+ * <FormField label="Name" error={err}>
+ *   <Input />
+ * </FormField>
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { size = 'md', invalid = false, mono, prefix, suffix, className, disabled, ...rest },
+  { size = 'md', invalid = false, mono, prefix, suffix, className, disabled, id, ...rest },
   ref,
 ) {
+  const field = useFormField();
+  const resolvedId = id ?? field?.controlId;
+  const resolvedInvalid = invalid || (field?.hasError ?? false);
+
   const inputCls = cx(
     'tln-input',
     size === 'sm' && 'tln-input-sm',
     size === 'lg' && 'tln-input-lg',
-    invalid && 'error',
+    resolvedInvalid && 'error',
     mono && 'mono',
     // className is always applied to the outermost element.
     // When there is no wrapper (no prefix/suffix), the input IS the outer element.
@@ -33,9 +46,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const input = (
     <input
       ref={ref}
+      id={resolvedId}
       className={inputCls}
       disabled={disabled}
-      aria-invalid={invalid}
+      aria-invalid={resolvedInvalid || undefined}
       {...rest}
     />
   );

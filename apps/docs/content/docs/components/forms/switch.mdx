@@ -1,0 +1,52 @@
+---
+title: Switch
+description: Accessible on/off toggle using role="switch". Use for settings that take immediate effect.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { SwitchDemo, SwitchSizes } from '@/components/demos/SwitchDemos';
+
+## Overview
+
+`Switch` is a binary toggle for settings that **take immediate effect on change** — no "Save" button required. The visual metaphor (sliding knob) communicates instantaneous state change.
+
+### Switch vs Checkbox
+
+| | Switch | Checkbox |
+|--|--------|---------|
+| **Effect timing** | Immediate — applies on toggle | Deferred — collected at form submit |
+| **Best for** | Feature flags, live settings | Form fields, select-all in tables |
+| **Semantic** | `role="switch"` | `<input type="checkbox">` |
+| **Example** | "Enable debug logging" | "Accept terms of service" |
+
+## Live demo
+
+<Preview>
+  <SwitchDemo />
+</Preview>
+
+## Sizes
+
+<Preview>
+  <SwitchSizes />
+</Preview>
+
+## Props
+
+<PropsTable path="components/Switch/Switch.types.ts" name="SwitchProps" />
+
+## Keyboard behavior
+
+| Key | Effect |
+|-----|--------|
+| `Space` | Toggles the switch |
+| `Enter` | Toggles the switch |
+| `Tab` / `Shift+Tab` | Move focus |
+
+## Accessibility
+
+- Uses `role="switch"` and `aria-checked` — screen readers announce "on"/"off".
+- `disabled` uses `aria-disabled` (not HTML `disabled`) so the element remains reachable by screen readers.
+- `name` + `value` props render a hidden `<input type="checkbox">` for native form data collection.
+- Always pair with a visible label — either a sibling element or `aria-label`.

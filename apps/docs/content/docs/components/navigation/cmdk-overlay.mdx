@@ -1,0 +1,70 @@
+---
+title: CmdKOverlay
+description: Full-screen command palette with fuzzy search, grouped results, and full keyboard navigation.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { CmdKDemo } from '@/components/demos/CmdKDemos';
+
+## Overview
+
+`CmdKOverlay` is a modal command palette — the "⌘K" pattern — that lets power users search and trigger actions without reaching for the mouse. It renders into a portal over the page, traps focus, and dismisses on `Escape` or backdrop click.
+
+### When to use
+
+- Global shortcut-driven action invocation (create sandbox, switch project, run command).
+- Any surface where the full action list would overwhelm a menu but a searchable overlay is appropriate.
+- Do not use for simple dropdowns or context menus — those should be standard `Select` or a custom menu.
+
+### Wire-up pattern
+
+```tsx
+const [open, setOpen] = useState(false);
+
+useEffect(() => {
+  const handler = (e: KeyboardEvent) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      setOpen(true);
+    }
+  };
+  window.addEventListener('keydown', handler);
+  return () => window.removeEventListener('keydown', handler);
+}, []);
+
+return (
+  <>
+    <Button onClick={() => setOpen(true)}>⌘K</Button>
+    <CmdKOverlay open={open} onClose={() => setOpen(false)} items={ITEMS} />
+  </>
+);
+```
+
+## Live demo
+
+<Preview minHeight={60}>
+  <CmdKDemo />
+</Preview>
+
+## Props
+
+<PropsTable path="components/CmdKOverlay/CmdKOverlay.types.ts" name="CmdKOverlayProps" />
+
+## Keyboard behavior
+
+| Key | Effect |
+|-----|--------|
+| `ArrowDown` | Move highlight to next result |
+| `ArrowUp` | Move highlight to previous result |
+| `Enter` | Execute highlighted action and close |
+| `Escape` | Close overlay |
+
+## Accessibility
+
+- Dialog uses `role="dialog"` with `aria-modal="true"` and `aria-label="Command palette"`.
+- The search input uses `role="combobox"` with `aria-controls` pointing at the listbox and `aria-activedescendant` tracking the highlighted option — screen readers announce the active item as the user navigates.
+- Results use `role="listbox"` / `role="option"` with `aria-selected`.
+- Groups use `role="group"` with `aria-label` set to the group name.
+- `useFocusTrap` keeps focus inside the modal while it is open.
+- Item icons use `aria-hidden="true"`.

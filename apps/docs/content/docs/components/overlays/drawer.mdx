@@ -1,0 +1,51 @@
+---
+title: Drawer
+description: Side-panel overlay that slides in from the right or left edge with focus trap and configurable width.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { DrawerDemo, DrawerLeft } from '@/components/demos/DrawerDemos';
+
+## Overview
+
+`Drawer` is a side panel that slides in from the right (default) or left edge of the viewport. Use it to display detail information or longer forms alongside — not instead of — the page content. Unlike `Dialog`, the drawer does not visually block the full viewport, making it suitable for content that the user may want to refer back to.
+
+### When to use vs Dialog
+
+| | Drawer | Dialog |
+|--|--------|--------|
+| **Content type** | Detail panels, longer forms | Confirmations, short forms |
+| **Width** | Configurable (default 560px) | Fixed narrow/medium |
+| **Interruption** | Slides in alongside content | Blocks the page center |
+| **Example** | Sandbox detail / edit form | "Delete sandbox?" confirm |
+
+## Live demo
+
+<Preview minHeight={80}>
+  <DrawerDemo />
+</Preview>
+
+## Left side
+
+<Preview minHeight={80}>
+  <DrawerLeft />
+</Preview>
+
+## Props
+
+<PropsTable path="components/Drawer/Drawer.types.ts" name="DrawerProps" />
+
+## Keyboard behavior
+
+| Key | Effect |
+|-----|--------|
+| `Escape` | Close drawer |
+| `Tab` / `Shift+Tab` | Cycle focus within drawer (trapped) |
+
+## Accessibility
+
+- Uses `role="dialog"` with `aria-modal="true"` and `aria-labelledby` pointing at the title — screen readers announce the drawer when it opens.
+- `useFocusTrap` keeps focus inside the drawer while it is open.
+- The backdrop div is `aria-hidden="true"` — it is a visual affordance, not an interactive region.
+- The close button has `aria-label="Close drawer"`.

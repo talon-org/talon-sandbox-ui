@@ -1,0 +1,55 @@
+---
+title: LoginLayout
+description: Two-column authentication page layout with a decorative left panel and a centered form on the right.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { LoginLayout, Input, Button } from '@/components/TalonComponents';
+
+## Overview
+
+`LoginLayout` provides the standard two-column layout for authentication pages: a full-height decorative `left` panel (brand, illustration, or copy) and a centered form panel on the `right`.
+
+## Live demo
+
+<Preview minHeight={280}>
+  <LoginLayout
+    left={
+      <div style={{
+        height: '100%',
+        background: 'linear-gradient(135deg, var(--acc-soft) 0%, var(--bg-2) 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 32,
+      }}>
+        <div style={{ color: 'var(--fg-1)', textAlign: 'center' }}>
+          <div style={{ fontSize: 32, marginBottom: 8 }}>🚀</div>
+          <div style={{ fontSize: 18, fontWeight: 600 }}>Talon Sandbox</div>
+          <div style={{ fontSize: 13, color: 'var(--fg-3)', marginTop: 4 }}>
+            Isolated environments for your team
+          </div>
+        </div>
+      </div>
+    }
+    style={{ height: 280, width: '100%' }}
+  >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 300 }}>
+      <div style={{ fontSize: 20, fontWeight: 600 }}>Sign in</div>
+      <Input size="md" placeholder="Email" type="email" />
+      <Input size="md" placeholder="Password" type="password" />
+      <Button>Continue</Button>
+    </div>
+  </LoginLayout>
+</Preview>
+
+## Props
+
+<PropsTable path="components/LoginLayout/LoginLayout.types.ts" name="LoginLayoutProps" />
+
+## Accessibility
+
+- The layout renders two sibling `<div>` elements — no implied roles.
+- The form inside `children` should use `<form>` with a submit handler, `<label>` elements associated with each input, and a submit `<Button type="submit">`.
+- The `left` decorative panel should not contain content critical to completing the login flow — it should be meaningful only as brand reinforcement.

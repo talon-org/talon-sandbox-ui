@@ -1,0 +1,56 @@
+---
+title: TablePagination
+description: Standalone pagination row with page-size selector, item count label, and prev/next controls.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { TablePaginationDemo } from '@/components/demos/TablePaginationDemos';
+
+## Overview
+
+`TablePagination` renders the pagination footer used by `DataTable`. Use it standalone when you manage your own list rendering or when building a server-driven table outside of `DataTable`.
+
+Page indices are **0-based** — page 0 is the first page. The `total` prop drives the page count and the item range label ("1–10 of 247").
+
+### When to use vs DataTable pagination
+
+| | TablePagination | DataTable (built-in) |
+|--|-----------------|----------------------|
+| **Own rendering loop** | Use standalone | N/A |
+| **Server-driven table** | Standalone or via `serverState` | `mode="server"` |
+| **Automatic** | — | Default when `pagination` prop is set |
+
+## Live demo
+
+<Preview minHeight={80}>
+  <TablePaginationDemo />
+</Preview>
+
+## Usage
+
+```tsx
+import { TablePagination } from '@talon-sandbox/react';
+
+const [page, setPage] = useState(0);
+const [pageSize, setPageSize] = useState(10);
+
+<TablePagination
+  page={page}
+  pageSize={pageSize}
+  total={247}
+  onPageChange={setPage}
+  onPageSizeChange={(size) => { setPageSize(size); setPage(0); }}
+  pageSizeOptions={[10, 25, 50]}
+/>
+```
+
+## Props
+
+<PropsTable path="components/TablePagination/TablePagination.types.ts" name="TablePaginationProps" />
+
+## Accessibility
+
+- Previous / next buttons have descriptive `aria-label` attributes ("Previous page", "Next page").
+- The page-size `<select>` has a visually-hidden label for screen readers.
+- When on the first page, "Previous" is `disabled` and `aria-disabled="true"`; same for "Next" on the last page.

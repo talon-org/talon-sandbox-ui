@@ -1,0 +1,70 @@
+---
+title: NumberInput
+description: Styled numeric input with optional stepper buttons, unit suffix, and min/max clamping. Integrates with FormField context.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { NumberInputDemo, NumberInputSizes } from '@/components/demos/NumberInputDemos';
+
+## Overview
+
+`NumberInput` renders a styled `<input type="number">` that calls `onChange(value: number)` rather than the raw DOM event. It optionally renders increment/decrement stepper buttons and a read-only unit suffix.
+
+Values are clamped to `[min, max]` on blur and stepper clicks. When rendered inside a `FormField`, it automatically picks up the accessible `id` and `aria-invalid` state from context.
+
+### When to use vs Slider
+
+| | NumberInput | Slider |
+|--|-------------|--------|
+| **Input mode** | Keyboard + steppers | Drag / arrow keys |
+| **Precise values** | Yes | Approximate |
+| **Best for** | CPU, memory, port numbers | Volume, progress, continuous ranges |
+
+## Live demo
+
+<Preview minHeight={120}>
+  <NumberInputDemo />
+</Preview>
+
+## Sizes
+
+<Preview minHeight={140}>
+  <NumberInputSizes />
+</Preview>
+
+## Usage
+
+```tsx
+import { FormField, NumberInput } from '@talon-sandbox/react';
+
+<FormField label="CPU" hint="1–32 vCPU">
+  <NumberInput
+    value={cpu}
+    onChange={setCpu}
+    min={1}
+    max={32}
+    step={1}
+    unit="vCPU"
+  />
+</FormField>
+```
+
+## Props
+
+<PropsTable path="components/NumberInput/NumberInput.types.ts" name="NumberInputProps" />
+
+## Keyboard behavior
+
+| Key | Effect |
+|-----|--------|
+| `ArrowUp` | Increment by step |
+| `ArrowDown` | Decrement by step |
+| `Home` / `End` | Jump to min / max (when min/max are set) |
+
+## Accessibility
+
+- Renders a native `<input type="number">` — browser and AT understand numeric semantics natively.
+- Stepper buttons have `aria-label="Increment"` / `aria-label="Decrement"`.
+- When inside `FormField`, `id` and `aria-invalid` are injected automatically from context.
+- `unit` suffix is `aria-hidden`; pair with `aria-label` on the input itself when the unit is meaningful (e.g. `aria-label="Memory in GiB"`).

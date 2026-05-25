@@ -1,0 +1,35 @@
+---
+title: MemberRow
+description: Team member list row with avatar, email, role, joined date, and an actions slot.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { MemberRowDemo, MemberRowCustomAvatar } from '@/components/demos/MemberRowDemos';
+
+## Overview
+
+`MemberRow` renders a standardized row for team member lists. It shows an avatar (initials or a custom image), email, optional role badge, optional joined date, and an end-aligned actions slot.
+
+## Live demo
+
+<Preview minHeight={140}>
+  <MemberRowDemo />
+</Preview>
+
+## Custom avatar
+
+Pass a React node (e.g., `<img>`) to `avatar` for photo avatars.
+
+<Preview minHeight={60}>
+  <MemberRowCustomAvatar />
+</Preview>
+
+## Props
+
+<PropsTable path="components/MemberRow/MemberRow.types.ts" name="MemberRowProps" />
+
+## Accessibility
+
+- The avatar element has `aria-hidden="true"` — the email address serves as the primary identifier for screen readers.
+- `role` and `joinedAt` are supplementary text; ensure `actions` buttons have their own visible labels or `aria-label` values that include context (e.g., "Remove alice@example.com").

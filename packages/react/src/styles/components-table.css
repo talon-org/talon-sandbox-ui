@@ -1,0 +1,194 @@
+/* ============================================================
+   Talon UI · table primitives stylesheet
+   ────────────────────────────────────────────────────────────
+   Imported by build-css.mjs after components.css.
+   Contains: DataTable sort/selection, TablePagination.
+   ============================================================ */
+
+/* ─────── TablePagination ─────── */
+.tln-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--line-soft);
+  background: var(--bg-1);
+  font-size: var(--text-sm);
+  color: var(--fg-2);
+  flex-wrap: wrap;
+}
+.tln-pagination__info {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+.tln-pagination__nav { display: flex; gap: 2px; align-items: center; }
+.tln-pagination__nav button {
+  height: 26px;
+  min-width: 26px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: var(--r-1);
+  background: transparent;
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.tln-pagination__nav button:hover:not([disabled]) { background: var(--bg-hover); color: var(--fg-0); }
+.tln-pagination__nav button[aria-current='page'] {
+  background: var(--acc-soft);
+  color: var(--acc-strong);
+  border-color: var(--acc);
+}
+.tln-pagination__nav button[disabled] { opacity: 0.3; cursor: not-allowed; }
+.tln-pagination__size {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+}
+.tln-pagination__size select {
+  height: 24px;
+  background: var(--bg-input);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  color: var(--fg-2);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  padding: 0 20px 0 6px;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--fg-3) 50%),
+                    linear-gradient(135deg, var(--fg-3) 50%, transparent 50%);
+  background-position: calc(100% - 10px) 50%, calc(100% - 6px) 50%;
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+}
+
+/* ─────── DataTable ─────── */
+.tln-datatable { display: flex; flex-direction: column; }
+
+/* toolbar */
+.tln-datatable__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--bg-1);
+}
+.tln-datatable__filter { display: flex; align-items: center; flex: 1; }
+.tln-datatable__filter-input {
+  width: 100%;
+  max-width: 260px;
+  height: 28px;
+  padding: 0 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  color: var(--fg-1);
+  font-size: var(--text-sm);
+  outline: none;
+}
+.tln-datatable__filter-input:focus { border-color: var(--acc); }
+
+/* column visibility */
+.tln-datatable__col-vis { position: relative; margin-left: auto; }
+.tln-datatable__col-vis-btn {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  background: var(--bg-1);
+  color: var(--fg-2);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.tln-datatable__col-vis-btn:hover { background: var(--bg-hover); color: var(--fg-0); }
+.tln-datatable__col-vis-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 50;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  box-shadow: 0 4px 16px var(--shadow-md);
+  padding: 8px;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tln-datatable__col-vis-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: var(--r-1);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  color: var(--fg-2);
+  user-select: none;
+}
+.tln-datatable__col-vis-item:hover { background: var(--bg-hover); color: var(--fg-0); }
+.tln-datatable__col-vis-item input { cursor: pointer; accent-color: var(--acc); }
+
+/* scroll container */
+.tln-datatable__scroll { overflow-x: auto; }
+
+/* header cells */
+.tln-datatable__th {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tln-datatable__th.sortable { cursor: pointer; }
+.tln-datatable__th.sortable:hover { color: var(--fg-1); }
+.tln-datatable__sort-icon {
+  font-size: 10px;
+  color: var(--fg-3);
+  flex-shrink: 0;
+}
+
+/* body */
+.tln-datatable__body { }
+.tln-datatable__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  color: var(--fg-3);
+  font-size: var(--text-sm);
+}
+
+/* sr-only utility for filter label */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
+}

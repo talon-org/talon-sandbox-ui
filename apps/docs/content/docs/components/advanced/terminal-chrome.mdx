@@ -1,0 +1,53 @@
+---
+title: TerminalChrome
+description: Sandbox terminal window frame with title bar, back button, recording indicator, and status bar slots.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { TerminalChromeDemo, TerminalChromeRecording } from '@/components/demos/TerminalChromeDemos';
+
+## Overview
+
+`TerminalChrome` wraps a terminal surface (e.g., an xterm.js mount) with Talon's standard window chrome: a top title bar showing sandbox identity, an optional back button, a recording toggle, custom top action slots, a `children` mount area, and a bottom status bar slot.
+
+### When to use
+
+Use `TerminalChrome` any time you are embedding a live or recorded terminal into a Talon surface. It ensures consistent window chrome across the console, playground, and recording player views.
+
+### Composition
+
+```
+┌──────────────────────────────────────────────────────┐
+│  ← Back   sandbox-name (id)   [topActions]  ● REC  │  ← title bar
+├──────────────────────────────────────────────────────┤
+│                                                      │
+│                   children                           │  ← terminal mount
+│                                                      │
+├──────────────────────────────────────────────────────┤
+│  [bottomStatus]                                      │  ← status bar
+└──────────────────────────────────────────────────────┘
+```
+
+## Live demo
+
+<Preview minHeight={200}>
+  <TerminalChromeDemo />
+</Preview>
+
+## Recording active
+
+<Preview minHeight={200}>
+  <TerminalChromeRecording />
+</Preview>
+
+## Props
+
+<PropsTable path="components/TerminalChrome/TerminalChrome.types.ts" name="TerminalChromeProps" />
+
+## Accessibility
+
+- The title bar is `aria-hidden` — it is visual chrome, not the primary content landmark.
+- The `children` area should have `role="application"` when embedding xterm.js, per WAI-ARIA recommendations for terminal applications.
+- The back button has an accessible label; the recording toggle button should have `aria-label` and `aria-pressed` set to reflect recording state.
+- `bottomStatus` content should include text alongside any badge or icon for screen reader equivalence.

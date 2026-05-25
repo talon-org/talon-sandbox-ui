@@ -1,0 +1,70 @@
+---
+title: RecordingPlayer
+description: Fully controlled terminal recording playback with rAF-driven timeline, speed control, and agent step sidebar.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { RecordingDemo } from '@/components/demos/RecordingDemos';
+
+## Overview
+
+`RecordingPlayer` renders a full-featured terminal session playback surface. It drives playback via a `requestAnimationFrame` loop internally, but follows a **fully controlled** interface — the parent holds `currentTime` and `isPlaying` in state and wires them back as props.
+
+### Architecture: why fully controlled?
+
+- The parent can persist and restore playback state (e.g., resume from a saved position).
+- The parent can synchronize playback with external signals (e.g., pause when a modal opens).
+- The `rAF` loop is entirely inside `RecordingPlayer` — the parent does not need to drive time manually. It just receives `onSeek` calls and updates `currentTime`.
+
+### Key behaviors
+
+- When `isPlaying` is `true`, the component calls `onSeek(currentTime + dt * speed)` every frame.
+- When `currentTime` reaches `recording.duration`, the component calls `onTogglePlay()` to signal end-of-recording.
+- Seeking by clicking the timeline scrubber calls `onSeek(t)`.
+
+## Live demo
+
+<Preview minHeight={260}>
+  <RecordingDemo />
+</Preview>
+
+## With agent steps
+
+The optional `steps` prop renders a sidebar of agent reasoning steps alongside the playback timeline.
+
+```tsx
+const steps: AgentStep[] = [
+  { time: 0, title: 'Initialize environment' },
+  { time: 2, title: 'Install dependencies', detail: '312 packages' },
+  { time: 6, title: 'Build complete', detail: '1.2s' },
+];
+
+<RecordingPlayer
+  recording={recording}
+  frames={frames}
+  steps={steps}
+  currentTime={t}
+  onSeek={setT}
+  isPlaying={playing}
+  onTogglePlay={() => setPlaying(p => !p)}
+/>
+```
+
+## Props
+
+<PropsTable path="components/RecordingPlayer/RecordingPlayer.types.ts" name="RecordingPlayerProps" />
+
+## Keyboard behavior
+
+| Key | Effect |
+|-----|--------|
+| `Space` | Toggle play / pause |
+| `ArrowLeft` | Seek backward 5 seconds |
+| `ArrowRight` | Seek forward 5 seconds |
+
+## Accessibility
+
+- The play/pause button has `aria-label` that reflects the current state ("Play" / "Pause").
+- The timeline scrubber uses `role="slider"` with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, and `aria-label="Playback position"`.
+- Terminal output frames are displayed in a scrollable `<pre>` — the region is `aria-live="off"` to avoid announcing every frame during playback.

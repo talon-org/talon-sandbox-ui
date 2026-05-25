@@ -20,6 +20,11 @@
     "typecheck": {
       "dependsOn": ["^build"],
       "outputs": []
+    },
+    "docs:build": {
+      "dependsOn": ["@talon-sandbox/react#build", "@talon-sandbox/tokens#build"],
+      "outputs": [".next/**"],
+      "cache": true
     }
   }
 }

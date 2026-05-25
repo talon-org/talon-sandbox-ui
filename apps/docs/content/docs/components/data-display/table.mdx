@@ -1,0 +1,56 @@
+---
+title: Table
+description: CSS Grid-based data table with sortable columns, click-through rows, and empty state slot.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { TableDemo, TableClickable, TableEmpty } from '@/components/demos/TableDemos';
+
+## Overview
+
+`Table` is a CSS Grid-based data table that accepts typed column definitions and a data array. It handles empty state, row click, and keyboard activation automatically.
+
+### When to use vs DataTable
+
+| | Table | DataTable (Phase 2) |
+|--|-------|---------------------|
+| **Sorting** | No (bring your own) | Built-in |
+| **Pagination** | No (bring your own) | Built-in |
+| **Row selection** | No | Yes |
+| **Data size** | Small–medium lists | Large datasets |
+| **Bundle cost** | Minimal | Heavier |
+
+Use `Table` for read-only lists where you control sorting outside the component. Reach for `DataTable` when you need built-in pagination and selection.
+
+## Live demo
+
+<Preview minHeight={160}>
+  <TableDemo />
+</Preview>
+
+## Clickable rows
+
+<Preview minHeight={160}>
+  <TableClickable />
+</Preview>
+
+## Empty state
+
+<Preview minHeight={120}>
+  <TableEmpty />
+</Preview>
+
+## Props
+
+<PropsTable path="components/Table/Table.types.ts" name="TableProps" />
+
+## Keyboard behavior
+
+When `onRowClick` is provided, rows receive `tabIndex={0}`. `Enter` and `Space` trigger the click handler.
+
+## Accessibility
+
+- Container uses `role="table"` with child `role="row"`, `role="columnheader"`, and `role="cell"` — full ARIA table semantics without a native `<table>` element.
+- Clickable rows receive `tabIndex={0}` and respond to `Enter`/`Space` so keyboard users can activate them.
+- Column widths are set via `gridTemplateColumns` — the layout is accessible since no visual reordering occurs.
