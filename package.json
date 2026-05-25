@@ -8,7 +8,8 @@
   },
   "workspaces": [
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "apps/*"
   ],
   "scripts": {
     "build": "turbo run build",
@@ -18,7 +19,9 @@
     "typecheck": "turbo run typecheck",
     "changeset": "changeset",
     "version-packages": "changeset version && pnpm install --lockfile-only",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset publish",
+    "docs:dev": "pnpm --filter @talon-sandbox/docs dev",
+    "docs:build": "pnpm --filter @talon-sandbox/docs build"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",

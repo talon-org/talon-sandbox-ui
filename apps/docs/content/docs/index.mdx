@@ -1,0 +1,69 @@
+---
+title: Getting Started
+description: React component library for Talon Sandbox. CSS-token-driven, no Tailwind required.
+---
+
+## Installation
+
+```bash
+pnpm add @talon-sandbox/react @talon-sandbox/tokens
+```
+
+## Quick start
+
+```tsx
+// 1. Import styles once at your app root
+import '@talon-sandbox/react/styles';
+
+// 2. Set data-* attributes on <html> (or any container)
+// data-theme="ink" data-mode="dark" data-density="standard"
+
+// 3. Use components
+import { Button, Input } from '@talon-sandbox/react';
+
+export function Example() {
+  return (
+    <>
+      <Input placeholder="Sandbox name" />
+      <Button variant="primary">Create</Button>
+    </>
+  );
+}
+```
+
+## Theming
+
+All visual decisions are made by CSS custom properties on the root element:
+
+| Attribute | Values | Default |
+|-----------|--------|---------|
+| `data-theme` | `ink` `onyx` `pewter` `iron` `phosphor` `indigo` `violet` `sky` `teal` | `ink` |
+| `data-mode` | `dark` `light` | `dark` |
+| `data-density` | `compact` `standard` `relaxed` | `standard` |
+| `data-font` | `geist` `plex` `jetbrains` `system` | `geist` |
+| `data-lang` | `en` `zh` | `en` |
+
+The dark/light toggle in the top-right corner of these docs switches both the docs shell and the component previews simultaneously.
+
+## CSS-only architecture
+
+Components emit stable `tln-*` class names and delegate all visual decisions to tokens. No Tailwind utilities are emitted. This means:
+
+- Works in any CSS environment (Tailwind project, vanilla CSS, CSS Modules)
+- No purging surprises — the stylesheet is a single self-contained file
+- Overriding is predictable: target the `tln-*` class directly
+
+## TypeScript
+
+All components export full TypeScript types:
+
+```tsx
+import type { ButtonProps, ButtonVariant, ButtonSize } from '@talon-sandbox/react';
+```
+
+## Package structure
+
+| Package | Purpose |
+|---------|---------|
+| `@talon-sandbox/react` | React components + compiled CSS |
+| `@talon-sandbox/tokens` | Raw design tokens (CSS vars, JSON, Tailwind preset) |
