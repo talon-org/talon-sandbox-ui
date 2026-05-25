@@ -1,0 +1,40 @@
+---
+title: FilterBar
+description: Horizontal filter strip with grouped option pills, optional counts, and a built-in search input slot.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { FilterBarDemo, FilterBarWithSearch, FilterBarMultiGroups } from '@/components/demos/FilterBarDemos';
+
+## Overview
+
+`FilterBar` renders a row of filter pills grouped by category, with optional counts per item and a search input on the right. It is the primary filtering control for list and table pages in the Talon console.
+
+## Live demo
+
+<Preview minHeight={60}>
+  <FilterBarDemo />
+</Preview>
+
+## With search
+
+<Preview minHeight={60}>
+  <FilterBarWithSearch />
+</Preview>
+
+## Multiple groups
+
+<Preview minHeight={80}>
+  <FilterBarMultiGroups />
+</Preview>
+
+## Props
+
+<PropsTable path="components/FilterBar/FilterBar.types.ts" name="FilterBarProps" />
+
+## Accessibility
+
+- Each filter pill is a `<button>` with `aria-pressed` reflecting whether it is the active filter.
+- Group labels are rendered as plain text separators — they do not have a heading role; the visual grouping is presentational.
+- The search input accepts all standard `<input>` keyboard behavior.
