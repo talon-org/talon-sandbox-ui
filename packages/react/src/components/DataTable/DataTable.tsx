@@ -293,7 +293,7 @@ export function DataTable<TRow extends object>({
                   >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(header.column.columnDef.header, header.getContext()) as React.ReactNode}
                     {canSort && (
                       <span className="tln-datatable__sort-icon" aria-hidden="true">
                         {sorted === 'asc' ? '↑' : sorted === 'desc' ? '↓' : '⇅'}
@@ -337,7 +337,7 @@ export function DataTable<TRow extends object>({
                         role="cell"
                         style={{ flex: cell.column.columnDef.size ? `0 0 ${cell.column.columnDef.size}px` : '1 1 0', minWidth: 0 }}
                       >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {flexRender(cell.column.columnDef.cell, cell.getContext()) as React.ReactNode}
                       </div>
                     ))}
                   </div>
@@ -359,7 +359,7 @@ export function DataTable<TRow extends object>({
                     role="cell"
                     style={{ flex: cell.column.columnDef.size ? `0 0 ${cell.column.columnDef.size}px` : '1 1 0', minWidth: 0 }}
                   >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext()) as React.ReactNode}
                   </div>
                 ))}
               </div>
