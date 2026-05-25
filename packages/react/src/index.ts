@@ -111,3 +111,21 @@ export type { FormItemProps, AnyFieldApi, AnyFieldMeta, FieldValidators, FieldOp
 
 export { TablePagination } from './components/TablePagination/index.js';
 export type { TablePaginationProps } from './components/TablePagination/index.js';
+
+export {
+  DataTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from './components/DataTable/index.js';
+export type {
+  DataTableProps,
+  DataTableServerState,
+  ColumnDef,
+  SortingState,
+  RowSelectionState,
+  PaginationState,
+  TanstackTableInstance,
+} from './components/DataTable/index.js';
