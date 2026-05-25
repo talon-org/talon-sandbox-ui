@@ -1,7 +1,11 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { Switch } from '@/components/TalonComponents';
 
 export function SwitchDemo() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -21,6 +25,9 @@ export function SwitchDemo() {
 }
 
 export function SwitchSizes() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
       <Switch size="sm" checked={true} onChange={() => {}} />

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tabs } from '@/components/TalonComponents';
 
 const TAB_ITEMS = [
@@ -15,7 +15,10 @@ const TAB_ITEMS_ICONS = [
 ];
 
 export function TabsDemo() {
+  const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState('overview');
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <Tabs
       value={value}
@@ -26,7 +29,10 @@ export function TabsDemo() {
 }
 
 export function TabsWithIcons() {
+  const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState('logs');
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <Tabs
       value={value}

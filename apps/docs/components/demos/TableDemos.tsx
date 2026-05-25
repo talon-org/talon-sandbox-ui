@@ -1,4 +1,5 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { Table, Badge } from '@/components/TalonComponents';
 
 const SANDBOX_DATA = [
@@ -25,6 +26,9 @@ const SANDBOX_COLUMNS = [
 ];
 
 export function TableDemo() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <Table
       columns={SANDBOX_COLUMNS}
@@ -35,6 +39,9 @@ export function TableDemo() {
 }
 
 export function TableClickable() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <Table
       columns={SANDBOX_COLUMNS}
@@ -46,6 +53,9 @@ export function TableClickable() {
 }
 
 export function TableEmpty() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <Table
       columns={SANDBOX_COLUMNS}

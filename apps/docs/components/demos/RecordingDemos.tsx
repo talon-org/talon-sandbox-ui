@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RecordingPlayer } from '@/components/TalonComponents';
 
 const DEMO_FRAMES = [
@@ -8,13 +8,17 @@ const DEMO_FRAMES = [
   { time: 2.5, text: '$ npm install', kind: 'cmd' as const },
   { time: 4, text: 'added 312 packages in 2s', kind: 'out' as const },
   { time: 6, text: '$ npm run build', kind: 'cmd' as const },
-  { time: 8, text: '✓ Built in 1.2s', kind: 'ok' as const },
+  { time: 8, text: 'Built in 1.2s', kind: 'ok' as const },
 ];
 
 export function RecordingDemo() {
+  const [mounted, setMounted] = useState(false);
   const [t, setT] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
+
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
 
   return (
     <RecordingPlayer

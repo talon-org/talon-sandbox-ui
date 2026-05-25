@@ -5,7 +5,7 @@ description: Team member list row with avatar, email, role, joined date, and an 
 
 import { Preview } from '@/components/Preview';
 import { PropsTable } from '@/components/PropsTable';
-import { MemberRow, Button, Badge } from '@/components/TalonComponents';
+import { MemberRowDemo, MemberRowCustomAvatar } from '@/components/demos/MemberRowDemos';
 
 ## Overview
 
@@ -14,26 +14,7 @@ import { MemberRow, Button, Badge } from '@/components/TalonComponents';
 ## Live demo
 
 <Preview minHeight={140}>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-    <MemberRow
-      email="alice@example.com"
-      role={<Badge variant="info">Admin</Badge>}
-      joinedAt="May 2026"
-      actions={<Button size="sm" variant="secondary">Remove</Button>}
-    />
-    <MemberRow
-      email="bob@example.com"
-      role={<Badge variant="neutral">Member</Badge>}
-      joinedAt="Apr 2026"
-      actions={<Button size="sm" variant="secondary">Remove</Button>}
-    />
-    <MemberRow
-      avatar="CW"
-      email="carol@example.com"
-      role={<Badge variant="neutral">Member</Badge>}
-      joinedAt="Mar 2026"
-    />
-  </div>
+  <MemberRowDemo />
 </Preview>
 
 ## Custom avatar
@@ -41,11 +22,7 @@ import { MemberRow, Button, Badge } from '@/components/TalonComponents';
 Pass a React node (e.g., `<img>`) to `avatar` for photo avatars.
 
 <Preview minHeight={60}>
-  <MemberRow
-    avatar={<img src="https://api.dicebear.com/7.x/thumbs/svg?seed=felix" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />}
-    email="felix@example.com"
-    role={<Badge>Owner</Badge>}
-  />
+  <MemberRowCustomAvatar />
 </Preview>
 
 ## Props

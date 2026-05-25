@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FilterBar } from '@/components/TalonComponents';
 
 const FILTER_GROUPS = [
@@ -31,7 +31,10 @@ const MULTI_GROUPS = [
 ];
 
 export function FilterBarDemo() {
+  const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState('all');
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <FilterBar
       groups={FILTER_GROUPS}
@@ -42,8 +45,11 @@ export function FilterBarDemo() {
 }
 
 export function FilterBarWithSearch() {
+  const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState('running');
   const [search, setSearch] = useState('');
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <FilterBar
       groups={FILTER_GROUPS}
@@ -55,7 +61,10 @@ export function FilterBarWithSearch() {
 }
 
 export function FilterBarMultiGroups() {
+  const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState('running');
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <FilterBar
       groups={MULTI_GROUPS}

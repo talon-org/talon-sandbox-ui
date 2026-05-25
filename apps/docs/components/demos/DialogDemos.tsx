@@ -1,9 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, Button } from '@/components/TalonComponents';
 
 export function DialogDemo() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <>
       <Button size="sm" onClick={() => setOpen(true)}>Open dialog</Button>
@@ -13,7 +16,7 @@ export function DialogDemo() {
         title="Delete sandbox?"
         footer={
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-            <Button size="sm" variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button size="sm" variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
             <Button size="sm" variant="danger" onClick={() => setOpen(false)}>Delete</Button>
           </div>
         }
@@ -27,7 +30,10 @@ export function DialogDemo() {
 }
 
 export function DialogNoFooter() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <>
       <Button size="sm" onClick={() => setOpen(true)}>Open (no footer)</Button>

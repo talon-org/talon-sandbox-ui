@@ -45,4 +45,9 @@ export {
   DEFAULT_STATE_ORDER,
   DEFAULT_STATE_COLORS,
   LoginLayout,
+  type TweaksTheme,
+  type TweaksMode,
+  type TweaksDensity,
+  type TweaksFont,
+  type TweaksLang,
 } from '@talon-sandbox/react';

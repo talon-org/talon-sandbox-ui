@@ -1,7 +1,11 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { TerminalChrome, Badge } from '@/components/TalonComponents';
 
 export function TerminalChromeDemo() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <TerminalChrome
       sandbox={{ id: 'sb-a1b2c3d4', name: 'dev-env' }}
@@ -30,6 +34,9 @@ export function TerminalChromeDemo() {
 }
 
 export function TerminalChromeRecording() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <TerminalChrome
       sandbox={{ id: 'sb-a1b2c3d4', name: 'dev-env' }}

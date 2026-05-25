@@ -1,9 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Segmented } from '@/components/TalonComponents';
 
 export function SegmentedDemo() {
+  const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState('dark');
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <Segmented
       value={value}
@@ -17,6 +20,9 @@ export function SegmentedDemo() {
 }
 
 export function SegmentedSizes() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       <Segmented size="sm" value="a" onChange={() => {}} options={[{ value: 'a', label: 'Small' }, { value: 'b', label: 'B' }]} />

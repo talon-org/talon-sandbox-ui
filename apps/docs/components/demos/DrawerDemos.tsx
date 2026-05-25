@@ -1,9 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Drawer, Button, KV, Badge } from '@/components/TalonComponents';
 
 export function DrawerDemo() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <>
       <Button size="sm" onClick={() => setOpen(true)}>Open detail drawer</Button>
@@ -31,7 +34,10 @@ export function DrawerDemo() {
 }
 
 export function DrawerLeft() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <>
       <Button size="sm" onClick={() => setOpen(true)}>Open from left</Button>
