@@ -129,3 +129,6 @@ export type {
   PaginationState,
   TanstackTableInstance,
 } from './components/DataTable/index.js';
+
+export { Combobox } from './components/Combobox/index.js';
+export type { ComboboxProps, ComboboxOption, ComboboxSize } from './components/Combobox/index.js';
