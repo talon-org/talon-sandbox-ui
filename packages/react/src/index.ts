@@ -108,3 +108,6 @@ export type { MultiSelectProps, MultiSelectOption } from './components/MultiSele
 
 export { FormItem, useForm, useField, useStore, formOptions } from './components/FormItem/index.js';
 export type { FormItemProps, AnyFieldApi, AnyFieldMeta, FieldValidators, FieldOptions } from './components/FormItem/index.js';
+
+export { TablePagination } from './components/TablePagination/index.js';
+export type { TablePaginationProps } from './components/TablePagination/index.js';
