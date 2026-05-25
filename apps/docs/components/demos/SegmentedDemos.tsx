@@ -1,0 +1,27 @@
+'use client';
+import { useState } from 'react';
+import { Segmented } from '@/components/TalonComponents';
+
+export function SegmentedDemo() {
+  const [value, setValue] = useState('dark');
+  return (
+    <Segmented
+      value={value}
+      onChange={setValue}
+      options={[
+        { value: 'dark', label: 'Dark' },
+        { value: 'light', label: 'Light' },
+      ]}
+    />
+  );
+}
+
+export function SegmentedSizes() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <Segmented size="sm" value="a" onChange={() => {}} options={[{ value: 'a', label: 'Small' }, { value: 'b', label: 'B' }]} />
+      <Segmented size="md" value="a" onChange={() => {}} options={[{ value: 'a', label: 'Medium' }, { value: 'b', label: 'B' }]} />
+      <Segmented size="lg" value="a" onChange={() => {}} options={[{ value: 'a', label: 'Large' }, { value: 'b', label: 'B' }]} />
+    </div>
+  );
+}
