@@ -93,3 +93,6 @@ export type { FormFieldContextValue } from './primitives/FormFieldContext.js';
 
 export { Checkbox } from './components/Checkbox/index.js';
 export type { CheckboxProps } from './components/Checkbox/index.js';
+
+export { Radio, RadioGroup } from './components/Radio/index.js';
+export type { RadioProps, RadioGroupProps, RadioGroupOption } from './components/Radio/index.js';
