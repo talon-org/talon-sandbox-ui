@@ -1,0 +1,67 @@
+---
+title: Card / Panel
+description: Surface container with optional title header and footer section. Panel is an alias for Card.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { Card, Button } from '@/components/TalonComponents';
+
+## Overview
+
+`Card` is the standard surface container in Talon — a bordered, rounded box with optional title header and footer slots. `Panel` is a direct alias exported from the same module; use either name, they are identical.
+
+### When to use
+
+- Grouping related content on dashboard and detail pages.
+- Wrapping a form section that needs visual separation.
+- Displaying metrics, resource panels, or any content that needs a distinct surface.
+
+## Live demo
+
+<Preview minHeight={140}>
+  <Card title="Sandbox details" style={{ maxWidth: 360 }}>
+    <p style={{ margin: 0, color: 'var(--fg-2)', fontSize: 14 }}>
+      Your sandbox is running and ready to accept connections.
+    </p>
+  </Card>
+</Preview>
+
+## With footer
+
+<Preview minHeight={160}>
+  <Card
+    title="Create sandbox"
+    footer={
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+        <Button size="sm" variant="secondary">Cancel</Button>
+        <Button size="sm">Create</Button>
+      </div>
+    }
+    style={{ maxWidth: 360 }}
+  >
+    <p style={{ margin: 0, color: 'var(--fg-2)', fontSize: 14 }}>
+      This will provision a new isolated environment.
+    </p>
+  </Card>
+</Preview>
+
+## No title
+
+<Preview minHeight={100}>
+  <Card style={{ maxWidth: 360 }}>
+    <p style={{ margin: 0, color: 'var(--fg-2)', fontSize: 14 }}>
+      Content-only card with no header.
+    </p>
+  </Card>
+</Preview>
+
+## Props
+
+<PropsTable path="components/Card/Card.types.ts" name="CardProps" />
+
+## Accessibility
+
+- `Card` renders a `<div>` — it has no inherent role.
+- If the card represents a distinct content region, wrap it in a `<section>` or add `role="region"` with an `aria-label`.
+- The `title` prop renders as a `<div>` — it is visual only. Add a heading element inside `children` if the card title needs to appear in the document outline.
