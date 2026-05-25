@@ -57,7 +57,7 @@ export function DataTableDemo() {
 
 export function DataTableSelectable() {
   const [mounted, setMounted] = useState(false);
-  const [selection, setSelection] = useState<Record<string, boolean>>({});
+  const [selection, setSelection] = useState<Sandbox[]>([]);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
   return (
@@ -66,11 +66,11 @@ export function DataTableSelectable() {
         columns={COLUMNS}
         data={SANDBOXES}
         rowSelection
-        onRowSelectionChange={setSelection}
+        onRowSelectionChange={(rows) => setSelection(rows as Sandbox[])}
       />
-      {Object.keys(selection).length > 0 && (
+      {selection.length > 0 && (
         <p style={{ fontSize: 12, color: 'var(--fg-3)' }}>
-          {Object.keys(selection).length} row(s) selected
+          {selection.length} row(s) selected
         </p>
       )}
     </div>
