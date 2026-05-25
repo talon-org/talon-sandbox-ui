@@ -8,14 +8,10 @@ const config = {
   output: 'export',
   // Required for static export — no Next image optimization server
   images: { unoptimized: true },
-  // Transpile workspace packages from source (S1 must-fix: resolve to src, not dist)
-  transpilePackages: ['@talon-sandbox/react', '@talon-sandbox/tokens'],
-  // Fix turbopack root detection in pnpm monorepo
-  experimental: {
-    turbo: {
-      root: '../../',
-    },
-  },
+  // @talon-sandbox/react and @talon-sandbox/tokens are used as pre-built ESM.
+  // transpilePackages is intentionally NOT set — the dist bundles are used directly.
+  // @tanstack/react-form is a peer dep of @talon-sandbox/react; install it to resolve it.
+
 };
 
 export default withMDX(config);

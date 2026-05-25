@@ -25,13 +25,10 @@
         "./*"
       ],
       "@talon-sandbox/react": [
-        "../../packages/react/src/index.ts"
-      ],
-      "@talon-sandbox/react/styles": [
-        "../../packages/react/src/styles/components.css"
+        "../../packages/react/dist/index.d.ts"
       ],
       "@talon-sandbox/tokens": [
-        "../../packages/tokens/src/index.ts"
+        "../../packages/tokens/dist/index.d.ts"
       ]
     },
     "plugins": [

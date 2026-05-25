@@ -5,8 +5,11 @@
 /* 1. Fumadocs UI base (shell, layout, typography) */
 @import 'fumadocs-ui/style.css';
 
-/* 2. Talon design tokens (CSS vars, fonts) */
-@import '@talon-sandbox/react/styles';
+/* 2. Talon design tokens (CSS vars, fonts) — using tokens package which has correct font paths */
+@import '@talon-sandbox/tokens/css';
+
+/* 3. Talon component classes (.tln-*) — components.css from react source (no embedded fonts) */
+@import '../../../packages/react/src/styles/components.css';
 
 /* ============================================================
    Token bridge: map Fumadocs fd- vars to Talon token vars.
@@ -38,7 +41,7 @@
   --color-fd-accent-foreground:  var(--acc);
 }
 
-/* Light mode: Talon's [data-mode='light'] resolves all --bg-*/--fg-*/--acc-* vars,
+/* Light mode: Talon's [data-mode='light'] resolves all --bg-, --fg-, --acc- vars,
    so the fd- bridge above naturally picks up the light values when data-mode="light" */
 
 /* ============================================================

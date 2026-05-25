@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit"
@@ -11,6 +11,8 @@
   "dependencies": {
     "@talon-sandbox/react": "workspace:^",
     "@talon-sandbox/tokens": "workspace:^",
+    "@tanstack/react-form": "^1.32.0",
+    "fumadocs-core": "^16.9.1",
     "fumadocs-mdx": "^15.0.8",
     "fumadocs-typescript": "^5.2.6",
     "fumadocs-ui": "^16.9.1",

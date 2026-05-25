@@ -14,7 +14,9 @@ import path from 'path';
 // CWD = apps/docs/ → ../../packages/react/tsconfig.json
 const tsconfigPath = path.resolve(process.cwd(), '../../packages/react/tsconfig.json');
 
+const cacheDir = path.resolve(process.cwd(), '.next/cache/type-generator');
+
 export const generator = createGenerator({
   tsconfigPath,
-  cache: createFileSystemGeneratorCache(),
+  cache: createFileSystemGeneratorCache(cacheDir),
 });
