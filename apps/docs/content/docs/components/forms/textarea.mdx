@@ -1,0 +1,43 @@
+---
+title: Textarea
+description: Multi-line text control with invalid state and configurable row height.
+---
+
+import { Preview } from '@/components/Preview';
+import { PropsTable } from '@/components/PropsTable';
+import { Textarea } from '@/components/TalonComponents';
+
+## Overview
+
+`Textarea` wraps the native `<textarea>` with Talon's token styling. Use it for multi-line free text: notes, descriptions, startup scripts, configuration snippets.
+
+### When to use vs Input
+
+- Use `Textarea` when the expected content is more than one line.
+- Use `Input` for single-line values.
+- Use `CodeBlock` for read-only code display — don't put code into a Textarea.
+
+## Live demo
+
+<Preview>
+  <div style={{ maxWidth: 420 }}>
+    <Textarea placeholder="Describe your sandbox configuration…" rows={4} />
+  </div>
+</Preview>
+
+## Invalid state
+
+<Preview>
+  <div style={{ maxWidth: 420 }}>
+    <Textarea invalid defaultValue="too-short" placeholder="Must be at least 20 characters" />
+  </div>
+</Preview>
+
+## Props
+
+<PropsTable path="components/Textarea/Textarea.types.ts" name="TextareaProps" />
+
+## Accessibility
+
+- Always associate with a label — use `FormField`.
+- `invalid` sets `aria-invalid="true"`.
