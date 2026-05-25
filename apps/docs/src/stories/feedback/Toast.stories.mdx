@@ -1,0 +1,83 @@
+import { Meta } from '@ladle/react';
+import { ToastViewport, toast, Button } from '@talon-sandbox/react';
+
+<Meta title="Feedback/Toast" />
+
+# Toast
+
+Imperative notification system. `toast` is a global singleton API — call it from anywhere (event handlers, async callbacks, service functions). `ToastViewport` renders the toast stack and must be mounted once in your app root.
+
+## When to use
+
+- Confirming a completed action: "Sandbox created", "Settings saved", "Token revoked".
+- Reporting a non-blocking background operation: "Deploying…", "Sync complete".
+- Surfacing transient errors that don't prevent the user from continuing: "Failed to load logs — retrying".
+
+## When NOT to use
+
+- Critical errors that block the user from proceeding — use a `Dialog` or inline error state.
+- Validation errors on a form field — use `FormField`'s `error` prop.
+- Persistent status — use `Badge`, `StatusBadge`, or `EmptyState` with `variant="error"`.
+
+## Usage pattern
+
+```tsx
+// App root — mount once
+import { ToastViewport } from '@talon-sandbox/react';
+<ToastViewport />
+
+// Anywhere else — call imperatively
+import { toast } from '@talon-sandbox/react';
+toast.success('Sandbox created');
+toast.error('Failed to connect');
+toast.warn('Rate limit approaching');
+toast.info('Deployment queued');
+toast.dismiss(); // dismiss all
+toast.dismiss(id); // dismiss specific (id returned from toast())
+```
+
+## Toast API
+
+| Method | Description |
+|--------|-------------|
+| `toast(msg)` | Default style notification |
+| `toast.success(msg)` | Green — action completed |
+| `toast.error(msg)` | Red — something failed |
+| `toast.warn(msg)` | Yellow — warning, non-fatal |
+| `toast.info(msg)` | Blue — informational |
+| `toast.dismiss(id?)` | Dismiss one or all toasts |
+
+Auto-dismisses after **3500ms**. Hover pauses the timer.
+
+## Props
+
+`ToastViewport` takes no props.
+
+## Examples
+
+export const AllKinds = () => (
+  <div style={{ padding: 16 }}>
+    <ToastViewport />
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Button onClick={() => toast.success('Sandbox created successfully')}>Success</Button>
+      <Button onClick={() => toast.error('Failed to connect to cluster')}>Error</Button>
+      <Button onClick={() => toast.warn('Rate limit: 80% used')}>Warning</Button>
+      <Button onClick={() => toast.info('Deployment queued — 2 ahead of you')}>Info</Button>
+      <Button variant="ghost" onClick={() => toast('Default notification')}>Default</Button>
+      <Button variant="ghost" onClick={() => toast.dismiss()}>Dismiss all</Button>
+    </div>
+  </div>
+);
+
+## Gotchas
+
+- `ToastViewport` uses `createPortal` — mount it inside a component that is always rendered (typically your root `App` or layout). Do not mount it inside modals or conditionally-rendered trees.
+- The toast store is a module-level singleton — toasts persist across page navigation in SPAs. Call `toast.dismiss()` on route change if needed.
+- Hover-to-pause uses `mouseenter`/`mouseleave` — touch devices don't get the pause behavior.
+
+## Accessibility checklist
+
+- The viewport has `role="region"` and `aria-live="polite"` — screen readers announce new toasts without interrupting the user.
+- Each toast has `role="status"`.
+- The dismiss button has `aria-label="Dismiss notification"`.
+- `aria-live="polite"` means toasts don't interrupt ongoing speech. For urgent errors, consider `aria-live="assertive"` via a custom viewport.

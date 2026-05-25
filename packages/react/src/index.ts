@@ -102,3 +102,6 @@ export type { NumberInputProps } from './components/NumberInput/index.js';
 
 export { Slider } from './components/Slider/index.js';
 export type { SliderProps } from './components/Slider/index.js';
+
+export { MultiSelect } from './components/MultiSelect/index.js';
+export type { MultiSelectProps, MultiSelectOption } from './components/MultiSelect/index.js';

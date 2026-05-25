@@ -20,6 +20,10 @@
     "typecheck": {
       "dependsOn": ["^build"],
       "outputs": []
+    },
+    "docs:build": {
+      "dependsOn": ["@talon-sandbox/react#build"],
+      "outputs": ["apps/docs/dist/**"]
     }
   }
 }

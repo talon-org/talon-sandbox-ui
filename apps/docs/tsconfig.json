@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@talon-sandbox/react": ["../../packages/react/src/index.ts"],
+      "@talon-sandbox/tokens": ["../../packages/tokens/src/index.ts"]
+    }
+  },
+  "include": ["src", ".ladle"]
+}
