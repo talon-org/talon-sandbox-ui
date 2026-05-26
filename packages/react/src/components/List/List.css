@@ -1,0 +1,52 @@
+/* List 条目列表
+   来源: ui-extra.jsx LIST section */
+
+.tln-list {
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  overflow: hidden;
+}
+.tln-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line-soft);
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.tln-list-item:first-child { border-top: 0; }
+.tln-list-item:hover { background: var(--bg-hover); }
+.tln-list-item.selected { background: var(--acc-2); box-shadow: inset 2px 0 0 var(--acc); }
+
+.tln-list-item .ic { color: var(--fg-2); flex: 0 0 auto; }
+.tln-list-item.selected .ic { color: var(--fg-0); }
+
+.tln-list-item .body { flex: 1; min-width: 0; }
+.tln-list-item .primary {
+  color: var(--fg-0);
+  font-size: var(--text-base);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tln-list-item .secondary {
+  color: var(--fg-2);
+  font-size: var(--text-sm);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tln-list-item .meta {
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  flex: 0 0 auto;
+}
+.tln-list-item .right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

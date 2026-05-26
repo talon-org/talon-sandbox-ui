@@ -1,51 +1,159 @@
-import { forwardRef } from 'react';
-import { cx } from '../../primitives/clsx.js';
-import { useFormField } from '../../primitives/FormFieldContext.js';
-import type { SelectProps } from './Select.types.js';
+import React, { forwardRef } from 'react';
+import * as RadixSelect from '@radix-ui/react-select';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils.js';
+import { Icon } from '../../primitives/icons.js';
+import './Select.css';
 
-/**
- * Select — native dropdown control with custom arrow styling.
- *
- * CSS-only: all styles are in @talon-sandbox/react/styles (components.css).
- * When rendered inside a FormField, auto-receives the field's generated id
- * and invalid state via FormFieldContext.
- *
- * @example
- * import '@talon-sandbox/react/styles'
- * <Select value={val} onChange={(e) => setVal(e.target.value)}>
- *   <option value="a">Option A</option>
- *   <option value="b">Option B</option>
- * </Select>
- */
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
-  { size = 'md', invalid = false, mono, className, disabled, id, children, ...rest },
-  ref,
-) {
-  const field = useFormField();
-  const resolvedId = id ?? field?.controlId;
-  const resolvedInvalid = invalid || (field?.hasError ?? false);
+// ─── SelectTrigger cva ───────────────────────────────────────────
+export const selectTriggerVariants = cva('tln-select', {
+  variants: {
+    size: {
+      sm: 'tln-select-sm',
+      md: '',
+      lg: 'tln-select-lg',
+    },
+  },
+  defaultVariants: { size: 'md' },
+});
 
-  const cls = cx(
-    'tln-select',
-    size === 'sm' && 'tln-select-sm',
-    size === 'lg' && 'tln-select-lg',
-    resolvedInvalid && 'error',
-    mono && 'mono',
-    className,
-  );
+// ─── 根容器（直接透传 Radix Root） ──────────────────────────────────
+export const Select = RadixSelect.Root;
+Select.displayName = 'Select';
 
+// ─── SelectTrigger ──────────────────────────────────────────────
+export interface SelectTriggerProps
+  extends React.ComponentPropsWithoutRef<typeof RadixSelect.Trigger>,
+    VariantProps<typeof selectTriggerVariants> {
+  /** 错误状态：红色边框 */
+  error?: boolean;
+  /** 等宽字体 */
+  mono?: boolean;
+  /** 透传给 Radix Trigger，使用子元素作为触发器（asChild 模式） */
+  asChild?: boolean;
+}
+
+export const SelectTrigger = forwardRef<
+  React.ElementRef<typeof RadixSelect.Trigger>,
+  SelectTriggerProps
+>(function SelectTrigger({ size, error, mono, asChild, className, children, ...props }, ref) {
   return (
-    <select
+    <RadixSelect.Trigger
       ref={ref}
-      id={resolvedId}
-      className={cls}
-      disabled={disabled}
-      aria-invalid={resolvedInvalid || undefined}
-      {...rest}
+      asChild={asChild}
+      className={cn(
+        selectTriggerVariants({ size }),
+        error && 'error',
+        mono && 'mono',
+        className,
+      )}
+      aria-invalid={error || undefined}
+      {...props}
     >
       {children}
-    </select>
+      <RadixSelect.Icon className="tln-select-icon">
+        <Icon name="chevronDown" size={14} />
+      </RadixSelect.Icon>
+    </RadixSelect.Trigger>
   );
 });
 
-Select.displayName = 'Select';
+SelectTrigger.displayName = 'SelectTrigger';
+
+// ─── SelectValue ────────────────────────────────────────────────
+export const SelectValue = RadixSelect.Value;
+SelectValue.displayName = 'SelectValue';
+
+// ─── SelectContent ──────────────────────────────────────────────
+export interface SelectContentProps
+  extends React.ComponentPropsWithoutRef<typeof RadixSelect.Content> {}
+
+export const SelectContent = forwardRef<
+  React.ElementRef<typeof RadixSelect.Content>,
+  SelectContentProps
+>(function SelectContent({ className, children, position = 'popper', sideOffset = 4, ...props }, ref) {
+  return (
+    <RadixSelect.Portal>
+      <RadixSelect.Content
+        ref={ref}
+        position={position}
+        sideOffset={sideOffset}
+        className={cn('tln-select-content', className)}
+        {...props}
+      >
+        <RadixSelect.Viewport>
+          {children}
+        </RadixSelect.Viewport>
+      </RadixSelect.Content>
+    </RadixSelect.Portal>
+  );
+});
+
+SelectContent.displayName = 'SelectContent';
+
+// ─── SelectGroup ────────────────────────────────────────────────
+export const SelectGroup = RadixSelect.Group;
+SelectGroup.displayName = 'SelectGroup';
+
+// ─── SelectLabel ────────────────────────────────────────────────
+export interface SelectLabelProps
+  extends React.ComponentPropsWithoutRef<typeof RadixSelect.Label> {}
+
+export const SelectLabel = forwardRef<
+  React.ElementRef<typeof RadixSelect.Label>,
+  SelectLabelProps
+>(function SelectLabel({ className, ...props }, ref) {
+  return (
+    <RadixSelect.Label
+      ref={ref}
+      className={cn('tln-select-label', className)}
+      {...props}
+    />
+  );
+});
+
+SelectLabel.displayName = 'SelectLabel';
+
+// ─── SelectItem ─────────────────────────────────────────────────
+export interface SelectItemProps
+  extends React.ComponentPropsWithoutRef<typeof RadixSelect.Item> {}
+
+export const SelectItem = forwardRef<
+  React.ElementRef<typeof RadixSelect.Item>,
+  SelectItemProps
+>(function SelectItem({ className, children, ...props }, ref) {
+  return (
+    <RadixSelect.Item
+      ref={ref}
+      className={cn('tln-select-item', className)}
+      {...props}
+    >
+      {/* 已选中时显示 check 图标 */}
+      <RadixSelect.ItemIndicator className="tln-select-item-check">
+        <Icon name="check" size={12} />
+      </RadixSelect.ItemIndicator>
+      <RadixSelect.ItemText>{children}</RadixSelect.ItemText>
+    </RadixSelect.Item>
+  );
+});
+
+SelectItem.displayName = 'SelectItem';
+
+// ─── SelectSeparator ────────────────────────────────────────────
+export interface SelectSeparatorProps
+  extends React.ComponentPropsWithoutRef<typeof RadixSelect.Separator> {}
+
+export const SelectSeparator = forwardRef<
+  React.ElementRef<typeof RadixSelect.Separator>,
+  SelectSeparatorProps
+>(function SelectSeparator({ className, ...props }, ref) {
+  return (
+    <RadixSelect.Separator
+      ref={ref}
+      className={cn('tln-select-sep', className)}
+      {...props}
+    />
+  );
+});
+
+SelectSeparator.displayName = 'SelectSeparator';

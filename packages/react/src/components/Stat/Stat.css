@@ -1,0 +1,55 @@
+/* ─────── Stat ───────────────────────────────────────────────
+   来源：ui-extra.jsx Stat 段（约 214-248 行）
+   Prototype classes: .tln-stat / .tln-stat-label / .tln-stat-value
+                      .tln-stat-meta / .tln-stat-delta
+   ─────────────────────────────────────────────────────────── */
+
+.tln-stat { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+/* 眉毛标签：大写 mono 小字 */
+.tln-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+}
+
+/* 大数值 */
+.tln-stat-value {
+  font-size: 28px;
+  color: var(--fg-0);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+/* 尺寸变体 — 新命名 + 旧别名 */
+.tln-stat-sm .tln-stat-value,
+.tln-stat.sm .tln-stat-value { font-size: 20px; }
+.tln-stat-lg .tln-stat-value,
+.tln-stat.lg .tln-stat-value { font-size: 36px; }
+
+/* 元信息行（delta + hint + sparkline 容器） */
+.tln-stat-meta {
+  display: flex; align-items: center;
+  gap: 8px;
+  font-size: var(--text-sm);
+  color: var(--fg-3);
+  margin-top: 2px;
+}
+
+/* delta 变化量 */
+.tln-stat-delta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  display: inline-flex; align-items: center; gap: 3px;
+}
+.tln-stat-delta.up   { color: var(--ok); }
+.tln-stat-delta.down { color: var(--err); }
+.tln-stat-delta.flat { color: var(--fg-3); }
+
+/* 副文案 */
+.tln-stat-hint { font-size: var(--text-sm); color: var(--fg-3); }

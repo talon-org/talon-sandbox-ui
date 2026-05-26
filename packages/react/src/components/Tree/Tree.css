@@ -1,0 +1,65 @@
+/* ─────── Tree ───────────────────────────────────────────────
+   来源：ui-extra.jsx Tree 段（约 41-83 行）
+   Prototype classes: .tln-tree / .tln-tree-node / .tln-tree-item
+                      .tln-tree-children
+   ─────────────────────────────────────────────────────────── */
+
+.tln-tree { font-family: inherit; font-size: var(--text-sm); user-select: none; }
+
+/* 节点容器 */
+.tln-tree-node { display: block; }
+
+/* 行区域 */
+.tln-tree-item {
+  display: flex; align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: var(--r-1);
+  cursor: pointer;
+  color: var(--fg-1);
+  transition: background var(--dur-fast);
+}
+.tln-tree-item:hover { background: var(--bg-hover); color: var(--fg-0); }
+
+/* 选中态：accent 色背景 */
+.tln-tree-item.selected {
+  background: var(--acc-2); color: var(--fg-0);
+}
+
+/* chevron 旋转动画 */
+.tln-tree-item .chev {
+  flex: 0 0 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--fg-3);
+  transition: transform var(--dur-fast);
+}
+.tln-tree-node.open > .tln-tree-item .chev { transform: rotate(90deg); }
+/* 叶子节点 chevron 不可见（占位保持缩进对齐） */
+.tln-tree-item.leaf .chev { visibility: hidden; }
+
+/* 图标 */
+.tln-tree-item .ic { color: var(--fg-2); flex: 0 0 auto; }
+.tln-tree-item.selected .ic { color: var(--fg-0); }
+
+/* 标签文字 */
+.tln-tree-item .label {
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* 右侧元信息 */
+.tln-tree-item .meta {
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  flex: 0 0 auto;
+}
+
+/* 子节点区域（CSS 控制展开/收起） */
+.tln-tree-children {
+  display: none;
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line-soft);
+}
+.tln-tree-node.open > .tln-tree-children { display: block; }

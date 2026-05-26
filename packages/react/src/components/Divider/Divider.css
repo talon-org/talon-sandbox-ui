@@ -1,0 +1,22 @@
+/* Divider 带标签的水平分隔线
+   .tln-divider 和 .tln-vdivider 已在 components.css 中定义；
+   此文件只补充带 label 的 tln-divider-h 变体。
+   来源: ui-forms.jsx DIVIDER section */
+
+.tln-divider-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.tln-divider-h::before,
+.tln-divider-h::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}

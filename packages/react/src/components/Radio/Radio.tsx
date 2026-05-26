@@ -1,56 +1,67 @@
-import type { KeyboardEvent } from 'react';
-import { cx } from '../../primitives/clsx.js';
-import type { RadioProps } from './Radio.types.js';
+import React, { forwardRef } from 'react';
+import * as RadixRadioGroup from '@radix-ui/react-radio-group';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils.js';
+import './Radio.css';
+import type { RadioGroupItemProps } from './Radio.types.js';
+
+// ─── RadioGroupItem cva ──────────────────────────────────────────
+export const radioGroupItemVariants = cva('tln-radio-item', {
+  variants: {
+    size: {
+      sm: 'tln-radio-sm',
+      md: '',
+      lg: 'tln-radio-lg',
+    },
+  },
+  defaultVariants: { size: 'md' },
+});
 
 /**
- * Radio — single radio button. Usually used inside RadioGroup.
+ * RadioGroup — 互斥单选组，基于 @radix-ui/react-radio-group。
  *
- * CSS-only: all styles are in @talon-sandbox/react/styles (components-forms.css).
- *
- * @example
- * <Radio value="a" checked={val === 'a'} onChange={setVal}>Option A</Radio>
+ * 使用组合式 API：
+ * ```tsx
+ * <RadioGroup value={v} onValueChange={setV} row>
+ *   <RadioGroupItem value="a" id="r-a" />
+ *   <label htmlFor="r-a">选项 A</label>
+ * </RadioGroup>
+ * ```
  */
-export function Radio({
-  value,
-  checked = false,
-  onChange,
-  disabled = false,
-  name,
-  children,
-  className,
-}: RadioProps) {
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === ' ' || e.key === 'Enter') {
-      e.preventDefault();
-      if (!disabled) onChange?.(value);
-    }
-  };
-
+export const RadioGroup = forwardRef<
+  React.ElementRef<typeof RadixRadioGroup.Root>,
+  React.ComponentPropsWithoutRef<typeof RadixRadioGroup.Root> & { row?: boolean }
+>(function RadioGroup({ className, row, ...props }, ref) {
   return (
-    <div
-      className={cx('tln-radio', disabled && 'tln-radio-disabled', className)}
-      role="radio"
-      aria-checked={checked}
-      aria-disabled={disabled || undefined}
-      tabIndex={disabled ? -1 : 0}
-      onClick={() => { if (!disabled) onChange?.(value); }}
-      onKeyDown={handleKeyDown}
-      data-checked={checked ? true : undefined}
-    >
-      <input
-        type="radio"
-        name={name}
-        value={value}
-        checked={checked}
-        onChange={() => {}}
-        aria-hidden="true"
-        tabIndex={-1}
-        style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
-      />
-      <span className="tln-radio__dot" />
-      {children != null && <span className="tln-radio__label">{children}</span>}
-    </div>
+    <RadixRadioGroup.Root
+      ref={ref}
+      className={cn('tln-radio-group', row && 'row', className)}
+      {...props}
+    />
   );
-}
+});
 
-Radio.displayName = 'Radio';
+RadioGroup.displayName = 'RadioGroup';
+
+/**
+ * RadioGroupItem — 单个单选按钮控件，必须嵌套在 RadioGroup 内。
+ *
+ * 通常与 `<label htmlFor="...">` 配合使用。
+ */
+export const RadioGroupItem = forwardRef<
+  React.ElementRef<typeof RadixRadioGroup.Item>,
+  React.ComponentPropsWithoutRef<typeof RadixRadioGroup.Item> &
+    VariantProps<typeof radioGroupItemVariants>
+>(function RadioGroupItem({ className, size, ...props }, ref) {
+  return (
+    <RadixRadioGroup.Item
+      ref={ref}
+      className={cn('dot', radioGroupItemVariants({ size }), className)}
+      {...props}
+    >
+      <RadixRadioGroup.Indicator />
+    </RadixRadioGroup.Item>
+  );
+});
+
+RadioGroupItem.displayName = 'RadioGroupItem';

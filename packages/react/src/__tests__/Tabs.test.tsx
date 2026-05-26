@@ -1,67 +1,81 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, test, expect, vi } from 'vitest';
-import { Tabs } from '../components/Tabs/index.js';
+import { Tabs, TabsList, TabsTrigger } from '../components/Tabs/index.js';
 
-const items = [
-  { value: 'a', label: 'A' },
-  { value: 'b', label: 'B' },
-  { value: 'c', label: 'C' },
-];
+// 新 API：组合式子组件
+function TestTabs({
+  value,
+  onValueChange,
+}: {
+  value: string;
+  onValueChange: (v: string) => void;
+}) {
+  return (
+    <Tabs value={value} onValueChange={onValueChange}>
+      <TabsList>
+        <TabsTrigger value="a">A</TabsTrigger>
+        <TabsTrigger value="b">B</TabsTrigger>
+        <TabsTrigger value="c">C</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  );
+}
 
 describe('Tabs', () => {
-  test('renders all tab labels', () => {
-    render(<Tabs value="a" onChange={vi.fn()} items={items} />);
+  test('渲染所有 tab 标签', () => {
+    render(<TestTabs value="a" onValueChange={vi.fn()} />);
     expect(screen.getByText('A')).toBeInTheDocument();
     expect(screen.getByText('B')).toBeInTheDocument();
   });
 
-  test('active tab has aria-selected=true', () => {
-    render(<Tabs value="a" onChange={vi.fn()} items={items} />);
+  test('激活的 tab 有 aria-selected=true', () => {
+    render(<TestTabs value="a" onValueChange={vi.fn()} />);
     expect(screen.getByRole('tab', { name: 'A' })).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByRole('tab', { name: 'B' })).toHaveAttribute('aria-selected', 'false');
   });
 
-  test('calls onChange when tab clicked', () => {
+  test('点击 tab 调用 onValueChange', async () => {
     const onChange = vi.fn();
-    render(<Tabs value="a" onChange={onChange} items={items} />);
-    fireEvent.click(screen.getByRole('tab', { name: 'B' }));
+    render(<TestTabs value="a" onValueChange={onChange} />);
+    await userEvent.click(screen.getByRole('tab', { name: 'B' }));
     expect(onChange).toHaveBeenCalledWith('b');
   });
 
-  test('keyboard ArrowRight moves to next tab', () => {
+  test('ArrowRight 移动到下一个 tab', async () => {
     const onChange = vi.fn();
-    render(<Tabs value="a" onChange={onChange} items={items} />);
-    const tabA = screen.getByRole('tab', { name: 'A' });
-    fireEvent.keyDown(tabA, { key: 'ArrowRight' });
+    render(<TestTabs value="a" onValueChange={onChange} />);
+    await userEvent.click(screen.getByRole('tab', { name: 'A' }));
+    await userEvent.keyboard('{ArrowRight}');
     expect(onChange).toHaveBeenCalledWith('b');
   });
 
-  test('keyboard ArrowLeft moves to prev tab', () => {
+  test('ArrowLeft 移动到上一个 tab', async () => {
     const onChange = vi.fn();
-    render(<Tabs value="b" onChange={onChange} items={items} />);
-    const tabB = screen.getByRole('tab', { name: 'B' });
-    fireEvent.keyDown(tabB, { key: 'ArrowLeft' });
+    render(<TestTabs value="b" onValueChange={onChange} />);
+    await userEvent.click(screen.getByRole('tab', { name: 'B' }));
+    await userEvent.keyboard('{ArrowLeft}');
     expect(onChange).toHaveBeenCalledWith('a');
   });
 
-  test('applies tln-tabs class to container', () => {
-    const { container } = render(<Tabs value="a" onChange={vi.fn()} items={items} />);
-    expect(container.firstChild).toHaveClass('tln-tabs');
+  test('TabsList 有 tln-tabs-list class', () => {
+    render(<TestTabs value="a" onValueChange={vi.fn()} />);
+    expect(screen.getByRole('tablist')).toHaveClass('tln-tabs-list');
   });
 
-  test('keyboard Home navigates to first tab', () => {
+  test('Home 导航到第一个 tab', async () => {
     const onChange = vi.fn();
-    render(<Tabs value="c" onChange={onChange} items={items} />);
-    const tabC = screen.getByRole('tab', { name: 'C' });
-    fireEvent.keyDown(tabC, { key: 'Home' });
+    render(<TestTabs value="c" onValueChange={onChange} />);
+    await userEvent.click(screen.getByRole('tab', { name: 'C' }));
+    await userEvent.keyboard('{Home}');
     expect(onChange).toHaveBeenCalledWith('a');
   });
 
-  test('keyboard End navigates to last tab', () => {
+  test('End 导航到最后一个 tab', async () => {
     const onChange = vi.fn();
-    render(<Tabs value="a" onChange={onChange} items={items} />);
-    const tabA = screen.getByRole('tab', { name: 'A' });
-    fireEvent.keyDown(tabA, { key: 'End' });
+    render(<TestTabs value="a" onValueChange={onChange} />);
+    await userEvent.click(screen.getByRole('tab', { name: 'A' }));
+    await userEvent.keyboard('{End}');
     expect(onChange).toHaveBeenCalledWith('c');
   });
 });

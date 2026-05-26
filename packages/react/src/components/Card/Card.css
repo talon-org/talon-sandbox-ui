@@ -1,0 +1,58 @@
+/* Talon · Card styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  background: var(--bg-2);
+  overflow: hidden;
+}
+
+.tln-card-head {
+  min-height: 44px;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tln-card-title {
+  font-size: var(--text-md);
+  color: var(--fg-0);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tln-card-body { padding: var(--pad-card); }
+
+.tln-card-section { padding: 16px 16px; border-top: 1px solid var(--line-soft); }
+
+.tln-card.pad-compact .tln-card-body { padding: 12px; }
+
+.tln-card.pad-standard .tln-card-body { padding: 20px; }
+
+.tln-card.pad-relaxed .tln-card-body { padding: 28px; }
+
+.tln-card.pad-compact .tln-card-head { min-height: 36px; padding: 6px 12px; }
+
+.tln-card.pad-relaxed .tln-card-head { min-height: 52px; padding: 14px 22px; }
+
+/* CardAction — 头部右侧操作区 */
+.tln-card-action { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+/* CardDescription — 标题下方说明文字 */
+.tln-card-desc { font-size: var(--text-sm); color: var(--fg-2); margin: 0; line-height: 1.5; }
+
+/* CardFooter — 底部操作栏 */
+.tln-card-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}

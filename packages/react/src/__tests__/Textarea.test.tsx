@@ -8,8 +8,8 @@ describe('Textarea', () => {
     expect(screen.getByTestId('t').className).toContain('tln-textarea');
   });
 
-  test('invalid adds error class and aria-invalid', () => {
-    render(<Textarea data-testid="t" invalid />);
+  test('error prop 添加 error class 并设置 aria-invalid', () => {
+    render(<Textarea data-testid="t" error />);
     const el = screen.getByTestId('t');
     expect(el.className).toContain('error');
     expect(el).toHaveAttribute('aria-invalid', 'true');

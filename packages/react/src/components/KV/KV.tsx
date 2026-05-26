@@ -1,60 +1,54 @@
-import { useState } from 'react';
-import { cx } from '../../primitives/clsx.js';
-import type { KVProps } from './KV.types.js';
+import { forwardRef, Fragment } from 'react';
+import { cva } from 'class-variance-authority';
+import { cn } from '../../lib/utils.js';
+import './KV.css';
 
-function CopyButton({ value }: { value: string }) {
-  const [copied, setCopied] = useState<'idle' | 'copied' | 'failed'>('idle');
+/**
+ * KV — 键值表，详情页主力。
+ * 每行两个直接子 span（.k / .v），CSS grid 布局 `130px 1fr`。
+ * cls 字段附加到 .v 上，支持任意 class 组合（如 'fg-0', 'acc', 'dim'）。
+ * 对应 prototype TlnKV。
+ */
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied('copied');
-      setTimeout(() => setCopied('idle'), 1500);
-    } catch {
-      console.warn('[KV] clipboard write failed');
-      setCopied('failed');
-      setTimeout(() => setCopied('idle'), 1500);
-    }
-  };
+/* ── variants ── */
+export const kvVariants = cva('tln-kv', {
+  variants: {},
+  defaultVariants: {},
+});
 
-  const btnLabel =
-    copied === 'copied' ? 'Copied' :
-    copied === 'failed' ? 'Failed' :
-    'Copy';
-
-  return (
-    <button
-      type="button"
-      aria-label="Copy value"
-      style={{
-        background: 'transparent',
-        border: 'none',
-        cursor: 'pointer',
-        padding: '0 2px',
-        color: 'var(--fg-3)',
-        fontSize: '10px',
-      }}
-      onClick={handleCopy}
-    >
-      <span aria-live="polite">{btnLabel}</span>
-    </button>
-  );
+/* ── 行类型 ── */
+export interface KVRow {
+  /** 键名，渲染在 .k cell */
+  k: React.ReactNode;
+  /** 值，渲染在 .v cell */
+  v: React.ReactNode;
+  /**
+   * 附加到 .v 上的 CSS class，允许任意空格分隔字符串
+   * 常用: 'fg-0'（高亮）| 'dim'（次要）| 'acc'（accent 色）
+   */
+  cls?: string;
 }
 
-export function KV({ items, className, ...rest }: KVProps) {
-  return (
-    <div className={cx('tln-kv', className)} {...rest}>
-      {items.map((item, i) => (
-        <span key={i} style={{ display: 'contents' }}>
-          <span className="k">{item.label}</span>
-          <span className="v" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            {item.value}
-            {item.copyable === true && <CopyButton value={item.value} />}
-          </span>
-        </span>
-      ))}
-    </div>
-  );
+/* ── KV ── */
+export interface KVProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** 行数据数组，每行渲染为 .k + .v 两个 span（直接子元素，CSS grid 布局） */
+  rows: KVRow[];
 }
+
+export const KV = forwardRef<HTMLDivElement, KVProps>(
+  ({ rows, className, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn(kvVariants(), className)} {...props}>
+        {rows.map((row, i) => (
+          // 直接用 Fragment，不包 div，保持 CSS grid 的直接子元素顺序
+          <Fragment key={i}>
+            <span className="k">{row.k}</span>
+            <span className={cn('v', row.cls)}>{row.v}</span>
+          </Fragment>
+        ))}
+      </div>
+    );
+  },
+);
 
 KV.displayName = 'KV';

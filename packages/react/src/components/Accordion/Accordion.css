@@ -1,0 +1,71 @@
+/* Accordion 折叠面板
+   来源: ui-extra.jsx ACCORDION section */
+
+.tln-acc {
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+}
+.tln-acc-item {
+  border-top: 1px solid var(--line-soft);
+}
+.tln-acc-item:first-child { border-top: 0; }
+
+.tln-acc-header {
+  /* button reset — dumi 主题给 button 加灰背景 + 边框 + 圆角,需要全部清掉 */
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+  margin: 0;
+  box-shadow: none;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.tln-acc-header:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: -2px;
+}
+.tln-acc-header:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.tln-acc-header:hover { background: var(--bg-hover); }
+.tln-acc-header .chev {
+  flex: 0 0 auto;
+  color: var(--fg-3);
+  transition: transform var(--dur-fast);
+}
+/* Radix data-state='open' 替代原 .tln-acc-item.open —— Trigger 上带 data-state */
+.tln-acc-item[data-state='open'] .chev { transform: rotate(90deg); }
+
+.tln-acc-title {
+  flex: 1;
+  font-size: var(--text-base);
+  color: var(--fg-0);
+  font-weight: 500;
+  min-width: 0;
+}
+.tln-acc-subtitle {
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+/* Radix Content 用 data-state 控制可见性，不需要手动 display:none/block */
+/* 保留 padding；display 由 Radix 内部的 hidden 属性管理 */
+.tln-acc-body {
+  padding: 0 14px 14px;
+  overflow: hidden;
+}
+/* Radix Content 关闭时隐藏（Radix 会设 data-state='closed' + 动画后 hidden） */
+.tln-acc-body[data-state='closed'] { display: none; }

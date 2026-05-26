@@ -1,8 +1,14 @@
 import type { TextareaHTMLAttributes } from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import type { textareaVariants } from './Textarea.js';
 
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  /** Marks the field as invalid; sets aria-invalid and adds error class. */
-  invalid?: boolean;
-  /** Number of visible text rows. Defaults to 4. */
+export interface TextareaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement>,
+    VariantProps<typeof textareaVariants> {
+  /** 尺寸档位，默认 md */
+  size?: 'sm' | 'md' | 'lg';
+  /** 错误状态：红色边框 */
+  error?: boolean;
+  /** 可见行数，默认 4 */
   rows?: number;
 }

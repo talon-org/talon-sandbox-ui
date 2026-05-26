@@ -1,0 +1,57 @@
+/* Banner 页级通知横幅
+   来源: ui-data.jsx BANNER section */
+
+.tln-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--acc);
+  border-radius: var(--r-2);
+  background: var(--bg-2);
+  font-size: var(--text-base);
+  color: var(--fg-1);
+}
+.tln-banner.info    { border-left-color: var(--info); }
+.tln-banner.ok      { border-left-color: var(--ok); }
+.tln-banner.warn    { border-left-color: var(--warn); background: linear-gradient(90deg, var(--warn-soft), transparent 50%); }
+.tln-banner.err     { border-left-color: var(--err);  background: linear-gradient(90deg, var(--err-soft),  transparent 50%); }
+.tln-banner.magenta { border-left-color: var(--magenta); }
+.tln-banner-sm,
+.tln-banner.sm      { padding: 8px 12px; gap: 8px; font-size: var(--text-sm); }
+.tln-banner-lg,
+.tln-banner.lg      { padding: 16px 22px; gap: 14px; font-size: var(--text-md); }
+
+.tln-banner .ic { color: var(--acc-strong); padding-top: 1px; flex: 0 0 auto; }
+.tln-banner.info    .ic { color: var(--info); }
+.tln-banner.ok      .ic { color: var(--ok); }
+.tln-banner.warn    .ic { color: var(--warn); }
+.tln-banner.err     .ic { color: var(--err); }
+.tln-banner.magenta .ic { color: var(--magenta); }
+
+.tln-banner .body { flex: 1; min-width: 0; }
+.tln-banner .head {
+  color: var(--fg-0);
+  font-weight: 500;
+  margin: 0 0 4px;
+  letter-spacing: -0.005em;
+}
+.tln-banner .text { margin: 0; color: var(--fg-2); line-height: 1.55; }
+.tln-banner .text strong { color: var(--fg-0); font-weight: 500; }
+.tln-banner .actions { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+
+.tln-banner .dismiss {
+  background: transparent;
+  border: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--fg-3);
+  border-radius: var(--r-1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -2px;
+}
+.tln-banner .dismiss:hover { background: var(--bg-hover); color: var(--fg-0); }

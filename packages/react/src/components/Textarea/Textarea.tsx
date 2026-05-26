@@ -1,33 +1,57 @@
 import { forwardRef } from 'react';
-import { cx } from '../../primitives/clsx.js';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils.js';
+import { useFormField } from '../../primitives/FormFieldContext.js';
+import './Textarea.css';
 import type { TextareaProps } from './Textarea.types.js';
 
+// ─── cva variant 定义 ───────────────────────────────────────────
+export const textareaVariants = cva('tln-textarea', {
+  variants: {
+    size: {
+      sm: 'tln-textarea-sm',
+      md: '',
+      lg: 'tln-textarea-lg',
+    },
+  },
+  defaultVariants: { size: 'md' },
+});
+
 /**
- * Textarea — multi-line text control.
+ * Textarea — 多行文本框。
  *
- * CSS-only: all styles are in @talon-sandbox/react/styles (components.css).
- *
- * @example
- * import '@talon-sandbox/react/styles'
- * <Textarea placeholder="Describe your issue…" rows={5} />
+ * - 默认 mono 字体（命令、yaml、env）
+ * - size sm/md/lg 控制字号和 padding
+ * - error → .error class（红色边框）
+ * - 在 FormField 内部时，自动继承 controlId 和 hasError
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { invalid = false, rows = 4, className, disabled, ...rest },
+  {
+    size = 'md',
+    error,
+    rows = 4,
+    id,
+    className,
+    ...rest
+  },
   ref,
 ) {
-  const cls = cx(
-    'tln-textarea',
-    invalid && 'error',
-    className,
-  );
+  // 从 FormField context 读取字段 id 和错误状态
+  const field = useFormField();
+  const resolvedId = id ?? field?.controlId;
+  const resolvedError = error || (field?.hasError ?? false);
 
   return (
     <textarea
       ref={ref}
-      className={cls}
+      id={resolvedId}
+      className={cn(
+        textareaVariants({ size }),
+        resolvedError && 'error',
+        className,
+      )}
       rows={rows}
-      disabled={disabled}
-      aria-invalid={invalid}
+      aria-invalid={resolvedError || undefined}
       {...rest}
     />
   );

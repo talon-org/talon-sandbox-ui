@@ -1,0 +1,21 @@
+/* Talon · Popover styles — 视觉从 Combobox 内部 popover 提取 */
+
+/* 弹出内容面板 — 数值对齐 Combobox 原型 */
+.tln-popover-content {
+  background: var(--bg-1);
+  border: 1px solid var(--line-strong);
+  /* 原型 Combobox panel 用 --r-2，修正为 --r-2（原来 --r-3 偏大） */
+  border-radius: var(--r-2);
+  /* 原型用 --shadow-3，修正（原来 --shadow-4 偏重） */
+  box-shadow: var(--shadow-3);
+  padding: 12px;
+  min-width: 200px;
+  max-width: 360px;
+  /* 列表类场景需要限高+滚动 */
+  max-height: 280px;
+  overflow: auto;
+  animation: tln-fade-in var(--dur-fast) var(--ease-out);
+  z-index: var(--z-popover, 50);
+}
+
+/* align 不影响 CSS，Radix 通过 data-align 属性处理对齐 */

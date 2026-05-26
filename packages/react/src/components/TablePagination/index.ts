@@ -1,2 +1,2 @@
-export { TablePagination } from './TablePagination.js';
-export type { TablePaginationProps } from './TablePagination.types.js';
+export { TablePagination, TablePaginationInfo } from './TablePagination.js';
+export type { TablePaginationProps, TablePaginationInfoProps } from './TablePagination.types.js';

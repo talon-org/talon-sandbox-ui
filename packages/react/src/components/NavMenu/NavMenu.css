@@ -1,0 +1,57 @@
+/* Talon · NavMenu styles — 1:1 from ui-extra.jsx NavMenu section.
+   迁自 pending.css tln-nav* 段落。 */
+
+.tln-nav {
+  padding: 6px;
+  display: flex; flex-direction: column;
+  gap: 1px;
+  width: 232px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-2);
+}
+
+.tln-nav-section-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  padding: 12px 10px 6px;
+}
+
+.tln-nav-item {
+  display: flex; align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--r-1);
+  cursor: pointer;
+  color: var(--fg-1);
+  font-size: var(--text-base);
+  user-select: none;
+}
+
+.tln-nav-item:hover { background: var(--bg-hover); color: var(--fg-0); }
+
+.tln-nav-item.active {
+  background: var(--acc-2);
+  color: var(--fg-0);
+}
+
+.tln-nav-item .ic { color: var(--fg-2); flex: 0 0 auto; }
+
+.tln-nav-item.active .ic { color: var(--fg-0); }
+
+.tln-nav-item .label { flex: 1; min-width: 0; }
+
+.tln-nav-item .count {
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--fg-3);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 0 5px;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+
+.tln-nav-item.active .count { color: var(--acc-7); background: transparent; border-color: var(--acc-4); }

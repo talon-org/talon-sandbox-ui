@@ -1,52 +1,88 @@
-import { cx } from '../../primitives/clsx.js';
-import type { BadgeProps, BadgeStatus, StatusBadgeProps } from './Badge.types.js';
+import './Badge.css';
+import { forwardRef } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils.js';
+import type { BadgeProps, StatusBadgeProps, SandboxState } from './Badge.types.js';
 
-const VARIANT_CLASS: Record<string, string> = {
-  default: '',
-  success: 'ok',
-  warning: 'warn',
-  danger: 'err',
-  info: 'info',
-  neutral: 'muted',
-  magenta: 'magenta',
-  teal: 'teal',
+// ─── cva 定义 ─────────────────────────────────────────────────────────────
+
+/** Badge variant 映射。class 同时保留旧裸词（ok/warn/err）以兼容 CSS */
+export const badgeVariants = cva('tln-badge', {
+  variants: {
+    variant: {
+      default: '',
+      ok: 'ok',
+      warn: 'warn',
+      err: 'err',
+      info: 'info',
+      magenta: 'magenta',
+      teal: 'teal',
+      muted: 'muted',
+    },
+    size: {
+      sm: 'tln-badge-sm',
+      md: '',
+      lg: 'tln-badge-lg',
+    },
+  },
+  defaultVariants: { variant: 'default', size: 'md' },
+});
+
+// ─── sandbox 状态映射表 ────────────────────────────────────────────────────
+
+/** sandbox 状态 → label + variant + static 映射 */
+const SBX_STATE: Record<SandboxState, { label: string; variant: string; isStatic: boolean }> = {
+  provisioning:  { label: '调度中',   variant: 'warn',  isStatic: false },
+  'pulling-image': { label: '拉取镜像', variant: 'warn',  isStatic: false },
+  running:       { label: '运行中',   variant: 'ok',    isStatic: false },
+  idle:          { label: '空闲',     variant: 'muted', isStatic: true },
+  paused:        { label: '已暂停',   variant: 'muted', isStatic: true },
+  terminating:   { label: '终止中',   variant: 'warn',  isStatic: false },
+  failed:        { label: '失败',     variant: 'err',   isStatic: true },
+  evicted:       { label: '已驱逐',   variant: 'muted', isStatic: true },
 };
 
-const STATUS_CLASS: Record<BadgeStatus, string> = {
-  running: 'ok',
-  stopped: 'muted static',
-  error: 'err static',
-  pending: 'warn',
-};
+// ─── Badge ────────────────────────────────────────────────────────────────
 
-export function Badge({
-  variant = 'default',
-  size,
-  dot = false,
-  children,
-  className,
-  ...rest
-}: BadgeProps) {
-  const variantCls = VARIANT_CLASS[variant] ?? '';
-  return (
+/**
+ * Badge — 色点 + mono 文字徽章。
+ * v0.3.0: `kind` 改为 `variant`，对齐 shadcn 惯例。
+ *
+ * @example
+ * <Badge variant="ok">运行中</Badge>
+ */
+export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
+  ({ variant, size, dot = true, children, className, ...rest }, ref) => (
     <span
-      className={cx('tln-badge', variantCls, size === 'sm' && 'tln-badge-sm', className)}
+      ref={ref}
+      className={cn(badgeVariants({ variant, size }), className)}
       {...rest}
     >
       {dot && <span className="dot" aria-hidden="true" />}
       {children}
     </span>
-  );
-}
-
+  ),
+);
 Badge.displayName = 'Badge';
 
-export function StatusBadge({ status, children, className, ...rest }: StatusBadgeProps) {
-  return (
-    <Badge dot variant="default" className={cx(STATUS_CLASS[status], className)} {...rest}>
-      {children}
-    </Badge>
-  );
-}
+// ─── StatusBadge ──────────────────────────────────────────────────────────
 
+/**
+ * StatusBadge — 根据 sandbox 状态自动映射 label 和颜色。
+ */
+export const StatusBadge = forwardRef<HTMLSpanElement, StatusBadgeProps>(
+  ({ state, className, ...rest }, ref) => {
+    const m = SBX_STATE[state] ?? { label: state, variant: 'muted', isStatic: true };
+    return (
+      <Badge
+        ref={ref}
+        variant={m.variant as VariantProps<typeof badgeVariants>['variant']}
+        className={cn(m.isStatic && 'static', className)}
+        {...rest}
+      >
+        {m.label}
+      </Badge>
+    );
+  },
+);
 StatusBadge.displayName = 'StatusBadge';

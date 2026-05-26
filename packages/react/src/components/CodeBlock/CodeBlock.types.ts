@@ -1,7 +1,1 @@
-import type { HTMLAttributes, ReactNode } from 'react';
-
-export interface CodeBlockProps extends HTMLAttributes<HTMLPreElement> {
-  language?: string;
-  copyable?: boolean;
-  children?: ReactNode;
-}
+export type { CodeBlockProps } from './CodeBlock.js';

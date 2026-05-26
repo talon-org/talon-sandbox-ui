@@ -1,2 +1,2 @@
-export { Segmented } from './Segmented.js';
-export type { SegmentedProps, SegmentedOption, SegmentedSize } from './Segmented.types.js';
+export { SegmentedGroup, SegmentedItem, segmentedVariants } from './Segmented.js';
+export type { SegmentedGroupProps, SegmentedItemProps, SegmentedSize, SegmentedOption } from './Segmented.types.js';

@@ -1,0 +1,131 @@
+/* Talon · base helpers + keyframes — shared, prototype-derived. */
+
+/* ─────────────────────────────────────────────────────────────
+   Button reset (host theme defense)
+   ─────────────────────────────────────────────────────────────
+   宿主主题(如 dumi / docusaurus / antd)经常给 <button> 加灰色
+   背景 + 圆角 + 边框。Talon 组件内大量使用原生 <button> 元素
+   做 trigger / tab / step / menu item,需要把宿主样式清掉,让
+   prototype CSS 接管。
+   注意:`.tln-btn` 自身样式会覆盖这条,所以 Button 组件不受影响。 */
+/* 只做最小干扰:appearance + font + color 继承。背景 / 边框 / 圆角
+   不在 reset 里写,让每个组件 .css 自己声明,避免覆盖具体组件。
+   单独排除 .tln-btn(它有完整自我样式) + .tln-switch(同上)。 */
+[class*="tln-"] button:not(.tln-btn):not(.tln-switch) {
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SVG 对齐统一处理
+   ─────────────────────────────────────────────────────────────
+   问题:svg 默认 vertical-align: baseline,且不影响父高度 →
+        当 svg 放进继承了 line-height 的 inline 容器(span 包裹)
+        时,父 span 的 box 由 line-height 决定,svg 在父 box 内
+        会偏移 1-2px,看起来"没居中"。
+   修复:
+     (1) 所有 talon 组件内 svg 强制 inline-block(自带 vertical-align: middle)
+         + flex-shrink: 0;
+     (2) 用来"装 svg 的纯包裹 span"(只含 svg,没有文字 baseline 干扰)
+         全部按 inline-flex 居中。常见命名: .ic-search / .ic-lead /
+         .icon / .chev / .check / .ic 等。 */
+[class*="tln-"] svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Radix 焦点 outline 全局兜底
+   ─────────────────────────────────────────────────────────────
+   Radix Item 用 tabindex=-1 + data-highlighted 做键盘高亮,
+   宿主主题/UA 可能给 :focus 加 outline。统一关掉,让 Talon
+   CSS 用 background / color 自己表达高亮态。
+   focus-visible 仍由各组件自定义(box-shadow ring 等)。 */
+[class*="tln-"] [data-highlighted]:focus,
+[class*="tln-"] [data-radix-collection-item]:focus,
+[class*="tln-"] [role="menuitem"]:focus,
+[class*="tln-"] [role="option"]:focus {
+  outline: none;
+}
+
+/* SVG-only 包裹 span:absolute-positioned slot 或 inline icon。统一
+   inline-flex 让里面的 svg 永远精确居中,不再依赖父 line-height。 */
+[class*="tln-"] .ic,
+[class*="tln-"] .ic-lead,
+[class*="tln-"] .ic-search,
+[class*="tln-"] .chev,
+[class*="tln-"] .check,
+[class*="tln-"] .check-slot,
+[class*="tln-"] .icon,
+[class*="tln-"] .icon-wrap,
+[class*="tln-"] .upload-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.tln-spark { display: block; width: 100%; }
+
+.tln-row { display: flex; align-items: center; gap: 8px; }
+
+.tln-col { display: flex; flex-direction: column; gap: 8px; }
+
+.tln-divider { height: 1px; background: var(--line); border: 0; margin: 0; }
+
+.tln-vdivider { width: 1px; align-self: stretch; background: var(--line); }
+
+.tln-micro {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-2);
+}
+
+.tln-mono { font-family: var(--font-mono); }
+
+.tln-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+.tln-divider-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.tln-divider-h::before, .tln-divider-h::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+
+@media (max-width: 1200px) { .tln-stat-card-grid { grid-template-columns: repeat(2, 1fr); } }
+
+@media (max-width: 720px) {
+  .tln-rec-player {
+    grid-template-columns: 1fr;
+  }
+  .tln-rec-player__sidebar,
+  .tln-rec-player__side {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .tln-login-layout { grid-template-columns: 1fr; }
+  .tln-login-layout__left { display: none; }
+}

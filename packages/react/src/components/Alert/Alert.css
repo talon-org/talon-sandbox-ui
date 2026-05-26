@@ -1,0 +1,36 @@
+/* Alert 内联提示
+   来源: ui-data.jsx ALERT section */
+
+.tln-alert {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-2);
+  font-size: var(--text-sm);
+  color: var(--fg-1);
+  font-family: var(--font-mono);
+}
+.tln-alert.info { color: var(--info); border-color: color-mix(in srgb, var(--info), transparent 70%); background: var(--info-soft); }
+.tln-alert.ok   { color: var(--ok);   border-color: color-mix(in srgb, var(--ok),   transparent 70%); background: var(--ok-soft); }
+.tln-alert.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn), transparent 70%); background: var(--warn-soft); }
+.tln-alert.err  { color: var(--err);  border-color: color-mix(in srgb, var(--err),  transparent 70%); background: var(--err-soft); }
+.tln-alert .ic  { flex: 0 0 auto; }
+.tln-alert .text { color: inherit; }
+.tln-alert-sm,
+.tln-alert.sm   { padding: 3px 8px 3px 6px; font-size: 10.5px; }
+.tln-alert-lg,
+.tln-alert.lg   { padding: 8px 12px 8px 10px; font-size: var(--text-base); }
+
+/* AlertIcon / AlertTitle / AlertDescription 语义类（同时保留旧 .ic / .text） */
+.tln-alert-icon  { flex: 0 0 auto; }
+.tln-alert-title {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: inherit;
+  line-height: 1.4;
+}
+.tln-alert-desc  { color: inherit; }

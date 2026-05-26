@@ -1,0 +1,70 @@
+/* ─────── Tooltip ────────────────────────────────────────────
+   迁移到 @radix-ui/react-tooltip 后，定位由 Radix 自动计算（Popper）。
+   Radix 通过 data-state="delayed-open|instant-open|closed" 控制显隐。
+   ─────────────────────────────────────────────────────────── */
+
+/* Portal 出来的 tooltip 节点（Radix 挂到 body） */
+.tln-tip {
+  background: var(--fg-1);
+  border: 1px solid var(--fg-2);
+  color: var(--bg-1);
+  padding: 5px 9px;
+  border-radius: var(--r-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--shadow-2);
+  z-index: 9999;
+  /* Radix 用 will-change: transform 做位移动画，配合 opacity 过渡 */
+  animation: tln-tip-in var(--dur-fast) var(--ease-out);
+}
+
+/* 淡入动画 — 原型用 translateY slide-up，与 scale 动画统一改成 translateY */
+@keyframes tln-tip-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* slide-up 别名，供 data-side='top' 场景使用 */
+@keyframes tln-slide-up {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 顶部弹出时 slide-up */
+.tln-tip[data-state='delayed-open'][data-side='top'] {
+  animation: tln-slide-up var(--dur-fast) var(--ease-out);
+}
+
+/* 关闭状态淡出（Radix data-state="closed" 触发） */
+.tln-tip[data-state='closed'] {
+  animation: tln-tip-out var(--dur-fast) var(--ease-out);
+}
+
+@keyframes tln-tip-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(2px); }
+}
+
+/* TooltipKbd：内嵌键位提示 */
+.tln-tooltip-kbd {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--bg-2);
+  border: 1px solid var(--fg-3);
+  border-radius: 3px;
+  padding: 0 3px;
+  margin-left: 5px;
+}
+
+/* 旧别名：兼容历史用法中直接用 .kbd 类的情况 */
+.tln-tip .kbd {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--bg-2);
+  border: 1px solid var(--fg-3);
+  border-radius: 3px;
+  padding: 0 3px;
+  margin-left: 5px;
+}

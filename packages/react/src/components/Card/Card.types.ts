@@ -1,7 +1,10 @@
-import type { HTMLAttributes, ReactNode } from 'react';
-
-export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
-  title?: ReactNode;
-  footer?: ReactNode;
-  children?: ReactNode;
-}
+// 类型从实现文件 re-export
+export type {
+  CardProps,
+  CardHeaderProps,
+  CardTitleProps,
+  CardDescriptionProps,
+  CardActionProps,
+  CardContentProps,
+  CardFooterProps,
+} from './Card.js';

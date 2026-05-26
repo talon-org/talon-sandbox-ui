@@ -1,0 +1,74 @@
+/* Talon · Tabs styles — 1:1 from prototype (ui-forms.jsx) */
+
+/* 根容器（Radix Tabs.Root） */
+.tln-tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+/* tab 按钮列表 */
+.tln-tabs-list {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  gap: 4px;
+  padding: 0 4px;
+}
+
+/* 单个 tab 按钮 */
+.tln-tabs-trigger {
+  padding: 10px 12px;
+  font-size: var(--text-md);
+  color: var(--fg-2);
+  border: 0;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  letter-spacing: -0.005em;
+  outline: none;
+}
+
+.tln-tabs-trigger:hover { color: var(--fg-0); }
+
+/* Radix data-state='active' 替代原 aria-selected='true' */
+.tln-tabs-trigger[data-state='active'] {
+  color: var(--fg-0);
+  border-bottom-color: var(--acc);
+  font-weight: 500;
+}
+
+.tln-tabs-trigger:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+  border-radius: var(--r-1);
+}
+
+/* 数量徽标（Talon-only） */
+.tln-tabs-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 1px 5px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* tab 内容区 */
+.tln-tabs-content {
+  outline: none;
+}
+.tln-tabs-content:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+/* 尺寸变体 */
+.tln-tabs-sm .tln-tabs-trigger { padding: 6px 8px; font-size: var(--text-sm); }
+.tln-tabs-lg .tln-tabs-trigger { padding: 14px 16px; font-size: var(--text-lg); }

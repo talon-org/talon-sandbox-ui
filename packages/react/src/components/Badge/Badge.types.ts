@@ -1,18 +1,31 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes } from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import type { badgeVariants } from './Badge.js';
 
-export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'magenta' | 'teal';
-export type BadgeSize = 'sm' | 'md';
-export type BadgeStatus = 'running' | 'stopped' | 'error' | 'pending';
+/** Badge variant 联合类型 */
+export type BadgeVariant = NonNullable<VariantProps<typeof badgeVariants>['variant']>;
 
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  variant?: BadgeVariant;
-  size?: BadgeSize;
-  /** Show animated dot indicator */
+/** Badge 尺寸 */
+export type BadgeSize = 'sm' | 'md' | 'lg';
+
+/** sandbox 状态机枚举 */
+export type SandboxState =
+  | 'provisioning'
+  | 'pulling-image'
+  | 'running'
+  | 'idle'
+  | 'paused'
+  | 'terminating'
+  | 'failed'
+  | 'evicted';
+
+export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,
+  VariantProps<typeof badgeVariants> {
+  /** 显示左侧色点（默认 true） */
   dot?: boolean;
-  children?: ReactNode;
 }
 
 export interface StatusBadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  status: BadgeStatus;
-  children?: ReactNode;
+  /** sandbox 状态机状态，自动映射 label + variant */
+  state: SandboxState;
 }

@@ -1,0 +1,105 @@
+/* Talon · Checkbox styles — 1:1 from .design-source/project/app/ui-forms.jsx */
+
+/* ═══════════════════════════════════════════════════════════════
+   CHECKBOX FIELD（含 label 包裹层）
+═══════════════════════════════════════════════════════════════ */
+.tln-check {
+  --b: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  line-height: 1.2;
+}
+/* 规范化选择器（cva 生成） */
+.tln-check.tln-check-sm { --b: 14px; gap: 6px; font-size: var(--text-sm); }
+.tln-check.tln-check-lg { --b: 18px; gap: 10px; font-size: var(--text-md); }
+/* 旧版 alias，保留向后兼容 */
+.tln-check.sm { --b: 14px; gap: 6px; font-size: var(--text-sm); }
+.tln-check.lg { --b: 18px; gap: 10px; font-size: var(--text-md); }
+.tln-check input { position: absolute; opacity: 0; pointer-events: none; }
+
+/* ─── Checkbox 控件本体（.box） ─── */
+
+/* 包裹在 .tln-check 内时，尺寸由父级 CSS var 控制 */
+.tln-check .box,
+.box {
+  --b: 16px;
+  width: var(--b); height: var(--b);
+  border-radius: var(--r-1);
+  border: 1px solid var(--line-strong);
+  background: var(--bg-input);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  transition: background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+  color: transparent;
+  /* Radix 渲染 <button>，重置 button 默认样式 */
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+/* 尺寸 variant（独立使用时由 tln-check 继承，字段用 sm/lg class） */
+.tln-check.sm .box,
+.box.sm { --b: 14px; }
+
+.tln-check.lg .box,
+.box.lg { --b: 18px; }
+
+/* hover */
+.tln-check:hover .box,
+.box:hover { border-color: var(--fg-3); }
+
+/* focus-visible ring */
+.tln-check input:focus-visible + .box,
+.tln-check .box:focus-visible,
+.box:focus-visible {
+  box-shadow: var(--shadow-focus);
+  border-color: var(--border-focus);
+}
+
+/* checked 态 */
+.tln-check input:checked + .box,
+.tln-check .box[data-state='checked'],
+.box[data-state='checked'] {
+  background: var(--acc); border-color: var(--acc); color: var(--acc-fg);
+}
+
+/* indeterminate 态 */
+.tln-check input:indeterminate + .box,
+.tln-check .box[data-state='indeterminate'],
+.box[data-state='indeterminate'] {
+  background: var(--acc); border-color: var(--acc); color: var(--acc-fg);
+}
+
+/* Radix Indicator：撑满 .box */
+.tln-check .box > span[data-state],
+.tln-check .box [data-radix-checkbox-indicator],
+.box > span[data-state],
+.box [data-radix-checkbox-indicator] {
+  width: 100%; height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.tln-check .box svg,
+.box svg { width: 70%; height: 70%; stroke: var(--acc-fg); color: var(--acc-fg); }
+
+/* disabled 态 */
+.tln-check[data-disabled='true'] { color: var(--fg-3); cursor: not-allowed; }
+.tln-check[data-disabled='true'] .box,
+.box[disabled] {
+  background: var(--bg-2); border-color: var(--line); color: var(--fg-3);
+}
+.tln-check[data-disabled='true'] .box svg,
+.box[disabled] svg { stroke: var(--fg-3); color: var(--fg-3); }
+
+.tln-check .hint { color: var(--fg-3); font-size: var(--text-sm); margin-left: 2px; }

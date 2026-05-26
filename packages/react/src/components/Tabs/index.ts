@@ -1,2 +1,9 @@
-export { Tabs } from './Tabs.js';
-export type { TabsProps, TabItem } from './Tabs.types.js';
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TabsCount,
+  tabsListVariants,
+} from './Tabs.js';
+export type { TabsProps } from './Tabs.types.js';

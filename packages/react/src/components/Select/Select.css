@@ -1,0 +1,110 @@
+/* Talon · Select styles — 1:1 from prototype (ui*.jsx). */
+
+/* ─── 原生 select（children 模式） ─── */
+
+.tln-select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--fg-2) 50%),
+                    linear-gradient(135deg, var(--fg-2) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat; 
+}
+
+/* ─── Radix Select（options 模式）── */
+
+/* Trigger 按钮：与原生 select 等高，但用 flex 布局显示 value + icon。
+   Radix Trigger 是 <button>,带 data-state="open|closed"。
+   原生 <select> 没有 data-state,所以用它区分两种模式。 */
+button.tln-select,
+.tln-select[data-state] {
+  background-image: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* 右侧箭头图标容器 */
+.tln-select-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--fg-2);
+  flex-shrink: 0;
+}
+
+/* 下拉面板（参考 Combobox .tln-combo-panel 视觉） */
+.tln-select-content {
+  background: var(--bg-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-3);
+  padding: 4px;
+  min-width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
+  overflow: hidden;
+  animation: tln-fade-in var(--dur-fast) var(--ease-out);
+  z-index: 50;
+}
+
+/* 单个选项（参考 Combobox .tln-combo-opt 视觉） */
+.tln-select-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--r-1);
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+/* Radix 高亮态（键盘导航 + 鼠标悬停） */
+.tln-select-item[data-highlighted] {
+  background: var(--bg-2);
+  color: var(--fg-0);
+}
+
+/* 已选中的选项 */
+.tln-select-item[data-state='checked'] {
+  color: var(--fg-0);
+  font-weight: 500;
+}
+
+/* 禁用选项 */
+.tln-select-item[data-disabled] {
+  color: var(--fg-4);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* check 图标容器（左侧） */
+.tln-select-item-check {
+  display: inline-flex;
+  align-items: center;
+  color: var(--acc-strong);
+  flex-shrink: 0;
+  width: 16px;
+}
+
+/* 分组标签 */
+.tln-select-label {
+  padding: 4px 10px 2px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-3);
+}
+
+/* 分隔线 */
+.tln-select-sep {
+  height: 1px;
+  background: var(--line-soft);
+  margin: 4px 0;
+}

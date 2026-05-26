@@ -1,19 +1,27 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import type { IconName } from '../../primitives/icons.js';
+import type { buttonVariants } from './Button.js';
 
-export type ButtonVariant = 'primary' | 'default' | 'ghost' | 'danger';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+/** leadIcon / trailingIcon 接受 IconName 字符串或自定义 ReactNode */
+export type ButtonIcon = IconName | ReactNode;
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Visual style. Defaults to "default". Use at most one "primary" per screen. */
-  variant?: ButtonVariant;
-  /** Height tier. Matches --ctrl-h-sm / --ctrl-h-md / --ctrl-h-lg tokens. */
-  size?: ButtonSize;
-  /** Square aspect ratio; use for icon-only buttons. */
+export interface ButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  // variant 和 size 来自 VariantProps<typeof buttonVariants>，不重复声明
+  /** 正方形按钮（边长 = 高度），用于工具栏 / 表格行内 icon-only。 */
   iconOnly?: boolean;
-  /** Optional keyboard hint label, e.g. "ctrl+k". */
+  /** 文字前图标。字符串视为内置 IconName，ReactNode 直接渲染。 */
+  leadIcon?: ButtonIcon;
+  /** 文字后图标（例如 chevronDown 暗示下拉）。 */
+  trailingIcon?: ButtonIcon;
+  /** 键盘快捷键提示，如 "⌘K" / "/" / "esc"。 */
   kbd?: string;
-  /** Renders a spinner and disables the button. */
+  /** loading 态：渲染 spinner 并禁用按钮。 */
   loading?: boolean;
-  /** Content rendered inside the button. */
+  /** asChild=true 时通过 Slot 把所有 props 注入子元素，支持 <a> / <Link>。 */
+  asChild?: boolean;
+  /** 按钮内文字。 */
   children?: ReactNode;
 }

@@ -1,0 +1,56 @@
+/* Talon · KV styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-kv {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 10px 16px;
+  align-items: baseline;
+}
+
+.tln-kv .k {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-3);
+}
+
+.tln-kv .v { font-family: var(--font-mono); color: var(--fg-1); font-size: 12px; }
+
+.tln-kv .v.fg-0 { color: var(--fg-0); }
+
+.tln-kv .v.dim { color: var(--fg-2); }
+
+.tln-kv .v.acc { color: var(--acc-strong); }
+
+.tln-kv-copy {
+  background: transparent;
+  border: 0;
+  margin-left: var(--s-3);
+  padding: 0 var(--s-2);
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.tln-kv:hover .tln-kv-copy,
+.tln-kv .tln-kv-copy:focus-visible { opacity: 1; }
+
+.tln-kv-copy:hover { color: var(--fg-1); }
+
+.tln-kv-sm { gap: 6px 12px; }
+
+.tln-kv-sm .k { font-size: 9.5px; }
+
+.tln-kv-sm .v { font-size: 11px; }
+
+.tln-kv-lg { gap: 14px 20px; }
+
+.tln-kv-lg .k { font-size: 11px; }
+
+.tln-kv-lg .v { font-size: 13px; }

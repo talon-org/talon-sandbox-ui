@@ -1,0 +1,98 @@
+/* Talon · Input styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-input, .tln-select, .tln-textarea {
+  height: var(--ctrl-h-md);
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: 0 10px;
+  font-family: inherit;
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.tln-input::placeholder, .tln-textarea::placeholder { color: var(--fg-3); }
+
+.tln-input:hover, .tln-select:hover, .tln-textarea:hover { border-color: var(--line-strong); }
+
+.tln-input:focus, .tln-select:focus, .tln-textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-focus);
+}
+
+.tln-input.mono, .tln-select.mono { font-family: var(--font-mono); }
+
+.tln-input.error, .tln-select.error, .tln-textarea.error { border-color: var(--err); }
+
+.tln-input.error:focus { box-shadow: 0 0 0 3px var(--err-soft); }
+
+.tln-input-w-icon { position: relative; }
+
+.tln-input-w-icon .ic-lead { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; justify-content: center; color: var(--fg-3); pointer-events: none; line-height: 0; }
+
+.tln-input-w-icon input { padding-left: 32px; }
+
+.tln .tln-input:focus,         .tln .tln-input:focus-visible,
+.tln .tln-select:focus,        .tln .tln-select:focus-visible,
+.tln .tln-textarea:focus,      .tln .tln-textarea:focus-visible,
+.tln .tln-search input:focus,  .tln .tln-search input:focus-visible,
+.tln .tln-combo .trigger:focus, .tln .tln-combo .trigger:focus-visible,
+.tln .tln-slider input[type='range']:focus,
+.tln .tln-slider input[type='range']:focus-visible {
+  outline: none;
+}
+
+.tln-input-sm, .tln-select-sm { height: var(--ctrl-h-sm); padding: 0 8px; font-size: var(--text-sm); }
+
+.tln-input-lg, .tln-select-lg { height: var(--ctrl-h-lg); padding: 0 12px; font-size: var(--text-md); }
+
+.tln-input-w-icon.sm .ic-lead { left: 7px; }
+
+.tln-input-w-icon.sm input { padding-left: 26px; }
+
+.tln-input-w-icon.lg .ic-lead { left: 11px; }
+
+.tln-input-w-icon.lg input { padding-left: 34px; }
+
+.tln .tln-input-w-icon .ic-lead {
+  top: 0; bottom: 0;
+  transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tln .tln-input-w-icon .ic-lead svg { display: block; }
+
+.tln-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.tln-input-wrap .tln-input { flex: 1; }
+
+.tln-input-prefix,
+.tln-input-suffix {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  color: var(--fg-3);
+}
+
+.tln-input-prefix > svg, .tln-input-prefix > .ic,
+.tln-input-suffix > svg, .tln-input-suffix > .ic {
+  pointer-events: none;
+}
+
+.tln-input-prefix { left: 9px; }
+
+.tln-input-suffix { right: 9px; }
+
+.tln-input-wrap:has(.tln-input-prefix) .tln-input { padding-left: 32px; }
+
+.tln-input-wrap:has(.tln-input-suffix) .tln-input { padding-right: 32px; }

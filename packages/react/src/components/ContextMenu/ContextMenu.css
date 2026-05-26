@@ -1,0 +1,105 @@
+/* Talon · ContextMenu styles — 复用 DropdownMenu 视觉，tln-ctx 前缀 */
+
+/* 菜单浮层面板 */
+.tln-ctx-content {
+  min-width: 200px;
+  background: var(--bg-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-3);
+  padding: 4px;
+  z-index: 50;
+  animation: tln-fade-in var(--dur-fast) var(--ease-out);
+  outline: none;
+}
+
+/* 非交互区块标题 */
+.tln-ctx-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  padding: 8px 10px 4px;
+  pointer-events: none;
+}
+
+/* 分隔线 */
+.tln-ctx-sep {
+  height: 1px;
+  background: var(--line);
+  margin: 4px 0;
+}
+
+/* 菜单项基础样式 */
+.tln-ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--r-1);
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  position: relative;
+}
+
+.tln-ctx-item[data-highlighted] {
+  background: var(--bg-2);
+  color: var(--fg-0);
+}
+
+/* 危险操作 */
+.tln-ctx-item-danger {
+  color: var(--err);
+}
+.tln-ctx-item-danger[data-highlighted] {
+  background: var(--err-soft);
+  color: var(--err);
+}
+
+/* 禁用态 */
+.tln-ctx-item[data-disabled] {
+  color: var(--fg-4);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 键盘快捷键提示 */
+.tln-ctx-shortcut {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+/* 子菜单触发箭头 */
+.tln-ctx-sub-arrow {
+  margin-left: auto;
+  color: var(--fg-3);
+}
+
+/* ════════════════════════════════════════════════════════════
+   旧 class alias — 兼容历史 prototype 用法 .tln-menu-item
+═══════════════════════════════════════════════════════════════ */
+.tln-ctx-content .tln-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--r-1);
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+.tln-ctx-content .tln-menu-item[data-highlighted] {
+  background: var(--bg-2);
+  color: var(--fg-0);
+}

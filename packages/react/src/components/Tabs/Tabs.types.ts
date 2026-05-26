@@ -1,14 +1,8 @@
-import type { ReactNode } from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import type { tabsListVariants } from './Tabs.js';
 
-export interface TabItem {
-  value: string;
-  label: ReactNode;
-  icon?: ReactNode;
-}
-
+/** Tabs 根容器 props — 继承 Radix Tabs.Root */
 export interface TabsProps {
-  value: string;
-  onChange: (value: string) => void;
-  items: TabItem[];
-  className?: string;
+  /** 尺寸档位，影响 TabsList 字号和 padding */
+  size?: VariantProps<typeof tabsListVariants>['size'];
 }

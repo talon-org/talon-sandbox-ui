@@ -1,0 +1,72 @@
+/* Talon · Search styles — 1:1 from .design-source/project/app/ui-forms.jsx */
+.tln-search {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+  height: var(--ctrl-h-md);
+  box-sizing: border-box;
+}
+.tln-search input { box-sizing: border-box; }
+/* 规范化选择器（cva 生成） */
+.tln-search.tln-search-sm { height: var(--ctrl-h-sm); }
+.tln-search.tln-search-lg { height: var(--ctrl-h-lg); }
+/* 旧版 alias，保留向后兼容 */
+.tln-search.sm { height: var(--ctrl-h-sm); }
+.tln-search.lg { height: var(--ctrl-h-lg); }
+.tln-search input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: 0 36px 0 32px;
+  font-family: inherit;
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+/* 隐藏浏览器原生的清除/搜索图标，使用自定义 .clear 按钮代替 */
+.tln-search input::-webkit-search-cancel-button,
+.tln-search input::-webkit-search-decoration,
+.tln-search input::-webkit-search-results-button,
+.tln-search input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+.tln-search.tln-search-sm input { padding: 0 28px 0 26px; font-size: var(--text-sm); }
+.tln-search.tln-search-lg input { padding: 0 40px 0 36px; font-size: var(--text-md); }
+/* 旧版 alias */
+.tln-search.sm input { padding: 0 28px 0 26px; font-size: var(--text-sm); }
+.tln-search.lg input { padding: 0 40px 0 36px; font-size: var(--text-md); }
+.tln-search input:focus { border-color: var(--border-focus); box-shadow: var(--shadow-focus); }
+.tln-search .ic-search {
+  position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-3); pointer-events: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  line-height: 0;
+}
+.tln-search.tln-search-sm .ic-search { left: 8px; }
+.tln-search.tln-search-lg .ic-search { left: 12px; }
+/* 旧版 alias */
+.tln-search.sm .ic-search { left: 8px; }
+.tln-search.lg .ic-search { left: 12px; }
+.tln-search .kbd {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  font-family: var(--font-mono); font-size: 10px;
+  padding: 1px 5px; border: 1px solid var(--line); border-radius: 3px;
+  color: var(--fg-3); background: var(--bg-2);
+  pointer-events: none;
+}
+.tln-search .clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  width: 18px; height: 18px;
+  border: 0; background: var(--bg-3); color: var(--fg-2);
+  border-radius: 50%; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.tln-search .clear:hover { background: var(--bg-4); color: var(--fg-0); }

@@ -1,2 +1,2 @@
-export { KV } from './KV.js';
-export type { KVProps, KVItem } from './KV.types.js';
+export { KV, kvVariants } from './KV.js';
+export type { KVProps, KVRow } from './KV.types.js';

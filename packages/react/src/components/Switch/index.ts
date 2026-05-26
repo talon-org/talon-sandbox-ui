@@ -1,2 +1,2 @@
-export { Switch } from './Switch.js';
-export type { SwitchProps, SwitchSize } from './Switch.types.js';
+export { Switch, SwitchField, switchVariants } from './Switch.js';
+export type { SwitchProps, SwitchFieldProps } from './Switch.types.js';

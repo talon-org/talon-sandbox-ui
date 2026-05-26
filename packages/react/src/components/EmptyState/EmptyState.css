@@ -1,0 +1,42 @@
+/* Talon · EmptyState styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-empty {
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-3);
+  padding: 56px 24px;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+
+.tln-empty .icon-wrap {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--fg-4);
+  margin-bottom: 4px;
+}
+
+.tln-empty .eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.tln-empty .head { font-size: 18px; color: var(--fg-0); font-weight: 600; letter-spacing: -0.015em; }
+
+.tln-empty .desc { font-size: 13px; color: var(--fg-2); max-width: 420px; line-height: 1.6; }
+
+.tln-empty .actions { display: flex; gap: 8px; margin-top: 12px; }
+
+.tln-empty-sm { padding: 32px 16px; }
+
+.tln-empty-sm .head { font-size: 15px; }
+
+.tln-empty-sm .desc { font-size: 12px; }
+
+.tln-empty-lg { padding: 80px 32px; }
+
+.tln-empty-lg .head { font-size: 22px; }
+
+.tln-empty-lg .desc { font-size: 14px; }

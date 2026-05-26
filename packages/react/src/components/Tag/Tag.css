@@ -1,0 +1,39 @@
+/* ─────── Tag ───────────────────────────────────────────────
+   来源：ui.jsx .tln-tag + ui-forms.jsx .tln-tag-sm / .tln-tag-lg
+   迁自：之前暂放在 Badge/Badge.css（若有），现在独立存放
+   ─────────────────────────────────────────────────────────── */
+
+.tln-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: var(--r-1);
+  background: var(--bg-2);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-2);
+  border: 1px solid var(--line);
+}
+
+/* 小号 */
+.tln-tag-sm { height: 16px; padding: 0 6px; font-size: 9.5px; }
+
+/* 大号 */
+.tln-tag-lg { height: 24px; padding: 0 10px; font-size: 11.5px; gap: 6px; }
+
+/* variant=accent */
+.tln-tag-acc { color: var(--acc-strong); border-color: var(--acc-4); background: var(--acc-2); }
+
+/* variant=mono */
+.tln-tag-mono { background: var(--bg-0); border-color: var(--line-strong); }
+
+/* 移除按钮 */
+.tln-tag-rm {
+  background: transparent; border: 0; padding: 0;
+  color: inherit; opacity: 0.6;
+  cursor: pointer; display: inline-flex; align-items: center;
+  border-radius: 2px;
+}
+.tln-tag-rm:hover { opacity: 1; }

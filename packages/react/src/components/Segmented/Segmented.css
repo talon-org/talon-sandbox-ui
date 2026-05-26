@@ -1,0 +1,50 @@
+/* Talon · Segmented styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-seg {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: 2px;
+  gap: 0;
+}
+
+.tln-seg button {
+  border: 0;
+  background: transparent;
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 9px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.tln-seg button:hover { color: var(--fg-1); background: var(--bg-hover); }
+
+/* Radix 输出 data-state="on"，同时保留 aria-pressed 兼容 */
+.tln-seg button[data-state='on'],
+.tln-seg button[aria-pressed='true'] {
+  color: var(--fg-0);
+  /* 容器是 bg-2,active 用 bg-1(浅色模式更亮 / 深色模式更暗)
+     形成 inset toggle 视觉。prototype 原值 bg-2 在两种模式下都
+     跟容器同色,实测分段不清晰,这里收紧到 bg-1。 */
+  background: var(--bg-1);
+  box-shadow: 0 0 0 1px var(--line-strong) inset;
+}
+
+.tln-seg button[disabled] { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+
+.tln-seg-sm button { height: 18px; padding: 0 7px; font-size: 9.5px; }
+
+.tln-seg-lg button { height: 26px; padding: 0 12px; font-size: 11.5px; }
+
+.tln-seg-disabled { opacity: 0.5; pointer-events: none; }

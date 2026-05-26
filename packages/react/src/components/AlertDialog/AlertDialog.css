@@ -1,0 +1,24 @@
+/* Talon · AlertDialog styles
+   复用 tln-dialog 基础样式，通过 .tln-alert-dialog modifier 增加强调色。
+   AlertDialog 的背景遮罩比 Dialog 更深（0.65 vs 0.55），视觉上更紧迫。 */
+
+/* 背景遮罩：直接用类名，不用 :has()（兼容性更好）
+   AlertDialogContent 内部显式渲染 tln-alert-dialog-backdrop */
+.tln-alert-dialog-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-dialog);
+  animation: tln-fade-in 160ms var(--ease-out);
+}
+
+/* AlertDialog 面板 — 继承 tln-dialog，最大宽度稍小（420px） */
+.tln-alert-dialog {
+  max-width: 420px;
+}
+
+/* 底部按钮区：Action（danger）在右，Cancel（ghost）在左 */
+.tln-alert-dialog .tln-dialog-foot {
+  gap: 8px;
+  justify-content: flex-end;
+}

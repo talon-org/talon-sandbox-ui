@@ -1,0 +1,221 @@
+/* Talon · MultiSelect styles */
+
+/* ════════════════════════════════════════════════════════════
+   MULTI-SELECT ROOT
+═══════════════════════════════════════════════════════════════ */
+.tln-multiselect {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+/* ─── Trigger ────────────────────────────────────────────────── */
+.tln-multiselect-trigger {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--ctrl-h-md);
+  padding: 3px 30px 3px 6px;
+  background: var(--bg-input);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  cursor: text;
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  font-family: inherit;
+  position: relative;
+  text-align: left;
+  outline: none;
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.tln-multiselect-sm .tln-multiselect-trigger {
+  min-height: var(--ctrl-h-sm);
+  padding: 2px 26px 2px 4px;
+}
+.tln-multiselect-lg .tln-multiselect-trigger {
+  min-height: var(--ctrl-h-lg);
+  padding: 4px 34px 4px 8px;
+  font-size: var(--text-md);
+}
+.tln-multiselect[data-open='true'] .tln-multiselect-trigger,
+.tln-multiselect-trigger:focus-visible {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-focus);
+}
+
+/* ─── Placeholder ────────────────────────────────────────────── */
+.tln-multiselect-placeholder {
+  color: var(--fg-3);
+  padding: 0 4px;
+}
+
+/* ─── Chevron ────────────────────────────────────────────────── */
+.tln-multiselect-chev {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-3);
+  pointer-events: none;
+}
+.tln-multiselect[data-open='true'] .tln-multiselect-chev {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* ─── Pill chip ──────────────────────────────────────────────── */
+.tln-multiselect-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 4px 0 8px;
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-line);
+  border-radius: var(--r-1);
+  font-size: 11px;
+  color: var(--acc-strong);
+}
+.tln-multiselect-pill.mono .tln-multiselect-pill-label {
+  font-family: var(--font-mono);
+}
+.tln-multiselect-pill-remove {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  background: transparent;
+  color: var(--acc-strong);
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+.tln-multiselect-pill-remove:hover {
+  opacity: 1;
+  background: var(--bg-hover);
+}
+
+/* ─── Content panel ──────────────────────────────────────────── */
+.tln-multiselect-content {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-3);
+  z-index: 40;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Search box ─────────────────────────────────────────────── */
+.tln-multiselect-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line-subtle);
+  color: var(--fg-3);
+}
+.tln-multiselect-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: var(--text-sm);
+  color: var(--fg-1);
+  font-family: inherit;
+}
+.tln-multiselect-search input::placeholder {
+  color: var(--fg-3);
+}
+
+/* ─── Options list ───────────────────────────────────────────── */
+.tln-multiselect-options {
+  overflow-y: auto;
+  max-height: 240px;
+  padding: 4px;
+}
+
+/* ─── Item ───────────────────────────────────────────────────── */
+.tln-multiselect-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: var(--r-1);
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  cursor: pointer;
+  user-select: none;
+}
+.tln-multiselect-item:hover {
+  background: var(--bg-hover);
+}
+/* 已选项：accent 高亮文字，与 Select item 保持一致 */
+.tln-multiselect-item.selected {
+  color: var(--acc-strong);
+  font-weight: 500;
+}
+.tln-multiselect-item[data-disabled='true'] {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+.tln-multiselect-item.mono .lbl {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.tln-multiselect-item .check-slot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+}
+.tln-multiselect-item .check {
+  flex-shrink: 0;
+  color: var(--acc);
+}
+.tln-multiselect-item .lbl {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tln-multiselect-item .opt-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  flex-shrink: 0;
+}
+
+/* ─── Empty ──────────────────────────────────────────────────── */
+.tln-multiselect-empty {
+  padding: 12px 8px;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--fg-3);
+}
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+.tln-multiselect-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  border-top: 1px solid var(--line-subtle);
+  font-size: 11px;
+  color: var(--fg-3);
+}
+.tln-multiselect-foot-keys span {
+  display: inline-block;
+  padding: 1px 4px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--fg-3);
+}

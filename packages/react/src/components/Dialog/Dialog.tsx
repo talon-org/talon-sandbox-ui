@@ -1,58 +1,151 @@
-import { useEffect, useRef, useCallback, useId } from 'react';
-import { createPortal } from 'react-dom';
-import { cx } from '../../primitives/clsx.js';
-import { useFocusTrap } from '../../primitives/useFocusTrap.js';
-import type { DialogProps } from './Dialog.types.js';
+/**
+ * Dialog — 模态弹窗，基于 @radix-ui/react-dialog。
+ *
+ * 拆分为子组件形式，与 shadcn 对齐：
+ *   Dialog / DialogTrigger / DialogContent / DialogHeader / DialogTitle /
+ *   DialogDescription / DialogFooter / DialogClose / DialogPortal / DialogOverlay
+ *
+ * 实现要点：
+ * - `modal={false}` 禁用 Radix 的 aria-hidden 广播，避免并发 Dialog 互相 aria-hidden
+ * - Content 手动补 `aria-modal="true"`
+ * - 尺寸 variant 通过 cva 管理（sm / md / lg）
+ */
+import React, { forwardRef } from 'react';
+import * as RadixDialog from '@radix-ui/react-dialog';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils.js';
+import './Dialog.css';
 
-export function Dialog({ open, onClose, title, children, footer, className }: DialogProps) {
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const titleId = useId();
+// ─── DialogContent cva ───────────────────────────────────────────────────────
+export const dialogContentVariants = cva('tln-dialog', {
+  variants: {
+    size: {
+      sm: 'tln-dialog-sm',
+      md: '',
+      lg: 'tln-dialog-lg',
+    },
+  },
+  defaultVariants: { size: 'md' },
+});
 
-  useFocusTrap(dialogRef, open);
+// ─── Dialog 根容器 ────────────────────────────────────────────────────────────
+// modal 默认 false：禁用 Radix 的 aria-hidden 广播，避免并发 Dialog 互相 aria-hidden
+// （方案 A：实现层真正默认 false，与文档/注释保持一致；Radix 原始默认是 true）
+export function Dialog({ modal = false, ...props }: React.ComponentPropsWithoutRef<typeof RadixDialog.Root>) {
+  return <RadixDialog.Root modal={modal} {...props} />;
+}
+Dialog.displayName = 'Dialog';
 
-  const handleEscape = useCallback(
-    (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); },
-    [onClose],
+// ─── DialogTrigger ────────────────────────────────────────────────────────────
+export const DialogTrigger = RadixDialog.Trigger;
+DialogTrigger.displayName = 'DialogTrigger';
+
+// ─── DialogPortal ─────────────────────────────────────────────────────────────
+export const DialogPortal = RadixDialog.Portal;
+DialogPortal.displayName = 'DialogPortal';
+
+// ─── DialogOverlay ────────────────────────────────────────────────────────────
+export interface DialogOverlayProps
+  extends React.ComponentPropsWithoutRef<typeof RadixDialog.Overlay> {}
+
+export const DialogOverlay = forwardRef<
+  React.ElementRef<typeof RadixDialog.Overlay>,
+  DialogOverlayProps
+>(function DialogOverlay({ className, ...props }, ref) {
+  return (
+    <RadixDialog.Overlay
+      ref={ref}
+      className={cn('tln-dialog-backdrop', className)}
+      {...props}
+    />
   );
+});
+DialogOverlay.displayName = 'DialogOverlay';
 
-  useEffect(() => {
-    if (!open) return;
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [open, handleEscape]);
+// ─── DialogContent ────────────────────────────────────────────────────────────
+export interface DialogContentProps
+  extends React.ComponentPropsWithoutRef<typeof RadixDialog.Content>,
+    VariantProps<typeof dialogContentVariants> {}
 
-  if (!open || typeof window === 'undefined') return null;
-
-  return createPortal(
-    <div
-      className="tln-dialog-backdrop"
-      onClick={onClose}
-    >
-      <div
-        ref={dialogRef}
-        className={cx('tln-dialog', className)}
-        role="dialog"
+export const DialogContent = forwardRef<
+  React.ElementRef<typeof RadixDialog.Content>,
+  DialogContentProps
+>(function DialogContent({ size, className, children, ...props }, ref) {
+  return (
+    <RadixDialog.Portal>
+      {/* 背景遮罩 */}
+      <DialogOverlay />
+      {/* 内容面板：手动补 aria-modal，因为 modal=false 时 Radix 不会自动加 */}
+      <RadixDialog.Content
+        ref={ref}
+        className={cn(dialogContentVariants({ size }), className)}
         aria-modal="true"
-        aria-labelledby={titleId}
-        onClick={(e) => e.stopPropagation()}
+        aria-describedby={undefined}
+        {...props}
       >
-        <div className="tln-dialog-head">
-          <h3 id={titleId} className="tln-dialog-title">{title}</h3>
-          <button
-            type="button"
-            className="tln-btn tln-btn-ghost tln-btn-sm tln-btn-icon"
-            aria-label="Close dialog"
-            onClick={onClose}
-          >
-            ×
-          </button>
-        </div>
-        <div className="tln-dialog-body">{children}</div>
-        {footer && <div className="tln-dialog-foot">{footer}</div>}
-      </div>
-    </div>,
-    document.body,
+        {children}
+      </RadixDialog.Content>
+    </RadixDialog.Portal>
+  );
+});
+DialogContent.displayName = 'DialogContent';
+
+// ─── DialogHeader ─────────────────────────────────────────────────────────────
+export interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export function DialogHeader({ className, ...props }: DialogHeaderProps) {
+  return (
+    <div className={cn('tln-dialog-head', className)} {...props} />
   );
 }
+DialogHeader.displayName = 'DialogHeader';
 
-Dialog.displayName = 'Dialog';
+// ─── DialogTitle ─────────────────────────────────────────────────────────────
+export interface DialogTitleProps
+  extends React.ComponentPropsWithoutRef<typeof RadixDialog.Title> {}
+
+export const DialogTitle = forwardRef<
+  React.ElementRef<typeof RadixDialog.Title>,
+  DialogTitleProps
+>(function DialogTitle({ className, ...props }, ref) {
+  return (
+    <RadixDialog.Title
+      ref={ref}
+      className={cn('tln-dialog-title', className)}
+      {...props}
+    />
+  );
+});
+DialogTitle.displayName = 'DialogTitle';
+
+// ─── DialogDescription ────────────────────────────────────────────────────────
+export interface DialogDescriptionProps
+  extends React.ComponentPropsWithoutRef<typeof RadixDialog.Description> {}
+
+export const DialogDescription = forwardRef<
+  React.ElementRef<typeof RadixDialog.Description>,
+  DialogDescriptionProps
+>(function DialogDescription({ className, ...props }, ref) {
+  return (
+    <RadixDialog.Description
+      ref={ref}
+      className={cn('tln-dialog-desc', className)}
+      {...props}
+    />
+  );
+});
+DialogDescription.displayName = 'DialogDescription';
+
+// ─── DialogFooter ─────────────────────────────────────────────────────────────
+export interface DialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export function DialogFooter({ className, ...props }: DialogFooterProps) {
+  return (
+    <div className={cn('tln-dialog-foot', className)} {...props} />
+  );
+}
+DialogFooter.displayName = 'DialogFooter';
+
+// ─── DialogClose ─────────────────────────────────────────────────────────────
+export const DialogClose = RadixDialog.Close;
+DialogClose.displayName = 'DialogClose';

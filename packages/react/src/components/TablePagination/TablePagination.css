@@ -1,0 +1,45 @@
+/* Talon · TablePagination styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+}
+
+.tln-pager button {
+  height: var(--ctrl-h-md);
+  min-width: var(--ctrl-h-md);
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-1);
+  color: var(--fg-1);
+  border-radius: var(--r-2);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+}
+
+/* 规范命名：tln-pagination-sm / tln-pagination-lg */
+.tln-pager.tln-pagination-sm button { height: var(--ctrl-h-sm); min-width: var(--ctrl-h-sm); font-size: 11px; padding: 0 6px; }
+.tln-pager.tln-pagination-lg button { height: var(--ctrl-h-lg); min-width: var(--ctrl-h-lg); font-size: var(--text-md); padding: 0 10px; }
+
+/* 旧 class alias：.tln-pagination.sm / .tln-pagination.lg（向后兼容） */
+.tln-pager.sm button { height: var(--ctrl-h-sm); min-width: var(--ctrl-h-sm); font-size: 11px; padding: 0 6px; }
+.tln-pager.lg button { height: var(--ctrl-h-lg); min-width: var(--ctrl-h-lg); font-size: var(--text-md); padding: 0 10px; }
+
+.tln-pager button:hover { background: var(--bg-2); color: var(--fg-0); }
+
+.tln-pager button.active { background: var(--acc); border-color: var(--acc); color: var(--acc-fg); }
+
+.tln-pager button[disabled] { color: var(--fg-3); cursor: not-allowed; background: var(--bg-1); }
+
+.tln-pager .ellipsis { color: var(--fg-3); padding: 0 4px; }
+
+.tln-pager .info {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--fg-3);
+  margin-left: 12px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}

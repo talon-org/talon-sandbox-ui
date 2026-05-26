@@ -1,145 +1,174 @@
-import { cx } from '../../primitives/clsx.js';
-import type { TablePaginationProps } from './TablePagination.types.js';
+import { forwardRef, useCallback, type KeyboardEvent, type ReactNode } from 'react';
+import { cn } from '../../lib/utils.js';
+import './TablePagination.css';
 
-const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
-
-/** Compute the page numbers to display, inserting -1 as an ellipsis sentinel. */
-function buildPageWindows(page: number, pageCount: number): number[] {
-  if (pageCount <= 7) {
-    return Array.from({ length: pageCount }, (_, i) => i);
+// ─── 构建页码数组 ─────────────────────────────────────────────────────────────
+/**
+ * 超过 7 页时用 '…' 字符串折叠中间部分。
+ * 返回 (number | string)[]：数字 = 页码，字符串 '…' = 省略号占位。
+ */
+function buildPages(page: number, total: number): Array<number | string> {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
   }
-  const pages: number[] = [0];
-  const lo = Math.max(1, page - 1);
-  const hi = Math.min(pageCount - 2, page + 1);
 
-  if (lo > 1) pages.push(-1);            // leading ellipsis
-  for (let i = lo; i <= hi; i++) pages.push(i);
-  if (hi < pageCount - 2) pages.push(-1); // trailing ellipsis
-  pages.push(pageCount - 1);
-  return pages;
+  const set = new Set<number>();
+  // 始终展示: 首尾两页、当前页及前后各一页
+  [1, 2, page - 1, page, page + 1, total - 1, total].forEach((p) => {
+    if (p >= 1 && p <= total) set.add(p);
+  });
+
+  const sorted = [...set].sort((a, b) => a - b);
+  const result: Array<number | string> = [];
+  let prev = 0;
+  sorted.forEach((p) => {
+    if (prev && p - prev > 1) result.push('…');
+    result.push(p);
+    prev = p;
+  });
+  return result;
+}
+
+// ─── TablePagination ──────────────────────────────────────────────────────────
+export interface TablePaginationProps {
+  /** 当前页，1-based */
+  page: number;
+  /** 总页数 */
+  total: number;
+  /** 页码切换回调（新 API） */
+  onPageChange?: (page: number) => void;
+  /** @deprecated 请使用 onPageChange */
+  onChange?: (page: number) => void;
+  /** 右侧信息文案（@deprecated，请使用 <TablePaginationInfo> 子组件） */
+  info?: ReactNode;
+  /** 尺寸档位 */
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  /** slot 子组件（如 <TablePaginationInfo>） */
+  children?: ReactNode;
 }
 
 /**
- * TablePagination
- *
- * Usage:
- *   <TablePagination
- *     page={0}
- *     pageSize={20}
- *     total={253}
- *     onPageChange={setPage}
- *     onPageSizeChange={setPageSize}
- *   />
+ * TablePagination — 列表底部分页器。
+ * 新 API：onPageChange 回调 + <TablePaginationInfo> 子组件。
+ * 旧 API：onChange / info prop 仍兼容。
  */
-export function TablePagination({
-  page,
-  pageSize,
-  total,
-  onPageChange,
-  onPageSizeChange,
-  pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
-  className,
-}: TablePaginationProps) {
-  const pageCount = Math.max(1, Math.ceil(total / pageSize));
-  const first = total === 0 ? 0 : page * pageSize + 1;
-  const last = Math.min((page + 1) * pageSize, total);
-  const pages = buildPageWindows(page, pageCount);
-  let ellipsisKey = 0;
+export const TablePagination = forwardRef<HTMLDivElement, TablePaginationProps>(
+  function TablePagination(
+    {
+      page,
+      total,
+      onPageChange,
+      onChange,
+      info,
+      size = 'md',
+      className,
+      children,
+    },
+    ref,
+  ) {
+    // onPageChange 优先，兼容旧 onChange
+    const handleChange = useCallback(
+      (p: number) => {
+        onPageChange?.(p);
+        onChange?.(p);
+      },
+      [onPageChange, onChange],
+    );
 
-  return (
-    <div className={cx('tln-pagination', className)} role="navigation" aria-label="Table pagination">
-      {/* Row info */}
-      <span className="tln-pagination__info">
-        {total === 0 ? '0 rows' : `${first}–${last} / ${total}`}
-      </span>
+    const pages = buildPages(page, total);
+    let ellipsisKey = 0;
 
-      {/* Page size selector */}
-      {onPageSizeChange != null && (
-        <div className="tln-pagination__size">
-          <span>Rows</span>
-          <select
-            value={pageSize}
-            aria-label="Rows per page"
-            onChange={(e) => {
-              onPageSizeChange(Number(e.target.value));
-              onPageChange(0);
-            }}
-          >
-            {pageSizeOptions.map((opt) => (
-              <option key={opt} value={opt}>{opt}</option>
-            ))}
-          </select>
-        </div>
-      )}
+    const onKeyDown = useCallback(
+      (e: KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); handleChange(Math.max(1, page - 1)); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); handleChange(Math.min(total, page + 1)); }
+      },
+      [page, total, handleChange],
+    );
 
-      {/* Nav buttons */}
-      <div className="tln-pagination__nav">
-        {/* First */}
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          'tln-pager',
+          size === 'sm' && 'tln-pagination-sm',
+          size === 'lg' && 'tln-pagination-lg',
+          className,
+        )}
+        role="navigation"
+        aria-label="分页"
+        onKeyDown={onKeyDown}
+      >
+        {/* 上一页 */}
         <button
           type="button"
-          aria-label="First page"
-          disabled={page === 0}
-          onClick={() => onPageChange(0)}
-        >
-          «
-        </button>
-        {/* Prev */}
-        <button
-          type="button"
-          aria-label="Previous page"
-          disabled={page === 0}
-          onClick={() => onPageChange(page - 1)}
+          aria-label="上一页"
+          disabled={page <= 1}
+          onClick={() => handleChange(Math.max(1, page - 1))}
         >
           ‹
         </button>
 
+        {/* 页码 */}
         {pages.map((p) => {
-          if (p === -1) {
+          if (typeof p === 'string') {
             ellipsisKey += 1;
             return (
-              <button
-                key={`ellipsis-${ellipsisKey}`}
-                type="button"
-                disabled
-                aria-hidden="true"
-                style={{ letterSpacing: 1 }}
-              >
-                …
-              </button>
+              <span key={`ell-${ellipsisKey}`} className="ellipsis">…</span>
             );
           }
           return (
             <button
               key={p}
               type="button"
-              aria-label={`Page ${p + 1}`}
+              className={p === page ? 'active' : undefined}
+              aria-label={`第 ${p} 页`}
               aria-current={p === page ? 'page' : undefined}
-              onClick={() => onPageChange(p)}
+              onClick={() => handleChange(p)}
             >
-              {p + 1}
+              {p}
             </button>
           );
         })}
 
-        {/* Next */}
+        {/* 下一页 */}
         <button
           type="button"
-          aria-label="Next page"
-          disabled={page >= pageCount - 1}
-          onClick={() => onPageChange(page + 1)}
+          aria-label="下一页"
+          disabled={page >= total}
+          onClick={() => handleChange(Math.min(total, page + 1))}
         >
           ›
         </button>
-        {/* Last */}
-        <button
-          type="button"
-          aria-label="Last page"
-          disabled={page >= pageCount - 1}
-          onClick={() => onPageChange(pageCount - 1)}
-        >
-          »
-        </button>
+
+        {/* slot 子组件（如 TablePaginationInfo） */}
+        {children}
+
+        {/* 旧 info prop 兼容 */}
+        {info != null && !children && <span className="tln-pagination-info">{info}</span>}
       </div>
-    </div>
-  );
+    );
+  },
+);
+TablePagination.displayName = 'TablePagination';
+
+// ─── TablePaginationInfo ──────────────────────────────────────────────────────
+export interface TablePaginationInfoProps {
+  className?: string;
+  children?: ReactNode;
 }
+
+/**
+ * TablePaginationInfo — 分页器信息文案 slot（如"共 1,248 条"）。
+ */
+export const TablePaginationInfo = forwardRef<HTMLSpanElement, TablePaginationInfoProps>(
+  function TablePaginationInfo({ className, children }, ref) {
+    return (
+      <span ref={ref} className={cn('tln-pagination-info', className)}>
+        {children}
+      </span>
+    );
+  },
+);
+TablePaginationInfo.displayName = 'TablePaginationInfo';

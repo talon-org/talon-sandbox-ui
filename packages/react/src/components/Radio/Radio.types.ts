@@ -1,33 +1,23 @@
-import type { ReactNode } from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import type { radioGroupItemVariants } from './Radio.js';
+import * as RadixRadioGroup from '@radix-ui/react-radio-group';
 
-export interface RadioProps {
-  value: string;
-  checked?: boolean;
-  onChange?: (value: string) => void;
-  disabled?: boolean;
-  name?: string;
-  children?: ReactNode;
-  className?: string;
+/**
+ * RadioGroup 根容器的 Props 类型。
+ */
+export interface RadioGroupProps
+  extends ComponentPropsWithoutRef<typeof RadixRadioGroup.Root> {
+  /** 水平排列 */
+  row?: boolean;
 }
 
-export interface RadioGroupOption {
-  value: string;
-  label: ReactNode;
-  /** Secondary description text; displayed in card variant. */
-  description?: ReactNode;
-  disabled?: boolean;
-}
-
-export interface RadioGroupProps {
-  value: string;
-  onChange: (value: string) => void;
-  options: RadioGroupOption[];
-  /** Layout direction. Default 'vertical'. */
-  orientation?: 'vertical' | 'horizontal';
-  /** 'default' = standard radio pills. 'card' = selectable bordered cards. */
-  variant?: 'default' | 'card';
-  /** Shared name for native form submission. */
-  name?: string;
-  disabled?: boolean;
-  className?: string;
+/**
+ * RadioGroupItem 单选项的 Props 类型。
+ */
+export interface RadioGroupItemProps
+  extends ComponentPropsWithoutRef<typeof RadixRadioGroup.Item>,
+    VariantProps<typeof radioGroupItemVariants> {
+  /** 尺寸档位，默认 md */
+  size?: 'sm' | 'md' | 'lg';
 }

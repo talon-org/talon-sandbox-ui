@@ -1,69 +1,103 @@
 import { forwardRef } from 'react';
-import { cx } from '../../primitives/clsx.js';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils.js';
+import { Icon } from '../../primitives/icons.js';
 import { useFormField } from '../../primitives/FormFieldContext.js';
+import './Input.css';
 import type { InputProps } from './Input.types.js';
+import type { IconName } from '../../primitives/icons.js';
+
+// ─── cva variant 定义 ───────────────────────────────────────────
+export const inputVariants = cva('tln-input', {
+  variants: {
+    size: {
+      sm: 'tln-input-sm',
+      md: '',
+      lg: 'tln-input-lg',
+    },
+  },
+  defaultVariants: { size: 'md' },
+});
 
 /**
- * Input — single-line text control.
+ * Input — 单行文本框。
  *
- * CSS-only: all styles are in @talon-sandbox/react/styles (components.css).
- * When rendered inside a FormField, auto-receives the field's generated id
- * and invalid state via FormFieldContext.
- *
- * @example
- * import '@talon-sandbox/react/styles'
- * <Input placeholder="Search…" size="md" />
- *
- * @example
- * // With prefix / suffix adornments
- * <Input prefix={<SearchIcon />} suffix={<ClearButton />} />
- *
- * @example
- * // Inside FormField — id and invalid wired automatically
- * <FormField label="Name" error={err}>
- *   <Input />
- * </FormField>
+ * - size sm/md/lg 控制高度（tln-input / tln-input-sm / tln-input-lg）
+ * - mono → .mono class（等宽字体，用于 ID/key/token/path）
+ * - error → .error class（红色边框）
+ * - leadIcon → 渲染 .tln-input-w-icon 包裹层 + .ic-lead 前置图标
+ * - trailingIcon → 渲染 .tln-input-w-icon 包裹层 + .ic-trail 后置图标
+ * - 在 FormField 内部时，自动继承 controlId 和 hasError
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { size = 'md', invalid = false, mono, prefix, suffix, className, disabled, id, ...rest },
+  {
+    size = 'md',
+    mono,
+    error,
+    leadIcon,
+    trailingIcon,
+    id,
+    className,
+    ...rest
+  },
   ref,
 ) {
+  // 从 FormField context 读取字段 id 和错误状态
   const field = useFormField();
   const resolvedId = id ?? field?.controlId;
-  const resolvedInvalid = invalid || (field?.hasError ?? false);
+  const resolvedError = error || (field?.hasError ?? false);
 
-  const inputCls = cx(
-    'tln-input',
-    size === 'sm' && 'tln-input-sm',
-    size === 'lg' && 'tln-input-lg',
-    resolvedInvalid && 'error',
-    mono && 'mono',
-    // className is always applied to the outermost element.
-    // When there is no wrapper (no prefix/suffix), the input IS the outer element.
-    !prefix && !suffix && className,
-  );
+  // 图标尺寸：sm=13 / md=14 / lg=15
+  const iconSize = size === 'sm' ? 13 : size === 'lg' ? 15 : 14;
+  const hasIcon = Boolean(leadIcon || trailingIcon);
 
-  const input = (
+  const inputEl = (
     <input
       ref={ref}
       id={resolvedId}
-      className={inputCls}
-      disabled={disabled}
-      aria-invalid={resolvedInvalid || undefined}
+      className={cn(
+        inputVariants({ size }),
+        resolvedError && 'error',
+        mono && 'mono',
+        // 有包裹层时 className 加到外层 wrapper
+        !hasIcon && className,
+      )}
+      aria-invalid={resolvedError || undefined}
       {...rest}
     />
   );
 
-  if (!prefix && !suffix) return input;
+  // 有图标时渲染 .tln-input-w-icon 包裹层
+  if (hasIcon) {
+    return (
+      <div
+        className={cn(
+          'tln-input-w-icon',
+          size === 'sm' && 'sm',
+          size === 'lg' && 'lg',
+          className,
+        )}
+      >
+        {leadIcon && (
+          <span className="ic-lead">
+            {typeof leadIcon === 'string'
+              ? <Icon name={leadIcon as IconName} size={iconSize} />
+              : leadIcon}
+          </span>
+        )}
+        {inputEl}
+        {trailingIcon && (
+          <span className="ic-trail">
+            {typeof trailingIcon === 'string'
+              ? <Icon name={trailingIcon as IconName} size={iconSize} />
+              : trailingIcon}
+          </span>
+        )}
+      </div>
+    );
+  }
 
-  return (
-    // className goes to the wrap (outermost element) — never to the inner input.
-    <div className={cx('tln-input-wrap', className)}>
-      {prefix != null && <span className="tln-input-prefix">{prefix}</span>}
-      {input}
-      {suffix != null && <span className="tln-input-suffix">{suffix}</span>}
-    </div>
-  );
+  return inputEl;
 });
 
 Input.displayName = 'Input';

@@ -1,393 +1,508 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  flexRender,
-  type SortingState,
-  type RowSelectionState,
-  type VisibilityState,
-  type PaginationState,
-} from '@tanstack/react-table';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import { cx } from '../../primitives/clsx.js';
+  createContext,
+  forwardRef,
+  useContext,
+  useMemo,
+  useState,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from 'react';
+import { cn } from '../../lib/utils.js';
 import { Checkbox } from '../Checkbox/index.js';
-import { TablePagination } from '../TablePagination/index.js';
-import type { DataTableProps } from './DataTable.types.js';
+import './DataTable.css';
+import type { ColumnDef, SortState } from './DataTable.types.js';
 
-const AUTO_VIRTUALIZE_THRESHOLD = 500;
-const DEFAULT_ESTIMATE_SIZE = 36;
+// ─── 辅助：从 row 取 key ────────────────────────────────────────────────────
+function getRowKey<T extends object>(row: T, rowKey: string | ((row: T) => string)): string {
+  if (typeof rowKey === 'function') return rowKey(row);
+  return String((row as Record<string, unknown>)[rowKey]);
+}
+
+// ─── 列宽转 grid-template-columns token ─────────────────────────────────────
+function colWidthToken(width: number | string | undefined): string {
+  if (width == null) return 'minmax(0, 1fr)';
+  if (typeof width === 'number') return `${width}px`;
+  return width;
+}
+
+// ─── 排序图标 ────────────────────────────────────────────────────────────────
+function SortIcon() {
+  return (
+    <span className="sort-ix" aria-hidden="true">
+      <svg className="up" width="7" height="4" viewBox="0 0 10 6" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1.5 4.5L5 1l3.5 3.5"/>
+      </svg>
+      <svg className="down" width="7" height="4" viewBox="0 0 10 6" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1.5 1.5L5 5l3.5-3.5"/>
+      </svg>
+    </span>
+  );
+}
+
+// ─── 骨架单元格 ──────────────────────────────────────────────────────────────
+function SkeletonCell() {
+  return <span className="tln-skel" style={{ display: 'inline-block', width: '60%', height: 10 }} />;
+}
+
+// ─── Context ──────────────────────────────────────────────────────────────────
+interface DataTableCtx<T extends object = Record<string, unknown>> {
+  data: T[];
+  columns: ColumnDef<T>[];
+  rowKey: string | ((row: T) => string);
+  selectable?: boolean;
+  selection: string[];
+  onSelectionChange?: (ids: string[]) => void;
+  sort?: SortState;
+  onSortChange?: (sort: SortState) => void;
+  loading?: boolean;
+  loadingRows: number;
+  empty?: ReactNode;
+  onRowClick?: (row: T) => void;
+}
+
+// 使用 Record<string, unknown> 而非 any，消费方通过 useDataTableContext<T>() 缩窄类型
+const DataTableContext = createContext<DataTableCtx<Record<string, unknown>> | null>(null);
+
+function useDataTableContext<T extends object>() {
+  const ctx = useContext(DataTableContext) as DataTableCtx<T> | null;
+  if (!ctx) throw new Error('DataTable 子组件必须在 <DataTable> 内使用');
+  return ctx;
+}
+
+// ─── DataTable Root ───────────────────────────────────────────────────────────
+export interface DataTableProps<T extends object> {
+  /** 数据行 */
+  data?: T[];
+  /** 列定义 */
+  columns: ColumnDef<T>[];
+  /** 取行唯一 key */
+  rowKey: string | ((row: T) => string);
+  /** 是否显示勾选列（可在 DataTableContent 上覆盖） */
+  selectable?: boolean;
+  /** 选中的 id 列表（受控，不传则非受控） */
+  selection?: string[];
+  /** 选中变化回调 */
+  onSelectionChange?: (ids: string[]) => void;
+  /** 当前排序状态 */
+  sort?: SortState;
+  /** 排序变化回调 */
+  onSortChange?: (sort: SortState) => void;
+  /** 加载中状态 */
+  loading?: boolean;
+  /** 加载时骨架行数，默认 5 */
+  loadingRows?: number;
+  /** 无数据时显示的内容 */
+  empty?: ReactNode;
+  /** 点击行回调 */
+  onRowClick?: (row: T) => void;
+  className?: string;
+  children?: ReactNode;
+}
 
 /**
- * DataTable — TanStack Table v8 wrapper with Talon UI styling.
- *
- * Client mode usage:
- *   <DataTable columns={cols} data={rows} sorting filtering pagination={{ pageSize: 25 }} />
- *
- * Server mode usage:
- *   <DataTable
- *     mode="server"
- *     columns={cols}
- *     data={pageRows}
- *     serverState={{ total, page, pageSize, onPageChange, onSortingChange, sorting }}
- *   />
+ * DataTable — 企业级数据表格根容器。
+ * API：DataTable > DataTableToolbar + DataTableFilters + DataTableBulkActions +
+ *      DataTableContent + DataTableFooter
  */
-export function DataTable<TRow extends object>({
-  columns,
+export function DataTable<T extends object>({
   data,
-  mode = 'client',
-  serverState,
-  sorting: sortingEnabled = true,
-  filtering: filteringEnabled = false,
-  rowSelection: rowSelectionEnabled = false,
-  onRowSelectionChange,
-  columnVisibility: columnVisibilityEnabled = true,
-  pagination: paginationConfig,
-  virtualization: virtualizationProp,
+  columns,
+  rowKey,
+  selectable,
+  selection,
+  onSelectionChange,
+  sort,
+  onSortChange,
+  loading,
+  loadingRows = 5,
+  empty,
   onRowClick,
-  emptyState,
-  tableRef,
   className,
-}: DataTableProps<TRow>) {
-  const filterId = useId();
+  children,
+}: DataTableProps<T>) {
+  // 内部维护非受控 selection（受控时忽略）
+  const [internalSelection, setInternalSelection] = useState<string[]>([]);
+  const isSelectionControlled = selection !== undefined;
+  const resolvedSelection = isSelectionControlled ? selection : internalSelection;
+  const handleSelectionChange = (ids: string[]) => {
+    if (!isSelectionControlled) setInternalSelection(ids);
+    onSelectionChange?.(ids);
+  };
 
-  // ── local state (client mode) ─────────────────────────────────────
-  const [clientSorting, setClientSorting] = useState<SortingState>([]);
-  const [clientFilter, setClientFilter] = useState('');
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [colVisOpen, setColVisOpen] = useState(false);
-  const [clientPagination, setClientPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: paginationConfig?.pageSize ?? 25,
-  });
-
-  const isServer = mode === 'server';
-
-  // ── resolve server vs client controlled values ────────────────────
-  const sorting = isServer ? (serverState?.sorting ?? []) : clientSorting;
-  const globalFilter = isServer ? (serverState?.globalFilter ?? '') : clientFilter;
-
-  // ── row selection column ──────────────────────────────────────────
-  const selectionColumn = useMemo(
+  const ctx = useMemo<DataTableCtx<T>>(
     () => ({
-      id: '__select__',
-      header: ({ table }: { table: import('@tanstack/react-table').Table<TRow> }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
-          onChange={(v) => table.toggleAllPageRowsSelected(v === true)}
-          aria-label="Select all rows"
-        />
-      ),
-      cell: ({ row }: { row: import('@tanstack/react-table').Row<TRow> }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onChange={(v) => row.toggleSelected(v === true)}
-          aria-label={`Select row ${row.index + 1}`}
-        />
-      ),
-      size: 40,
-      enableSorting: false,
+      data: data ?? ([] as unknown as T[]),
+      columns,
+      rowKey,
+      selectable,
+      selection: resolvedSelection,
+      onSelectionChange: handleSelectionChange,
+      sort,
+      onSortChange,
+      loading,
+      loadingRows,
+      empty,
+      onRowClick,
     }),
-    [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, columns, rowKey, selectable, resolvedSelection, onSelectionChange, sort, onSortChange, loading, loadingRows, empty, onRowClick],
   );
-
-  const resolvedColumns = useMemo(
-    () => (rowSelectionEnabled ? [selectionColumn, ...columns] : columns),
-    [rowSelectionEnabled, selectionColumn, columns],
-  );
-
-  // ── determine virtualization ──────────────────────────────────────
-  const shouldVirtualize =
-    virtualizationProp === true ||
-    (virtualizationProp !== false && data.length > AUTO_VIRTUALIZE_THRESHOLD);
-
-  const estimateSize =
-    typeof virtualizationProp === 'object'
-      ? virtualizationProp.estimateSize
-      : DEFAULT_ESTIMATE_SIZE;
-
-  // ── table instance ────────────────────────────────────────────────
-  const table = useReactTable<TRow>({
-    data,
-    columns: resolvedColumns as import('@tanstack/react-table').ColumnDef<TRow>[],
-    state: {
-      sorting,
-      globalFilter,
-      rowSelection,
-      columnVisibility,
-      ...(paginationConfig != null && !isServer
-        ? { pagination: clientPagination }
-        : {}),
-    },
-    // server-mode: manual everything
-    manualSorting: isServer,
-    manualFiltering: isServer,
-    manualPagination: isServer,
-    pageCount: isServer && serverState
-      ? Math.max(1, Math.ceil(serverState.total / serverState.pageSize))
-      : undefined,
-
-    // handlers
-    onSortingChange: isServer
-      ? serverState?.onSortingChange
-      : setClientSorting,
-    onGlobalFilterChange: isServer
-      ? (v) => serverState?.onGlobalFilterChange?.(String(v))
-      : setClientFilter,
-    onRowSelectionChange: setRowSelection,
-    onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setClientPagination,
-
-    // row models
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: !isServer ? getSortedRowModel() : undefined,
-    getFilteredRowModel: !isServer ? getFilteredRowModel() : undefined,
-    getPaginationRowModel: paginationConfig != null && !isServer ? getPaginationRowModel() : undefined,
-
-    enableSorting: sortingEnabled,
-    enableRowSelection: rowSelectionEnabled,
-  });
-
-  // sync tableRef
-  useEffect(() => {
-    if (tableRef != null) {
-      (tableRef as React.MutableRefObject<typeof table>).current = table;
-    }
-  }, [table, tableRef]);
-
-  // notify parent of row selection changes
-  useEffect(() => {
-    if (onRowSelectionChange != null) {
-      const selected = table
-        .getSelectedRowModel()
-        .rows.map((r) => r.original);
-      onRowSelectionChange(selected);
-    }
-  }, [rowSelection, onRowSelectionChange, table]);
-
-  // ── virtualizer ───────────────────────────────────────────────────
-  const tbodyRef = useRef<HTMLDivElement>(null);
-  const rows = table.getRowModel().rows;
-
-  const virtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => tbodyRef.current,
-    estimateSize: () => estimateSize,
-    enabled: shouldVirtualize,
-  });
-
-  // ── visible columns for col-visibility popover ────────────────────
-  const allLeafColumns = table.getAllLeafColumns().filter((c) => c.id !== '__select__');
-
-  // ── server-mode page values ───────────────────────────────────────
-  const serverPage = serverState?.page ?? 0;
-  const serverPageSize = serverState?.pageSize ?? 25;
-  const serverTotal = serverState?.total ?? 0;
-
-  // ── client-mode pagination values ────────────────────────────────
-  const clientPage = table.getState().pagination?.pageIndex ?? 0;
-  const clientPageSize = table.getState().pagination?.pageSize ?? 25;
-  const clientTotal = table.getFilteredRowModel().rows.length;
 
   return (
-    <div className={cx('tln-datatable', className)}>
-      {/* ── toolbar ─── */}
-      {(filteringEnabled || columnVisibilityEnabled) && (
-        <div className="tln-datatable__toolbar">
-          {filteringEnabled && (
-            <div className="tln-datatable__filter">
-              <label htmlFor={filterId} className="sr-only">Filter rows</label>
-              <input
-                id={filterId}
-                className="tln-datatable__filter-input"
-                type="search"
-                placeholder="Filter…"
-                value={isServer ? (serverState?.globalFilter ?? '') : clientFilter}
-                onChange={(e) => {
-                  if (isServer) {
-                    serverState?.onGlobalFilterChange?.(e.target.value);
-                  } else {
-                    table.setGlobalFilter(e.target.value);
-                  }
-                }}
-                aria-label="Filter table rows"
-              />
-            </div>
-          )}
+    // 消费方通过 useDataTableContext<T>() 缩窄回具体类型，此处做类型断言
+    <DataTableContext.Provider value={ctx as unknown as DataTableCtx<Record<string, unknown>>}>
+      <div className={cn('tln-dt', className)}>
+        {children}
+      </div>
+    </DataTableContext.Provider>
+  );
+}
+DataTable.displayName = 'DataTable';
 
-          {columnVisibilityEnabled && (
-            <div className="tln-datatable__col-vis">
-              <button
-                type="button"
-                className="tln-datatable__col-vis-btn"
-                aria-expanded={colVisOpen}
-                aria-haspopup="listbox"
-                onClick={() => setColVisOpen((o) => !o)}
-              >
-                Columns
-              </button>
-              {colVisOpen && (
-                <div
-                  className="tln-datatable__col-vis-panel"
-                  role="listbox"
-                  aria-multiselectable="true"
-                  aria-label="Toggle column visibility"
-                >
-                  {allLeafColumns.map((col) => {
-                    const header =
-                      typeof col.columnDef.header === 'string'
-                        ? col.columnDef.header
-                        : col.id;
-                    return (
-                      <label
-                        key={col.id}
-                        className="tln-datatable__col-vis-item"
-                        role="option"
-                        aria-selected={col.getIsVisible()}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={col.getIsVisible()}
-                          onChange={col.getToggleVisibilityHandler()}
-                        />
-                        {header}
-                      </label>
-                    );
-                  })}
-                </div>
+// ─── DataTableToolbar ─────────────────────────────────────────────────────────
+export interface DataTableToolbarProps {
+  className?: string;
+  children?: ReactNode;
+}
+
+/**
+ * DataTableToolbar — 顶部工具栏，包含搜索、视图选项等。
+ */
+export const DataTableToolbar = forwardRef<HTMLDivElement, DataTableToolbarProps>(
+  function DataTableToolbar({ className, children }, ref) {
+    return (
+      <div ref={ref} className={cn('tln-dt-toolbar', className)}>
+        {children}
+      </div>
+    );
+  },
+);
+DataTableToolbar.displayName = 'DataTableToolbar';
+
+// ─── DataTableFilters ─────────────────────────────────────────────────────────
+export interface DataTableFiltersProps {
+  className?: string;
+  children?: ReactNode;
+}
+
+/**
+ * DataTableFilters — 筛选条区域（filter chip 行）。
+ */
+export const DataTableFilters = forwardRef<HTMLDivElement, DataTableFiltersProps>(
+  function DataTableFilters({ className, children }, ref) {
+    return (
+      <div ref={ref} className={cn('tln-dt-filters', className)}>
+        {children}
+      </div>
+    );
+  },
+);
+DataTableFilters.displayName = 'DataTableFilters';
+
+// ─── DataTableBulkActions ─────────────────────────────────────────────────────
+export interface DataTableBulkActionsProps {
+  /** 已选中的 ID 数量（或列表，用于显示计数） */
+  selected?: string[] | number;
+  className?: string;
+  children?: ReactNode;
+}
+
+/**
+ * DataTableBulkActions — 批量操作栏，有选中时自动从 context 取 selection.length 显示。
+ * 可传 selected 覆盖。
+ */
+export const DataTableBulkActions = forwardRef<HTMLDivElement, DataTableBulkActionsProps>(
+  function DataTableBulkActions({ selected, className, children }, ref) {
+    const ctx = useDataTableContext();
+    // 优先用 props.selected，否则从 context 取
+    const count = selected !== undefined
+      ? (typeof selected === 'number' ? selected : selected.length)
+      : ctx.selection.length;
+
+    if (count === 0) return null;
+
+    return (
+      <div ref={ref} className={cn('tln-dt-bulk', className)}>
+        <span className="count">
+          <strong>{count}</strong> 项已选
+        </span>
+        <button
+          type="button"
+          style={{ background: 'none', border: 0, padding: 0, fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-3)', cursor: 'pointer' }}
+          onClick={() => ctx.onSelectionChange?.([])}>
+          清除
+        </button>
+        <div className="actions">{children}</div>
+      </div>
+    );
+  },
+);
+DataTableBulkActions.displayName = 'DataTableBulkActions';
+
+// ─── DataTableContent ─────────────────────────────────────────────────────────
+export interface DataTableContentProps {
+  /** 是否显示勾选列（覆盖 DataTable root 的 selectable 配置） */
+  selectable?: boolean;
+  /** 受控 selection（不传则继承 DataTable root 的受控/非受控模式） */
+  selection?: string[];
+  /** selection 变化回调 */
+  onSelectionChange?: (ids: string[]) => void;
+  /** 受控 sort（不传则继承 DataTable root 的 sort） */
+  sort?: SortState;
+  /** sort 变化回调 */
+  onSortChange?: (sort: SortState) => void;
+  /** 加载中骨架行数（覆盖 root） */
+  loading?: boolean;
+  /** 无数据时展示内容（覆盖 root） */
+  empty?: ReactNode;
+  className?: string;
+}
+
+/**
+ * DataTableContent — 表格主体（表头 + 数据行 / 骨架 / 空状态）。
+ * 从 DataTable context 读取 data、columns 等，selection/sort 支持在此层覆盖（受控或非受控）。
+ */
+export const DataTableContent = forwardRef<HTMLDivElement, DataTableContentProps>(
+  function DataTableContent({
+    selectable: selectableProp,
+    selection: controlledSelection,
+    onSelectionChange: controlledOnSelectionChange,
+    sort: controlledSort,
+    onSortChange: controlledOnSortChange,
+    loading: loadingProp,
+    empty: emptyProp,
+    className,
+  }, ref) {
+    const ctx = useDataTableContext();
+    // DataTableContent 的 selectable 覆盖 DataTable root 的 selectable
+    const selectable = selectableProp !== undefined ? selectableProp : ctx.selectable;
+
+    // ── selection 受控/非受控 ──────────────────────────────────────────
+    const [internalSel, setInternalSel] = useState<string[]>([]);
+    const isSelControlled = controlledSelection !== undefined;
+    // 优先使用 DataTableContent 自身的受控 prop，其次继承 context（来自 DataTable root）
+    const selection = isSelControlled ? controlledSelection : ctx.selection.length > 0 || controlledSelection === undefined ? ctx.selection : internalSel;
+    const setSelection = (next: string[]) => {
+      if (controlledOnSelectionChange) {
+        controlledOnSelectionChange(next);
+      } else {
+        ctx.onSelectionChange?.(next);
+        if (!isSelControlled) setInternalSel(next);
+      }
+    };
+
+    // ── sort 受控/非受控 ──────────────────────────────────────────────
+    const [internalSort, setInternalSort] = useState<SortState | undefined>(undefined);
+    const isSortControlled = controlledSort !== undefined;
+    const sort = isSortControlled ? controlledSort : controlledSort === undefined ? ctx.sort ?? internalSort : internalSort;
+    const setSortState = (next: SortState) => {
+      if (controlledOnSortChange) {
+        controlledOnSortChange(next);
+      } else {
+        ctx.onSortChange?.(next);
+        if (!isSortControlled) setInternalSort(next);
+      }
+    };
+
+    // 加载状态和空状态支持覆盖
+    const loading = loadingProp !== undefined ? loadingProp : ctx.loading;
+    const empty = emptyProp !== undefined ? emptyProp : ctx.empty;
+
+    const { data, columns, rowKey, loadingRows, onRowClick } = ctx;
+
+    // ── 全选 / 半选状态 ──────────────────────────────────────────────
+    const allKeys = data.map((r) => getRowKey(r, rowKey));
+    const allSelected = selectable && data.length > 0 && selection.length === data.length;
+    const partial = selectable && selection.length > 0 && !allSelected;
+
+    const toggleAll = () => {
+      if (allSelected) setSelection([]);
+      else setSelection(allKeys);
+    };
+
+    const toggleOne = (key: string) => {
+      if (selection.includes(key)) setSelection(selection.filter((x) => x !== key));
+      else setSelection([...selection, key]);
+    };
+
+    // ── 构建 grid-template-columns ──────────────────────────────────
+    const gridCols = [
+      selectable ? '28px' : null,
+      ...columns.map((c) => colWidthToken(c.width)),
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    // ── 点击列头排序 ────────────────────────────────────────────────
+    const handleSort = (col: ColumnDef<typeof data[0]>) => {
+      if (!col.sort) return;
+      if (sort && sort.key === col.key) {
+        setSortState({ key: col.key, dir: sort.dir === 'asc' ? 'desc' : 'asc' });
+      } else {
+        setSortState({ key: col.key, dir: 'asc' });
+      }
+    };
+
+    // ── 表头 ────────────────────────────────────────────────────────
+    const renderHead = () => (
+      <div className="tln-dt-head" style={{ ['--cols' as string]: gridCols }}>
+        {selectable && (
+          <div className="cell align-center">
+            <Checkbox
+              size="sm"
+              checked={!!allSelected}
+              indeterminate={!!partial}
+              onChange={toggleAll}
+              aria-label="全选"
+            />
+          </div>
+        )}
+        {columns.map((c) => {
+          const isActive = sort?.key === c.key;
+          return (
+            <div
+              key={c.key}
+              className={cn(
+                'cell',
+                c.align && `align-${c.align}`,
+                c.sort && 'sortable',
+                isActive && 'active',
+                isActive && sort?.dir,
               )}
+              onClick={() => handleSort(c)}
+              aria-sort={
+                isActive
+                  ? sort?.dir === 'asc'
+                    ? 'ascending'
+                    : 'descending'
+                  : c.sort
+                  ? 'none'
+                  : undefined
+              }
+            >
+              {c.label}
+              {c.sort && <SortIcon />}
+            </div>
+          );
+        })}
+      </div>
+    );
+
+    // ── 骨架行 ──────────────────────────────────────────────────────
+    const renderSkeletonRows = () =>
+      Array.from({ length: loadingRows }).map((_, i) => (
+        <div
+          key={i}
+          className="tln-dt-row skel"
+          style={{ ['--cols' as string]: gridCols }}
+        >
+          {selectable && (
+            <div className="cell align-center">
+              <span className="tln-skel" style={{ display: 'inline-block', width: 14, height: 14 }} />
             </div>
           )}
-        </div>
-      )}
-
-      {/* ── table ─── */}
-      <div className="tln-datatable__scroll" role="table" aria-label="Data table">
-        {/* head */}
-        <div className="tln-tbl-head" role="rowgroup">
-          {table.getHeaderGroups().map((hg) => (
-            <div key={hg.id} className="tln-tbl-row" role="row" style={{ cursor: 'default' }}>
-              {hg.headers.map((header) => {
-                const canSort = header.column.getCanSort();
-                const sorted = header.column.getIsSorted();
-                return (
-                  <div
-                    key={header.id}
-                    className={cx('tln-datatable__th', canSort && 'sortable')}
-                    role="columnheader"
-                    aria-sort={
-                      sorted === 'asc'
-                        ? 'ascending'
-                        : sorted === 'desc'
-                        ? 'descending'
-                        : canSort
-                        ? 'none'
-                        : undefined
-                    }
-                    onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
-                    style={{ flex: header.column.columnDef.size ? `0 0 ${header.column.columnDef.size}px` : '1 1 0', minWidth: 0 }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext()) as React.ReactNode}
-                    {canSort && (
-                      <span className="tln-datatable__sort-icon" aria-hidden="true">
-                        {sorted === 'asc' ? '↑' : sorted === 'desc' ? '↓' : '⇅'}
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
+          {columns.map((c) => (
+            <div key={c.key} className={cn('cell', c.align && `align-${c.align}`)}>
+              <SkeletonCell />
             </div>
           ))}
         </div>
+      ));
 
-        {/* body */}
-        <div
-          ref={tbodyRef}
-          className="tln-datatable__body"
-          role="rowgroup"
-          style={shouldVirtualize ? { overflowY: 'auto', maxHeight: '480px' } : undefined}
-        >
-          {rows.length === 0 ? (
-            <div className="tln-datatable__empty" role="row">
-              {emptyState ?? <span>No data</span>}
-            </div>
-          ) : shouldVirtualize ? (
-            <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }}>
-              {virtualizer.getVirtualItems().map((vRow) => {
-                const row = rows[vRow.index];
-                if (row == null) return null;
-                return (
-                  <div
-                    key={row.id}
-                    className={cx('tln-tbl-row', row.getIsSelected() && 'selected', onRowClick == null && 'no-click')}
-                    role="row"
-                    aria-selected={rowSelectionEnabled ? row.getIsSelected() : undefined}
-                    style={{ position: 'absolute', top: vRow.start, left: 0, right: 0 }}
-                    onClick={() => onRowClick?.(row.original)}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <div
-                        key={cell.id}
-                        role="cell"
-                        style={{ flex: cell.column.columnDef.size ? `0 0 ${cell.column.columnDef.size}px` : '1 1 0', minWidth: 0 }}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext()) as React.ReactNode}
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            rows.map((row) => (
-              <div
-                key={row.id}
-                className={cx('tln-tbl-row', row.getIsSelected() && 'selected', onRowClick == null && 'no-click')}
-                role="row"
-                aria-selected={rowSelectionEnabled ? row.getIsSelected() : undefined}
-                onClick={() => onRowClick?.(row.original)}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <div
-                    key={cell.id}
-                    role="cell"
-                    style={{ flex: cell.column.columnDef.size ? `0 0 ${cell.column.columnDef.size}px` : '1 1 0', minWidth: 0 }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext()) as React.ReactNode}
-                  </div>
-                ))}
+    // ── 数据行 ──────────────────────────────────────────────────────
+    const renderRows = () =>
+      data.map((row) => {
+        const key = getRowKey(row, rowKey);
+        const selected = selection.includes(key);
+        return (
+          <div
+            key={key}
+            className={cn('tln-dt-row', selected && 'selected')}
+            style={{ ['--cols' as string]: gridCols }}
+            onClick={() => onRowClick?.(row)}
+          >
+            {selectable && (
+              // 阻止勾选单击冒泡到行
+              <div className="cell align-center" onClick={(e) => e.stopPropagation()}>
+                <Checkbox
+                  size="sm"
+                  checked={selected}
+                  onChange={() => toggleOne(key)}
+                  aria-label={`选择行 ${key}`}
+                />
               </div>
-            ))
-          )}
-        </div>
-      </div>
+            )}
+            {columns.map((c) => (
+              <div
+                key={c.key}
+                className={cn('cell', c.align && `align-${c.align}`, c.truncate && 'truncate')}
+                onClick={(e) => c.stopClick && e.stopPropagation()}
+              >
+                {c.render ? c.render(row) : (row as Record<string, ReactNode>)[c.key]}
+              </div>
+            ))}
+          </div>
+        );
+      });
 
-      {/* ── pagination ─── */}
-      {isServer && serverState != null ? (
-        <TablePagination
-          page={serverPage}
-          pageSize={serverPageSize}
-          total={serverTotal}
-          onPageChange={serverState.onPageChange}
-          onPageSizeChange={serverState.onPageSizeChange}
-          pageSizeOptions={paginationConfig?.pageSizeOptions}
-        />
-      ) : paginationConfig != null ? (
-        <TablePagination
-          page={clientPage}
-          pageSize={clientPageSize}
-          total={clientTotal}
-          onPageChange={(p) => table.setPageIndex(p)}
-          onPageSizeChange={(s) => table.setPageSize(s)}
-          pageSizeOptions={paginationConfig.pageSizeOptions}
-        />
-      ) : null}
-    </div>
-  );
+    return (
+      <div ref={ref} className={cn('tln-dt-scroll', className)}>
+        {renderHead()}
+        {loading
+          ? renderSkeletonRows()
+          : data.length === 0
+          ? <div className="tln-dt-empty">{empty ?? '无数据'}</div>
+          : renderRows()}
+      </div>
+    );
+  },
+);
+DataTableContent.displayName = 'DataTableContent';
+
+// ─── DataTableFooter ──────────────────────────────────────────────────────────
+export interface DataTableFooterProps {
+  className?: string;
+  children?: ReactNode;
 }
+
+/**
+ * DataTableFooter — 底部区域（分页 / 汇总信息）。
+ */
+export const DataTableFooter = forwardRef<HTMLDivElement, DataTableFooterProps>(
+  function DataTableFooter({ className, children }, ref) {
+    return (
+      <div ref={ref} className={cn('tln-dt-foot', className)}>
+        {children}
+      </div>
+    );
+  },
+);
+DataTableFooter.displayName = 'DataTableFooter';
+
+// ─── DataTableViewOptions ─────────────────────────────────────────────────────
+export interface DataTableViewOptionsProps {
+  className?: string;
+}
+
+/**
+ * DataTableViewOptions — 视图选项按钮（列显示/隐藏等，未来扩展）。
+ * 当前为占位实现，提供基础的列可见性入口。
+ */
+export const DataTableViewOptions = forwardRef<HTMLButtonElement, DataTableViewOptionsProps>(
+  function DataTableViewOptions({ className }, ref) {
+    return (
+      <button
+        ref={ref}
+        type="button"
+        className={cn('tln-dt-view-opts', className)}
+        aria-label="视图选项"
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+          strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M2 4h12M4 8h8M6 12h4"/>
+        </svg>
+      </button>
+    );
+  },
+);
+DataTableViewOptions.displayName = 'DataTableViewOptions';

@@ -1,0 +1,18 @@
+/* ─────── Sparkline ───────────────────────────────────────────
+   迷你折线图容器样式
+   组件使用 SVG 自绘，CSS 仅提供容器约束和默认视觉
+   ─────────────────────────────────────────────────────────── */
+
+/* SVG 容器：默认撑满父元素宽度，高度由 height prop 控制 */
+.tln-sparkline {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+/* 配合 Stat 卡片内嵌使用时的常见场景 */
+.tln-sparkline svg,
+svg.tln-sparkline {
+  display: block;
+  width: 100%;
+}

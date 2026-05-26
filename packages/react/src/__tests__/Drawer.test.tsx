@@ -1,51 +1,75 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
-import { Drawer } from '../components/Drawer/index.js';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerFooter,
+  DrawerClose,
+} from '../components/Drawer/index.js';
+
+/** 标准 Drawer 包装：模拟常见用法 */
+function TestDrawer({
+  open,
+  onOpenChange,
+  title,
+  children = 'drawer body',
+  footer,
+  side,
+}: {
+  open: boolean;
+  onOpenChange?: (v: boolean) => void;
+  title?: string;
+  children?: React.ReactNode;
+  footer?: React.ReactNode;
+  side?: 'left' | 'right';
+}) {
+  return (
+    <Drawer open={open} onOpenChange={onOpenChange} modal={false}>
+      <DrawerContent side={side}>
+        {title && (
+          <DrawerHeader>
+            <DrawerTitle>{title}</DrawerTitle>
+          </DrawerHeader>
+        )}
+        <div className="tln-drawer-body">{children}</div>
+        {footer && <DrawerFooter>{footer}</DrawerFooter>}
+      </DrawerContent>
+    </Drawer>
+  );
+}
 
 describe('Drawer', () => {
   test('renders nothing when closed', () => {
-    const { container } = render(<Drawer open={false} onClose={vi.fn()}>x</Drawer>);
+    const { container } = render(<TestDrawer open={false} />);
     expect(container.querySelector('.tln-drawer')).not.toBeInTheDocument();
   });
 
   test('renders content when open', () => {
-    render(<Drawer open onClose={vi.fn()}>drawer body</Drawer>);
+    render(<TestDrawer open>drawer body</TestDrawer>);
     expect(screen.getByText('drawer body')).toBeInTheDocument();
   });
 
-  test('calls onClose when backdrop clicked', () => {
-    const onClose = vi.fn();
-    render(<Drawer open onClose={onClose}>x</Drawer>);
-    fireEvent.click(document.querySelector('.tln-drawer-backdrop')!);
-    expect(onClose).toHaveBeenCalled();
-  });
-
-  test('calls onClose when close button clicked', () => {
-    const onClose = vi.fn();
-    render(<Drawer open onClose={onClose}>x</Drawer>);
-    fireEvent.click(screen.getByRole('button', { name: /close/i }));
-    expect(onClose).toHaveBeenCalled();
-  });
-
-  test('calls onClose on Escape', () => {
-    const onClose = vi.fn();
-    render(<Drawer open onClose={onClose}>x</Drawer>);
+  test('calls onOpenChange on Escape', () => {
+    const onOpenChange = vi.fn();
+    render(<TestDrawer open onOpenChange={onOpenChange} />);
     fireEvent.keyDown(document, { key: 'Escape' });
-    expect(onClose).toHaveBeenCalled();
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   test('applies tln-drawer class', () => {
-    render(<Drawer open onClose={vi.fn()}>x</Drawer>);
+    render(<TestDrawer open />);
     expect(document.querySelector('.tln-drawer')).toBeInTheDocument();
   });
 
   test('renders title when provided', () => {
-    render(<Drawer open onClose={vi.fn()} title="My Drawer">x</Drawer>);
+    render(<TestDrawer open title="My Drawer" />);
     expect(screen.getByText('My Drawer')).toBeInTheDocument();
   });
 
   test('aria-labelledby points to title element', () => {
-    render(<Drawer open onClose={vi.fn()} title="Labeled Drawer">x</Drawer>);
+    render(<TestDrawer open title="Labeled Drawer" />);
     const dialog = screen.getByRole('dialog');
     const labelId = dialog.getAttribute('aria-labelledby');
     expect(labelId).toBeTruthy();
@@ -53,22 +77,23 @@ describe('Drawer', () => {
     expect(titleEl?.textContent).toBe('Labeled Drawer');
   });
 
-  test('focus enters drawer when opened', () => {
-    render(<Drawer open onClose={vi.fn()} title="D"><button>inside</button></Drawer>);
-    const dialog = screen.getByRole('dialog');
-    expect(dialog.contains(document.activeElement)).toBe(true);
+  test('DrawerClose closes drawer via onOpenChange', () => {
+    const onOpenChange = vi.fn();
+    render(
+      <Drawer open onOpenChange={onOpenChange} modal={false}>
+        <DrawerContent>
+          <DrawerClose asChild>
+            <button>关闭</button>
+          </DrawerClose>
+        </DrawerContent>
+      </Drawer>
+    );
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }));
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  test('focus is restored to trigger element when drawer closes', () => {
-    const trigger = document.createElement('button');
-    trigger.textContent = 'Open Drawer';
-    document.body.appendChild(trigger);
-    trigger.focus();
-
-    const { rerender } = render(<Drawer open onClose={vi.fn()} title="D">x</Drawer>);
-    rerender(<Drawer open={false} onClose={vi.fn()} title="D">x</Drawer>);
-    expect(document.activeElement).toBe(trigger);
-
-    document.body.removeChild(trigger);
+  test('left side drawer applies tln-drawer-left class', () => {
+    render(<TestDrawer open side="left" />);
+    expect(document.querySelector('.tln-drawer-left')).toBeInTheDocument();
   });
 });

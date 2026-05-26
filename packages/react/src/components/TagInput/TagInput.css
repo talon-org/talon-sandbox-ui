@@ -1,0 +1,57 @@
+/* Talon · TagInput styles — 1:1 from .design-source/project/app/ui-forms.jsx */
+.tln-tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--ctrl-h-md);
+  padding: 3px 4px 3px 6px;
+  background: var(--bg-input);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+/* 规范化选择器（cva 生成） */
+.tln-tag-input.tln-taginput-sm { min-height: var(--ctrl-h-sm); padding: 2px 3px 2px 4px; }
+.tln-tag-input.tln-taginput-lg { min-height: var(--ctrl-h-lg); padding: 4px 5px 4px 8px; }
+/* 旧版 alias，保留向后兼容 */
+.tln-tag-input.sm { min-height: var(--ctrl-h-sm); padding: 2px 3px 2px 4px; }
+.tln-tag-input.lg { min-height: var(--ctrl-h-lg); padding: 4px 5px 4px 8px; }
+.tln-tag-input:focus-within { border-color: var(--border-focus); box-shadow: var(--shadow-focus); }
+.tln-tag-input .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 4px 0 8px;
+  border-radius: var(--r-1);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-0);
+}
+.tln-tag-input.tln-taginput-sm .pill { height: 16px; font-size: 10px; padding: 0 3px 0 6px; }
+.tln-tag-input.tln-taginput-lg .pill { height: 24px; font-size: 12px; padding: 0 5px 0 10px; }
+/* 旧版 alias */
+.tln-tag-input.sm .pill { height: 16px; font-size: 10px; padding: 0 3px 0 6px; }
+.tln-tag-input.lg .pill { height: 24px; font-size: 12px; padding: 0 5px 0 10px; }
+.tln-tag-input .pill button {
+  width: 16px; height: 16px;
+  border: 0; background: transparent;
+  color: var(--fg-2);
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color var(--dur-fast), background var(--dur-fast);
+}
+.tln-tag-input.sm .pill button { width: 14px; height: 14px; }
+.tln-tag-input.lg .pill button { width: 18px; height: 18px; }
+.tln-tag-input .pill button:hover { background: var(--err-soft); color: var(--err); }
+.tln-tag-input input {
+  flex: 1;
+  min-width: 80px;
+  border: 0; background: transparent; outline: none;
+  font-family: inherit; font-size: var(--text-base);
+  color: var(--fg-0);
+}

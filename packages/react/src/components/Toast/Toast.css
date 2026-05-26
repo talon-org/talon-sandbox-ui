@@ -1,0 +1,61 @@
+/* Talon · Toast styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-toast-stack {
+  position: fixed; bottom: 20px; right: 20px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+
+.tln-toast {
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--acc);
+  border-radius: var(--r-2);
+  padding: 10px 14px;
+  min-width: 280px;
+  max-width: 380px;
+  box-shadow: var(--shadow-2);
+  font-size: var(--text-sm);
+  color: var(--fg-1);
+  display: flex; gap: 10px; align-items: flex-start;
+  pointer-events: auto;
+  animation: tln-fade-in 160ms var(--ease-out);
+}
+
+.tln-toast.ok   { border-left-color: var(--ok); }
+
+.tln-toast.warn { border-left-color: var(--warn); }
+
+.tln-toast.err  { border-left-color: var(--err); }
+
+/* info 类型：使用 --info token，不存在时 fallback --acc */
+.tln-toast.info { border-left-color: var(--info, var(--acc)); }
+.tln-toast.info .ic { color: var(--info, var(--acc)); }
+
+/* 新命名空间类名 */
+.tln-toast .tln-toast-body  { flex: 1; }
+.tln-toast .tln-toast-title { color: var(--fg-0); font-weight: 500; }
+
+/* 旧类名别名，保持向后兼容（深度限定，不影响全局） */
+.tln-toast .body  { flex: 1; }
+.tln-toast .title { color: var(--fg-0); font-weight: 500; }
+
+.tln-toast-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  border-radius: var(--r-1);
+  cursor: pointer;
+  color: var(--fg-3);
+  flex: 0 0 auto;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+
+.tln-toast-dismiss:hover { background: var(--bg-hover); color: var(--fg-1); }
+
+.tln-toast-dismiss:focus-visible { outline: none; box-shadow: var(--shadow-focus); }

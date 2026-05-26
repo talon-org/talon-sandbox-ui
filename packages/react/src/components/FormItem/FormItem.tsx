@@ -1,21 +1,17 @@
 import type { ReactNode } from 'react';
 import type { AnyFieldApi } from '@tanstack/react-form';
-import { FormField } from '../FormField/FormField.js';
+import { FormField, FormLabel, FormDescription, FormMessage } from '../FormField/index.js';
 
 /**
- * FormItem — styled wrapper for a TanStack Form field.
+ * FormItem — TanStack Form 字段的样式化包装层。
  *
- * Connects a TanStack Form AnyFieldApi to FormField, surfacing the first
- * error once the field has been touched or dirtied.
+ * 把 TanStack Form 的 AnyFieldApi 连到新 v0.3 组合式 FormField。
+ * Touched/Dirty 后首个错误显示在 FormMessage 内。
  *
- * Use children-as-function: the field instance is passed to children so
- * any control can bind value/onChange/onBlur without modification.
+ * 子组件渲染采用 render-props 形式,把 field 实例传给 children。
  *
  * @example
- * const form = useForm({
- *   defaultValues: { name: '' },
- *   onSubmit: async ({ value }) => { ... },
- * });
+ * const form = useForm({ defaultValues: { name: '' }, onSubmit: ... });
  *
  * <form.Field name="name" validators={{ onChange: ({ value }) => !value ? 'Required' : undefined }}>
  *   {(field) => (
@@ -52,18 +48,21 @@ export function FormItem({
 }: FormItemProps) {
   const { isTouched, isDirty, errors } = field.state.meta;
   const showError = (isTouched || isDirty) && errors.length > 0;
-  const errorMsg: ReactNode = showError ? (errors[0] as ReactNode) : undefined;
+  const errorMsg = showError
+    ? (typeof errors[0] === 'string' ? errors[0] : String(errors[0] ?? ''))
+    : undefined;
 
   return (
-    <FormField
-      htmlFor={field.name as string}
-      label={label}
-      hint={hint}
-      error={errorMsg}
-      required={required}
-      className={className}
-    >
+    <FormField error={!!errorMsg} className={className}>
+      {label != null && (
+        <FormLabel htmlFor={field.name as string}>
+          {label}
+          {required && <span aria-hidden="true"> *</span>}
+        </FormLabel>
+      )}
       {children(field)}
+      {hint != null && !errorMsg && <FormDescription>{hint}</FormDescription>}
+      {errorMsg && <FormMessage>{errorMsg}</FormMessage>}
     </FormField>
   );
 }

@@ -1,0 +1,130 @@
+/* Talon · Menubar styles — 1:1 from prototype (ui-extra.jsx MenuBar section) */
+
+/* 顶级菜单栏容器 */
+.tln-menubar {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: 0 4px;
+  gap: 0;
+  outline: none;
+}
+
+/* 顶级触发按钮 */
+.tln-menubar-trigger {
+  height: 24px;
+  padding: 0 10px;
+  font-size: var(--text-sm);
+  color: var(--fg-1);
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  border-radius: var(--r-1);
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  outline: none;
+}
+.tln-menubar-trigger:hover,
+.tln-menubar-trigger[data-state='open'] {
+  background: var(--bg-hover);
+  color: var(--fg-0);
+}
+.tln-menubar-trigger:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: -2px;
+}
+
+/* 菜单内容面板 */
+.tln-menubar-content {
+  min-width: 200px;
+  background: var(--bg-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-3);
+  padding: 4px;
+  z-index: 50;
+  animation: tln-fade-in var(--dur-fast) var(--ease-out);
+  outline: none;
+}
+
+/* 非交互标题 */
+.tln-menubar-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  padding: 8px 10px 4px;
+  pointer-events: none;
+}
+
+/* 分隔线 */
+.tln-menubar-sep {
+  height: 1px;
+  background: var(--line);
+  margin: 4px 0;
+}
+
+/* 菜单项 */
+.tln-menubar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--r-1);
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  position: relative;
+}
+.tln-menubar-item[data-highlighted] {
+  background: var(--bg-2);
+  color: var(--fg-0);
+}
+.tln-menubar-item[data-disabled] {
+  color: var(--fg-4);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 键盘快捷键提示 */
+.tln-menubar-shortcut {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+/* 子菜单触发箭头 */
+.tln-menubar-sub-arrow {
+  margin-left: auto;
+  color: var(--fg-3);
+}
+
+/* Checkbox/Radio 指示符区域 */
+.tln-menubar-item-indicator {
+  width: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--acc);
+}
+
+/* RadioItem 圆点 */
+.tln-menubar-radio-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  display: block;
+}

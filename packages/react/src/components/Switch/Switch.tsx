@@ -1,68 +1,111 @@
-import { cx } from '../../primitives/clsx.js';
-import type { SwitchProps } from './Switch.types.js';
+import React, { forwardRef } from 'react';
+import * as RadixSwitch from '@radix-ui/react-switch';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils.js';
+import './Switch.css';
+import type { SwitchProps, SwitchFieldProps } from './Switch.types.js';
+
+// ─── cva variant 定义 ───────────────────────────────────────────
+export const switchVariants = cva('tln-switch', {
+  variants: {
+    size: {
+      sm: 'tln-switch-sm',
+      md: '',
+      lg: 'tln-switch-lg',
+    },
+  },
+  defaultVariants: { size: 'md' },
+});
 
 /**
- * Switch — accessible toggle control using role="switch".
+ * Switch — 即时生效的二态开关（不需要「保存」）。
  *
- * CSS-only: all styles are in @talon-sandbox/react/styles (components.css).
- *
- * @example
- * import '@talon-sandbox/react/styles'
- * const [on, setOn] = useState(false)
- * <Switch checked={on} onChange={setOn} />
+ * 基于 @radix-ui/react-switch 实现，提供完整 a11y 支持。
+ * Radix 输出 data-state="checked|unchecked"。
+ * - onCheckedChange 对齐 Radix 命名（代替旧 onChange）
+ * - 通常与 <label htmlFor="..."> 配合，或用 SwitchField 便利封装
  */
-export function Switch({
-  checked = false,
-  onChange,
-  disabled = false,
-  size = 'md',
-  className,
-  name,
-  value,
-}: SwitchProps) {
-  const cls = cx(
-    'tln-switch',
-    size === 'sm' && 'tln-switch-sm',
-    disabled && 'tln-switch-disabled',
+export const Switch = forwardRef<
+  React.ElementRef<typeof RadixSwitch.Root>,
+  SwitchProps
+>(function Switch(
+  {
+    size = 'md',
+    checked,
+    defaultChecked,
+    onCheckedChange,
+    disabled = false,
     className,
-  );
-
-  const handleClick = () => {
-    if (!disabled) onChange?.(!checked);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === ' ' || e.key === 'Enter') {
-      e.preventDefault();
-      if (!disabled) onChange?.(!checked);
-    }
-  };
-
+    id,
+    ...rest
+  },
+  ref,
+) {
   return (
-    <div
-      className={cls}
-      role="switch"
-      aria-checked={checked}
-      aria-disabled={disabled || undefined}
-      tabIndex={disabled ? -1 : 0}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
+    <RadixSwitch.Root
+      ref={ref}
+      id={id}
+      className={cn(switchVariants({ size }), className)}
+      checked={checked}
+      defaultChecked={defaultChecked}
+      onCheckedChange={onCheckedChange}
+      disabled={disabled}
+      {...rest}
     >
-      {name != null && (
-        <input
-          type="checkbox"
-          name={name}
-          value={value}
-          checked={checked}
-          onChange={() => {}}
-          aria-hidden="true"
-          tabIndex={-1}
-          style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
-        />
-      )}
-      <span className="knob" />
-    </div>
+      {/* 可视化滑块圆点 */}
+      <RadixSwitch.Thumb className="knob" />
+    </RadixSwitch.Root>
   );
-}
+});
 
 Switch.displayName = 'Switch';
+
+/**
+ * SwitchField — 带 label + hint 包裹层的便利封装，用于设置面板。
+ *
+ * 渲染 flex-between 的 <label>：左侧（label + hint 竖排）+ 右侧 Switch。
+ */
+export const SwitchField = forwardRef<
+  React.ElementRef<typeof RadixSwitch.Root>,
+  SwitchFieldProps
+>(function SwitchField(
+  {
+    label,
+    hint,
+    disabled = false,
+    size = 'md',
+    checked,
+    defaultChecked,
+    onCheckedChange,
+    className,
+    id,
+    ...rest
+  },
+  ref,
+) {
+  return (
+    <label
+      className={cn('tln-switch-field', className)}
+      data-disabled={disabled ? 'true' : 'false'}
+    >
+      {/* 左侧文字区域 */}
+      <div className="tln-switch-field-text">
+        {label && <span>{label}</span>}
+        {hint && <span className="tln-hint">{hint}</span>}
+      </div>
+      {/* 右侧开关 */}
+      <Switch
+        ref={ref}
+        id={id}
+        size={size}
+        checked={checked}
+        defaultChecked={defaultChecked}
+        onCheckedChange={onCheckedChange}
+        disabled={disabled}
+        {...rest}
+      />
+    </label>
+  );
+});
+
+SwitchField.displayName = 'SwitchField';

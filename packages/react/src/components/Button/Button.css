@@ -1,0 +1,91 @@
+/* Talon · Button styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-btn {
+  --h: var(--ctrl-h-md);
+  height: var(--h);
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: var(--text-base);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  border-radius: var(--r-2);
+  border: 1px solid var(--line);
+  background: var(--bg-1);
+  color: var(--fg-1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.tln-btn:hover { background: var(--bg-2); border-color: var(--line-strong); color: var(--fg-0); }
+
+.tln-btn:active { transform: translateY(0.5px); }
+
+.tln-btn[disabled], .tln-btn[aria-disabled='true'] {
+  color: var(--fg-3); cursor: not-allowed; background: var(--bg-1); border-color: var(--line-soft);
+}
+
+.tln-btn-primary {
+  background: var(--acc);
+  color: var(--acc-fg);
+  border-color: var(--acc);
+  font-weight: 600;
+}
+
+.tln-btn-primary:hover { background: var(--acc-6); border-color: var(--acc-6); color: var(--acc-fg); }
+
+.tln-btn-ghost { background: transparent; border-color: transparent; color: var(--fg-2); }
+
+.tln-btn-ghost:hover { background: var(--bg-hover); color: var(--fg-0); border-color: transparent; }
+
+.tln-btn-danger { background: transparent; border-color: var(--err); color: var(--err); }
+
+.tln-btn-danger:hover { background: var(--err-soft); border-color: var(--err); }
+
+.tln-btn-sm { --h: var(--ctrl-h-sm); padding: 0 9px; font-size: var(--text-sm); }
+
+.tln-btn-lg { --h: var(--ctrl-h-lg); padding: 0 14px; font-size: var(--text-md); }
+
+.tln-btn-icon { padding: 0; width: var(--h); justify-content: center; }
+
+.tln-btn .kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--fg-3);
+  margin-left: 4px;
+}
+
+.tln .tln-btn-danger:hover {
+  color: var(--err);
+}
+
+.tln-btn-loading {
+  position: relative;
+  color: transparent !important;
+}
+
+.tln-btn-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  color: var(--fg-1);
+  animation: tln-spin 0.8s linear infinite;
+}
+
+.tln-btn-primary.tln-btn-loading::after { color: var(--acc-fg); }

@@ -1,2 +1,2 @@
-export { Badge, StatusBadge } from './Badge.js';
-export type { BadgeProps, BadgeVariant, BadgeSize, BadgeStatus, StatusBadgeProps } from './Badge.types.js';
+export { Badge, StatusBadge, badgeVariants } from './Badge.js';
+export type { BadgeProps, StatusBadgeProps, BadgeVariant, BadgeSize, SandboxState } from './Badge.types.js';

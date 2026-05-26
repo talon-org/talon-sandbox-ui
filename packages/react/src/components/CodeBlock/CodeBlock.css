@@ -1,0 +1,51 @@
+/* Talon · CodeBlock styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-code {
+  background: var(--bg-0);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-strong);
+  border-radius: var(--r-2);
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--fg-1);
+  overflow-x: auto;
+  position: relative;
+  margin: 0;
+}
+
+.tln-code .c-key { color: var(--info); }
+
+.tln-code .c-str { color: var(--ok); }
+
+.tln-code .c-com { color: var(--fg-3); font-style: italic; }
+
+.tln-code .c-fn  { color: var(--acc-strong); }
+
+.tln-code .c-num { color: var(--magenta); }
+
+.tln-code-sm { font-size: 11px; padding: 8px 10px; }
+
+.tln-code-lg { font-size: 13px; padding: 16px 18px; }
+
+.tln-code-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  cursor: pointer;
+  color: var(--fg-3);
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+
+.tln-code-copy:hover { background: var(--bg-hover); color: var(--fg-1); }
+
+.tln-code-copy:focus-visible { outline: none; box-shadow: var(--shadow-focus); }

@@ -1,0 +1,50 @@
+/* Talon · InputGroup styles — 1:1 from .design-source/project/app/ui-forms.jsx */
+.tln-input-group {
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+  height: var(--ctrl-h-md);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  overflow: hidden;
+  background: var(--bg-input);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+/* 规范化选择器（cva 生成） */
+.tln-input-group.tln-input-group-sm { height: var(--ctrl-h-sm); }
+.tln-input-group.tln-input-group-lg { height: var(--ctrl-h-lg); }
+/* 旧版 alias，保留向后兼容 */
+.tln-input-group.sm { height: var(--ctrl-h-sm); }
+.tln-input-group.lg { height: var(--ctrl-h-lg); }
+.tln-input-group:focus-within { border-color: var(--border-focus); box-shadow: var(--shadow-focus); }
+.tln-input-group .addon {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  background: var(--bg-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--fg-3);
+  border-right: 1px solid var(--line-soft);
+  white-space: nowrap;
+}
+.tln-input-group .addon.suffix { border-right: 0; border-left: 1px solid var(--line-soft); }
+.tln-input-group.tln-input-group-sm .addon { padding: 0 8px; font-size: 11px; }
+.tln-input-group.tln-input-group-lg .addon { padding: 0 12px; font-size: var(--text-base); }
+/* 旧版 alias */
+.tln-input-group.sm .addon { padding: 0 8px; font-size: 11px; }
+.tln-input-group.lg .addon { padding: 0 12px; font-size: var(--text-base); }
+.tln-input-group input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--text-base);
+  color: var(--fg-0);
+  padding: 0 10px;
+  outline: none;
+  min-width: 0;
+}
+.tln-input-group.sm input { font-size: var(--text-sm); padding: 0 8px; }
+.tln-input-group.lg input { font-size: var(--text-md); padding: 0 12px; }
+.tln-input-group input.mono { font-family: var(--font-mono); }

@@ -1,0 +1,37 @@
+/* Skeleton 骨架屏动画
+   来源: ui-forms.jsx SKELETON section */
+
+.tln-skel {
+  display: block;
+  background:
+    linear-gradient(90deg,
+      var(--line-soft) 0%,
+      var(--line-strong) 50%,
+      var(--line-soft) 100%);
+  background-size: 200% 100%;
+  animation: tln-shimmer 1.6s linear infinite;
+  border-radius: var(--r-1);
+  height: 12px;
+}
+.tln-skel.text   { height: 12px; }
+.tln-skel.line   { height: 8px; }
+.tln-skel.h-md   { height: 16px; }
+.tln-skel.h-lg   { height: 24px; }
+.tln-skel.circle { border-radius: 50%; }
+.tln-skel.box    { border-radius: var(--r-2); }
+
+/* pulse variant — 柔和呼吸动画 */
+.tln-skel-pulse {
+  animation: tln-skel-pulse 1.6s ease-in-out infinite;
+  background: var(--line-soft);
+}
+
+@keyframes tln-skel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes tln-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

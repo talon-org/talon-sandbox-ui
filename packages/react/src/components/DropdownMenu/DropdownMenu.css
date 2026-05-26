@@ -1,0 +1,105 @@
+/* Talon · DropdownMenu styles — 1:1 from prototype (ui-data.jsx) */
+
+/* 菜单浮层面板 */
+.tln-dropdown-content {
+  min-width: 200px;
+  background: var(--bg-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-3);
+  padding: 4px;
+  z-index: 50;
+  animation: tln-fade-in var(--dur-fast) var(--ease-out);
+  outline: none;
+}
+
+/* 非交互区块标题 */
+.tln-dropdown-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  padding: 8px 10px 4px;
+  pointer-events: none;
+}
+
+/* 分隔线 */
+.tln-dropdown-sep {
+  height: 1px;
+  background: var(--line);
+  margin: 4px 0;
+}
+
+/* 菜单项（基础样式） */
+.tln-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--r-1);
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  position: relative;
+}
+
+/* Radix 高亮态（键盘导航 + 鼠标悬停） */
+.tln-dropdown-item[data-highlighted] {
+  background: var(--bg-2);
+  color: var(--fg-0);
+}
+
+/* 危险操作 */
+.tln-dropdown-item-danger {
+  color: var(--err);
+}
+.tln-dropdown-item-danger[data-highlighted] {
+  background: var(--err-soft);
+  color: var(--err);
+}
+
+/* 禁用态 */
+.tln-dropdown-item[data-disabled] {
+  color: var(--fg-4);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 键盘快捷键提示 */
+.tln-dropdown-shortcut {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+/* 子菜单触发项箭头 */
+.tln-dropdown-sub-arrow {
+  margin-left: auto;
+  color: var(--fg-3);
+}
+
+/* CheckboxItem / RadioItem 左侧指示符区域 */
+.tln-dropdown-item-indicator {
+  width: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--acc);
+}
+
+/* RadioItem 圆点 */
+.tln-dropdown-radio-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  display: block;
+}

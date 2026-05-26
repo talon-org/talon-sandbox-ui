@@ -1,0 +1,113 @@
+/* Talon · Radio styles — 1:1 from .design-source/project/app/ui-forms.jsx */
+
+/* ═══════════════════════════════════════════════════════════════
+   RADIO
+═══════════════════════════════════════════════════════════════ */
+.tln-radio {
+  --b: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  line-height: 1.2;
+}
+.tln-radio.sm { --b: 14px; gap: 6px; font-size: var(--text-sm); }
+.tln-radio.lg { --b: 18px; gap: 10px; font-size: var(--text-md); }
+/* 保留旧版 input 规则以防 fallback */
+.tln-radio input { position: absolute; opacity: 0; pointer-events: none; }
+.tln-radio .dot {
+  width: var(--b); height: var(--b);
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-input);
+  position: relative;
+  flex: 0 0 auto;
+  transition: border-color var(--dur-fast) var(--ease-out);
+  /* Radix 渲染 <button>，重置 button 默认样式 */
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+.tln-radio:hover .dot { border-color: var(--fg-2); }
+/* focus-visible ring：Radix <button> 支持 :focus-visible */
+.tln-radio input:focus-visible + .dot,
+.tln-radio .dot:focus-visible { box-shadow: var(--shadow-focus); border-color: var(--border-focus); }
+.tln-radio .dot::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--acc);
+  transform: scale(0);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.tln-radio.sm .dot::after { inset: 2.5px; }
+.tln-radio.lg .dot::after { inset: 4px; }
+/* Radix 输出 data-state="checked|unchecked"，同时保留旧版选择器兼容 */
+.tln-radio input:checked + .dot,
+.tln-radio[data-checked='true'] .dot,
+.tln-radio .dot[data-state='checked'] {
+  border-color: var(--acc);
+}
+.tln-radio input:checked + .dot::after,
+.tln-radio[data-checked='true'] .dot::after,
+.tln-radio .dot[data-state='checked']::after {
+  transform: scale(1);
+}
+.tln-radio[data-disabled='true'] { color: var(--fg-3); cursor: not-allowed; }
+.tln-radio[data-disabled='true'] .dot { background: var(--bg-2); border-color: var(--line); }
+.tln-radio[data-disabled='true'] .dot::after { background: var(--fg-3); }
+
+.tln-radio-group {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tln-radio-group.row { flex-direction: row; gap: 18px; }
+
+/* RadioGroupItem 独立使用时（不包裹在 .tln-radio 内）*/
+.tln-radio-item {
+  --b: 16px;
+  width: var(--b); height: var(--b);
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-input);
+  position: relative;
+  flex: 0 0 auto;
+  transition: border-color var(--dur-fast) var(--ease-out);
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 规范化选择器（cva 生成） */
+.tln-radio-item.tln-radio-sm { --b: 14px; }
+.tln-radio-item.tln-radio-lg { --b: 18px; }
+/* 旧版 alias，保留向后兼容 */
+.tln-radio-item.sm { --b: 14px; }
+.tln-radio-item.lg { --b: 18px; }
+.tln-radio-item:hover { border-color: var(--fg-2); }
+.tln-radio-item:focus-visible { box-shadow: var(--shadow-focus); border-color: var(--border-focus); }
+.tln-radio-item::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--acc);
+  transform: scale(0);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+/* 规范化选择器的 ::after */
+.tln-radio-item.tln-radio-sm::after { inset: 2.5px; }
+.tln-radio-item.tln-radio-lg::after { inset: 4px; }
+/* 旧版 alias */
+.tln-radio-item.sm::after { inset: 2.5px; }
+.tln-radio-item.lg::after { inset: 4px; }
+.tln-radio-item[data-state='checked'] { border-color: var(--acc); }
+.tln-radio-item[data-state='checked']::after { transform: scale(1); }
+.tln-radio-item[data-disabled] { background: var(--bg-2); border-color: var(--line); cursor: not-allowed; }

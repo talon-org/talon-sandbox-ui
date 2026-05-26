@@ -2,31 +2,22 @@
   "name": "@talon-sandbox/docs",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
-    "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "dev": "dumi dev",
+    "build": "dumi build && node ./scripts/postbuild.mjs",
+    "preview": "dumi preview"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.27.0",
-    "@talon-sandbox/react": "workspace:^",
-    "@talon-sandbox/tokens": "workspace:^",
-    "@tanstack/react-form": "^1.32.0",
-    "@tanstack/react-table": "^8.0.0",
-    "fumadocs-core": "^16.9.1",
-    "fumadocs-mdx": "^15.0.8",
-    "fumadocs-typescript": "^5.2.6",
-    "fumadocs-ui": "^16.9.1",
-    "next": "^16.2.6",
-    "next-themes": "^0.4.6",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "@talon-sandbox/react": "workspace:*",
+    "@talon-sandbox/tokens": "workspace:*",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-hook-form": "^7.50.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
+    "dumi": "^2.4.0",
+    "dumi-theme-antd": "^0.4.4",
     "typescript": "^5.5.0"
   }
 }

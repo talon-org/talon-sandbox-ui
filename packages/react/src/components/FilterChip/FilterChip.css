@@ -1,0 +1,84 @@
+/* ─────── FilterChip ─────────────────────────────────────────
+   来源：ui-data.jsx .tln-filter-chip / .tln-filter-bar
+   ─────────────────────────────────────────────────────────── */
+
+.tln-filter-chip {
+  display: inline-flex;
+  align-items: stretch;
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  overflow: hidden;
+  transition: border-color var(--dur-fast);
+}
+.tln-filter-chip:hover { border-color: var(--line-strong); }
+
+/* 键名区域 */
+.tln-filter-chip .key {
+  display: inline-flex; align-items: center;
+  padding: 0 8px;
+  color: var(--fg-3);
+  background: var(--bg-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* 操作符 */
+.tln-filter-chip .op {
+  color: var(--fg-4);
+  align-self: center;
+  padding: 0 2px;
+}
+
+/* 值区域 */
+.tln-filter-chip .val {
+  display: inline-flex; align-items: center;
+  padding: 0 8px;
+  color: var(--fg-0);
+  background: var(--bg-2);
+  border-left: 1px solid var(--line-soft);
+  cursor: pointer;
+  gap: 4px;
+}
+.tln-filter-chip .val:hover { background: var(--bg-2); }
+/* 高亮值 */
+.tln-filter-chip .val.acc { color: var(--acc-strong); }
+
+/* 移除按钮 */
+.tln-filter-chip .rm {
+  width: 22px;
+  border: 0;
+  background: var(--bg-2);
+  color: var(--fg-3);
+  border-left: 1px solid var(--line-soft);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.tln-filter-chip .rm:hover { background: var(--err-soft); color: var(--err); }
+
+/* 容器行，通常由父层 tln-filter-bar 套用 */
+.tln-filter-bar {
+  display: flex; align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* 添加筛选按钮（配套，由调用方直接使用此 class） */
+.add-filter {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 26px; padding: 0 8px;
+  border: 1px dashed var(--line-strong);
+  background: transparent;
+  border-radius: var(--r-2);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-3);
+  cursor: pointer;
+  transition: color var(--dur-fast), border-color var(--dur-fast);
+}
+.add-filter:hover { color: var(--fg-1); border-color: var(--acc); }

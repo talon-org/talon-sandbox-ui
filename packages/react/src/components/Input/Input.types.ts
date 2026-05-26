@@ -1,23 +1,19 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import type { IconName } from '../../primitives/icons.js';
+import type { inputVariants } from './Input.js';
 
-export type InputSize = 'sm' | 'md' | 'lg';
-
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'> {
-  /** Height tier. Defaults to "md". */
-  size?: InputSize;
-  /** Marks the field as invalid; sets aria-invalid and adds error class. */
-  invalid?: boolean;
-  /** Renders the value in a monospace font (adds the `mono` class). */
+export interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>,
+    VariantProps<typeof inputVariants> {
+  /** 尺寸档位，默认 md */
+  size?: 'sm' | 'md' | 'lg';
+  /** 等宽字体（ID / key / token / path） */
   mono?: boolean;
-  /** Leading adornment rendered inside the input wrapper. */
-  prefix?: ReactNode;
-  /** Trailing adornment rendered inside the input wrapper. */
-  suffix?: ReactNode;
-  /**
-   * Additional CSS class.
-   * Always applied to the outermost DOM element:
-   *  - the `<input>` itself when there is no prefix/suffix
-   *  - the `.tln-input-wrap` div when prefix or suffix is present
-   */
-  className?: string;
+  /** 错误状态：边框变红 */
+  error?: boolean;
+  /** 前置图标，可以是注册的 IconName 或任意 ReactNode */
+  leadIcon?: IconName | ReactNode;
+  /** 后置图标，可以是注册的 IconName 或任意 ReactNode */
+  trailingIcon?: IconName | ReactNode;
 }

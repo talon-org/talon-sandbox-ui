@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cx } from '../../primitives/clsx.js';
-import { Segmented } from '../Segmented/index.js';
+import { SegmentedGroup, SegmentedItem } from '../Segmented/index.js';
 import type { TweaksPanelProps } from './TweaksPanel.types.js';
 
 const THEME_SWATCHES = [
@@ -71,57 +71,37 @@ export function TweaksPanel({
 
           <div className="tln-tweaks__row">
             <span className="tln-tweaks__key">Mode</span>
-            <Segmented
-              size="sm"
-              value={mode}
-              onChange={(v) => onSet('mode', v)}
-              options={[
-                { value: 'dark', label: 'Dark' },
-                { value: 'light', label: 'Light' },
-              ]}
-            />
+            <SegmentedGroup size="sm" value={mode} onValueChange={(v) => onSet('mode', v)}>
+              <SegmentedItem value="dark">Dark</SegmentedItem>
+              <SegmentedItem value="light">Light</SegmentedItem>
+            </SegmentedGroup>
           </div>
 
           <div className="tln-tweaks__row">
             <span className="tln-tweaks__key">Language</span>
-            <Segmented
-              size="sm"
-              value={lang}
-              onChange={(v) => onSet('lang', v)}
-              options={[
-                { value: 'en', label: 'EN' },
-                { value: 'zh', label: '中文' },
-              ]}
-            />
+            <SegmentedGroup size="sm" value={lang} onValueChange={(v) => onSet('lang', v)}>
+              <SegmentedItem value="en">EN</SegmentedItem>
+              <SegmentedItem value="zh">中文</SegmentedItem>
+            </SegmentedGroup>
           </div>
 
           <div className="tln-tweaks__row">
             <span className="tln-tweaks__key">Density</span>
-            <Segmented
-              size="sm"
-              value={density}
-              onChange={(v) => onSet('density', v)}
-              options={[
-                { value: 'compact', label: 'Compact' },
-                { value: 'standard', label: 'Standard' },
-                { value: 'relaxed', label: 'Relaxed' },
-              ]}
-            />
+            <SegmentedGroup size="sm" value={density} onValueChange={(v) => onSet('density', v)}>
+              <SegmentedItem value="compact">Compact</SegmentedItem>
+              <SegmentedItem value="standard">Standard</SegmentedItem>
+              <SegmentedItem value="relaxed">Relaxed</SegmentedItem>
+            </SegmentedGroup>
           </div>
 
           <div className="tln-tweaks__row">
             <span className="tln-tweaks__key">Font</span>
-            <Segmented
-              size="sm"
-              value={font}
-              onChange={(v) => onSet('font', v)}
-              options={[
-                { value: 'geist', label: 'Geist' },
-                { value: 'plex', label: 'Plex' },
-                { value: 'jetbrains', label: 'JBM' },
-                { value: 'system', label: 'Sys' },
-              ]}
-            />
+            <SegmentedGroup size="sm" value={font} onValueChange={(v) => onSet('font', v)}>
+              <SegmentedItem value="geist">Geist</SegmentedItem>
+              <SegmentedItem value="plex">Plex</SegmentedItem>
+              <SegmentedItem value="jetbrains">JBM</SegmentedItem>
+              <SegmentedItem value="system">Sys</SegmentedItem>
+            </SegmentedGroup>
           </div>
         </div>
       )}

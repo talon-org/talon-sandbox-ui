@@ -1,19 +1,19 @@
-export { DataTable } from './DataTable.js';
+export {
+  DataTable,
+  DataTableToolbar,
+  DataTableFilters,
+  DataTableBulkActions,
+  DataTableContent,
+  DataTableFooter,
+  DataTableViewOptions,
+} from './DataTable.js';
 export type {
   DataTableProps,
-  DataTableServerState,
-  ColumnDef,
-  SortingState,
-  RowSelectionState,
-  PaginationState,
-  TanstackTableInstance,
-} from './DataTable.types.js';
-
-// Re-export TanStack Table utilities for power users.
-export {
-  getCoreRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+  DataTableToolbarProps,
+  DataTableFiltersProps,
+  DataTableBulkActionsProps,
+  DataTableContentProps,
+  DataTableFooterProps,
+  DataTableViewOptionsProps,
+} from './DataTable.js';
+export type { ColumnDef, SortState } from './DataTable.types.js';

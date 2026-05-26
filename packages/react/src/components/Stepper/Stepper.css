@@ -1,0 +1,91 @@
+/* Talon · Stepper styles — 1:1 from ui-data.jsx STEPPER section.
+   迁自 pending.css tln-stepper 段落。 */
+
+.tln-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+
+.tln-stepper.vertical { flex-direction: column; align-items: stretch; gap: 0; }
+
+.tln-stepper .step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  cursor: default;
+  position: relative;
+}
+
+.tln-stepper.vertical .step-item { padding: 8px 0; align-items: flex-start; }
+
+.tln-stepper .bullet {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* tln-stepper-sm / tln-stepper-lg 为新命名空间 class，.sm/.lg 保留为向后兼容别名 */
+.tln-stepper.tln-stepper-sm .bullet,
+.tln-stepper.sm .bullet { width: 18px; height: 18px; font-size: 9px; }
+
+.tln-stepper.tln-stepper-lg .bullet,
+.tln-stepper.lg .bullet { width: 28px; height: 28px; font-size: 12px; }
+
+.tln-stepper .step-item.done .bullet { background: var(--acc); border-color: var(--acc); color: var(--acc-fg); }
+
+.tln-stepper .step-item.active .bullet {
+  border-color: var(--acc); color: var(--acc-strong);
+  box-shadow: 0 0 0 4px var(--acc-soft);
+}
+
+.tln-stepper .label {
+  font-size: var(--text-base);
+  color: var(--fg-2);
+}
+
+.tln-stepper .step-item.done .label { color: var(--fg-1); }
+
+.tln-stepper .step-item.active .label { color: var(--fg-0); font-weight: 500; }
+
+.tln-stepper .label .desc {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+}
+
+.tln-stepper .connector {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  margin: 0 12px;
+}
+
+.tln-stepper .step-item.done + .connector { background: var(--acc); }
+
+.tln-stepper.vertical .connector {
+  width: 1px; height: 22px;
+  margin: 0 0 0 11px;
+  flex: 0 0 auto;
+}
+
+.tln-stepper.vertical.tln-stepper-sm .connector,
+.tln-stepper.vertical.sm .connector { margin-left: 9px; height: 16px; }
+
+.tln-stepper.vertical.tln-stepper-lg .connector,
+.tln-stepper.vertical.lg .connector { margin-left: 14px; height: 28px; }

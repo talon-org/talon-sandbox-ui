@@ -1,0 +1,167 @@
+/* 无障碍辅助：视觉隐藏但对 screen reader 可见 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* CommandPalette 命令面板（⌘K）
+   来源: ui-extra.jsx Command Palette section
+   Radix Dialog：Overlay = .tln-cmdk-backdrop；Content = .tln-cmdk
+   Content 自己做居中定位（Radix 不提供 centering，需在 Content 上写 fixed+translate） */
+
+/* 遮罩层 */
+.tln-cmdk-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: var(--z-cmdk);
+  animation: tln-fade-in var(--dur-fast) var(--ease-out);
+}
+
+/* 面板主体 — fixed 居中，对齐顶部 12vh */
+.tln-cmdk {
+  position: fixed;
+  top: 12vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-cmdk);
+  width: 100%;
+  max-width: 560px;
+  background: var(--bg-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-5);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 70vh;
+  animation: tln-fade-in var(--dur-fast) var(--ease-out);
+}
+
+/* 搜索框区域 */
+.tln-cmdk-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.tln-cmdk-input .ic { color: var(--fg-3); flex: 0 0 auto; }
+.tln-cmdk-input input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--fg-0);
+  font-family: inherit;
+  font-size: var(--text-md);
+}
+.tln-cmdk-input input::placeholder { color: var(--fg-3); }
+
+/* 结果列表 */
+.tln-cmdk-list { overflow-y: auto; padding: 6px; flex: 1; }
+
+/* 分组容器 */
+.tln-cmdk-group { }
+
+/* 分组标题 */
+.tln-cmdk-section {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  padding: 10px 10px 4px;
+}
+
+/* 命令项 */
+.tln-cmdk-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--r-1);
+  cursor: pointer;
+  color: var(--fg-1);
+}
+.tln-cmdk-item.active { background: var(--bg-2); color: var(--fg-0); }
+.tln-cmdk-item .ic { color: var(--fg-2); flex: 0 0 auto; }
+.tln-cmdk-item.active .ic { color: var(--fg-0); }
+.tln-cmdk-item .label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* CommandShortcut：键位提示 */
+.tln-cmdk-shortcut {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+/* 旧别名：.kbd 类兼容历史用法 */
+.tln-cmdk-item .kbd {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+
+/* 空状态 */
+.tln-cmdk-empty {
+  padding: 28px 12px;
+  text-align: center;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+/* 分隔线 */
+.tln-cmdk-sep {
+  height: 1px;
+  background: var(--line-soft);
+  margin: 4px 6px;
+}
+
+/* 底部快捷键提示 */
+.tln-cmdk-foot {
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-3);
+}
+.tln-cmdk-foot .keys {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 8px;
+}
+.tln-cmdk-foot .keys span {
+  padding: 0 4px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--fg-2);
+}

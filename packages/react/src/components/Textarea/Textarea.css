@@ -1,0 +1,7 @@
+/* Talon · Textarea styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-textarea { height: auto; padding: 8px 10px; resize: vertical; min-height: 64px; font-family: var(--font-mono); }
+
+.tln-textarea-sm { font-size: var(--text-sm); padding: 6px 8px; min-height: 52px; }
+
+.tln-textarea-lg { font-size: var(--text-md); padding: 10px 12px; min-height: 80px; }

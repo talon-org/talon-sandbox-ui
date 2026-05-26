@@ -1,0 +1,95 @@
+/* Talon · NumberInput styles — 1:1 from .design-source/project/app/ui-forms.jsx */
+
+/* ═══════════════════════════════════════════════════════════════
+   NUMBER INPUT
+═══════════════════════════════════════════════════════════════ */
+.tln-number {
+  display: inline-flex;
+  align-items: stretch;
+  height: var(--ctrl-h-md);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-input);
+  overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+/* 规范化选择器（cva 生成） */
+.tln-number.tln-number-sm { height: var(--ctrl-h-sm); }
+.tln-number.tln-number-lg { height: var(--ctrl-h-lg); }
+/* 旧版 alias，保留向后兼容 */
+.tln-number.sm { height: var(--ctrl-h-sm); }
+.tln-number.lg { height: var(--ctrl-h-lg); }
+.tln-number:focus-within { border-color: var(--border-focus); box-shadow: var(--shadow-focus); }
+.tln-number input {
+  border: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--fg-0);
+  width: 72px;
+  padding: 0 10px;
+  outline: none;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tln-number.tln-number-sm input { font-size: var(--text-sm); width: 60px; padding: 0 8px; }
+.tln-number.tln-number-lg input { font-size: var(--text-md); width: 84px; padding: 0 12px; }
+/* 旧版 alias */
+.tln-number.sm input { font-size: var(--text-sm); width: 60px; padding: 0 8px; }
+.tln-number.lg input { font-size: var(--text-md); width: 84px; padding: 0 12px; }
+.tln-number .step {
+  width: 22px;
+  border: 0;
+  border-left: 1px solid var(--line-soft);
+  background: var(--bg-1);
+  color: var(--fg-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.tln-number.sm .step { width: 18px; font-size: 9px; }
+.tln-number.lg .step { width: 26px; font-size: 11px; }
+.tln-number .step:hover { background: var(--bg-2); color: var(--fg-0); }
+/* 规范化选择器（cva 生成的 tln-number-steps）*/
+.tln-number .tln-number-steps { display: inline-flex; flex-direction: column; border-left: 1px solid var(--line-soft); }
+.tln-number .tln-number-steps .step { border-left: 0; border-bottom: 1px solid var(--line-soft); flex: 1; height: auto; }
+.tln-number .tln-number-steps .step:last-child { border-bottom: 0; }
+/* 旧版 alias，保留向后兼容 */
+.tln-number .steps { display: inline-flex; flex-direction: column; border-left: 1px solid var(--line-soft); }
+.tln-number .steps .step { border-left: 0; border-bottom: 1px solid var(--line-soft); flex: 1; height: auto; }
+.tln-number .steps .step:last-child { border-bottom: 0; }
+
+/* NumberInputField (内部 input) */
+.tln-number-field {
+  border: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--fg-0);
+  width: 72px;
+  padding: 0 10px;
+  outline: none;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  flex: 1;
+  min-width: 0;
+}
+.tln-number.sm .tln-number-field { font-size: var(--text-sm); width: 60px; padding: 0 8px; }
+.tln-number.lg .tln-number-field { font-size: var(--text-md); width: 84px; padding: 0 12px; }
+
+/* NumberInputAddon（前缀/后缀文字） */
+.tln-number-addon {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-3);
+  border-right: 1px solid var(--line-soft);
+  background: var(--bg-1);
+  white-space: nowrap;
+}
+.tln-number-addon.suffix { border-right: 0; border-left: 1px solid var(--line-soft); }

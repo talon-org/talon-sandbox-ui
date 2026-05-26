@@ -1,18 +1,9 @@
-export interface MultiSelectOption {
-  value: string;
-  label: string;
-  disabled?: boolean;
-}
-
-export interface MultiSelectProps {
-  options: MultiSelectOption[];
-  value: string[];
-  onChange: (value: string[]) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  size?: 'sm' | 'md';
-  /** Max number of selections. Undefined = unlimited. */
-  max?: number;
-  invalid?: boolean;
-  className?: string;
-}
+// MultiSelect.types.ts — v0.3.0
+// 所有类型已在 MultiSelect.tsx 内联定义，此文件保留作 re-export 入口。
+export type {
+  MultiSelectProps,
+  MultiSelectTriggerProps,
+  MultiSelectContentProps,
+  MultiSelectItemProps,
+  MultiSelectEmptyProps,
+} from './MultiSelect.js';

@@ -1,0 +1,74 @@
+/* Talon · Switch styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-switch {
+  width: 28px;
+  height: 16px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+  flex: 0 0 auto;
+}
+
+.tln-switch .knob {
+  position: absolute;
+  top: 1px; left: 1px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--fg-3);
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast);
+}
+
+/* Radix 输出 data-state，同时保留 aria-checked 兼容旧选择器 */
+.tln-switch[data-state='checked'],
+.tln-switch[aria-checked='true'] { background: var(--acc); border-color: var(--acc); }
+
+.tln-switch[data-state='checked'] .knob,
+.tln-switch[aria-checked='true'] .knob { transform: translateX(12px); background: var(--acc-fg); }
+
+.tln-switch-sm { width: 22px; height: 12px; }
+
+.tln-switch-sm .knob { width: 8px; height: 8px; }
+
+.tln-switch-sm[data-state='checked'] .knob,
+.tln-switch-sm[aria-checked='true'] .knob { transform: translateX(10px); }
+
+.tln-switch-lg { width: 36px; height: 20px; }
+
+.tln-switch-lg .knob { width: 16px; height: 16px; }
+
+.tln-switch-lg[data-state='checked'] .knob,
+.tln-switch-lg[aria-checked='true'] .knob { transform: translateX(16px); }
+
+.tln-switch-disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Radix disabled 态 */
+.tln-switch[data-disabled] { opacity: 0.45; cursor: not-allowed; }
+
+/* SwitchField：左 label + 右 Switch 布局 */
+.tln-switch-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.tln-switch-field[data-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: var(--fg-3);
+}
+
+.tln-switch-field-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tln-hint {
+  color: var(--fg-3);
+  font-size: var(--text-sm);
+}

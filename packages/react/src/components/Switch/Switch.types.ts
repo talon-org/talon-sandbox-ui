@@ -1,25 +1,20 @@
-export type SwitchSize = 'sm' | 'md';
+import type { ReactNode } from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import type * as RadixSwitch from '@radix-ui/react-switch';
+import type { switchVariants } from './Switch.js';
 
-export interface SwitchProps {
-  /** Whether the switch is on. */
-  checked?: boolean;
-  /** Called when the user toggles the switch. Receives the new value. */
-  onChange?: (checked: boolean) => void;
-  /** Prevents interaction. */
-  disabled?: boolean;
-  /** Size variant. Defaults to "md". */
-  size?: SwitchSize;
-  /** Additional className. */
-  className?: string;
-  /**
-   * Native checkbox name for form submission.
-   * When set, a hidden <input type="checkbox"> is rendered so the switch
-   * participates in form data collection (FormData / submit events).
-   */
-  name?: string;
-  /**
-   * Native checkbox value submitted with the form.
-   * Defaults to the browser default "on" if omitted.
-   */
-  value?: string;
+export interface SwitchProps
+  extends Omit<React.ComponentPropsWithoutRef<typeof RadixSwitch.Root>, 'onCheckedChange'>,
+    VariantProps<typeof switchVariants> {
+  /** 尺寸档位，默认 md */
+  size?: 'sm' | 'md' | 'lg';
+  /** 值变更回调（Radix 命名） */
+  onCheckedChange?: (checked: boolean) => void;
+}
+
+export interface SwitchFieldProps extends SwitchProps {
+  /** 开关左侧标题文本 */
+  label?: ReactNode;
+  /** label 下方小灰字补充说明 */
+  hint?: ReactNode;
 }

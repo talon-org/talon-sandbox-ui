@@ -1,0 +1,48 @@
+/* Talon · Dialog styles — 1:1 from prototype (ui*.jsx).
+   与 Radix Dialog 配合：Overlay 和 Content 是 Portal 内的同级元素，
+   Content 用 fixed + transform 居中，Overlay 铺满屏幕作遮罩。 */
+
+.tln-dialog-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-dialog);
+  animation: tln-fade-in 160ms var(--ease-out);
+}
+
+/* Radix Content 默认 fixed 定位，用 transform 水平+垂直居中 */
+.tln-dialog {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 48px); max-width: 480px;
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  z-index: calc(var(--z-dialog) + 1);
+}
+
+.tln-dialog-head {
+  padding: 18px 20px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.tln-dialog-title { font-size: var(--text-lg); color: var(--fg-0); font-weight: 600; letter-spacing: -0.015em; }
+
+/* DialogDescription：视觉辅助描述，字号偏小 */
+.tln-dialog-desc { padding: 0 20px 8px; color: var(--fg-3); font-size: var(--text-sm); }
+
+.tln-dialog-body { padding: 0 20px 16px; color: var(--fg-2); font-size: var(--text-base); line-height: 1.6; }
+
+.tln-dialog-foot {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.tln-dialog-sm { max-width: 360px; }
+
+.tln-dialog-lg { max-width: 640px; }

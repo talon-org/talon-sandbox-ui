@@ -1,0 +1,40 @@
+/* Talon · FormField styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-field { display: flex; flex-direction: column; gap: 6px; }
+
+.tln-field-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.tln-field-hint { font-size: 11.5px; color: var(--fg-3); }
+
+.tln-field-hint.error { color: var(--err); }
+
+.tln-field-horizontal {
+  display: grid;
+  grid-template-columns: var(--label-w, 140px) 1fr;
+  gap: 6px 16px;
+  align-items: center;
+}
+
+.tln-field-horizontal .tln-field-label {
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: inherit;
+  font-size: var(--text-base);
+  color: var(--fg-1);
+  align-self: center;
+  display: block;
+}
+
+.tln-field-horizontal .tln-field-control {
+  display: flex; flex-direction: column; gap: 6px;
+  min-width: 0;
+}

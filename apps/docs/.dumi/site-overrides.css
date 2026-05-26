@@ -1,0 +1,20 @@
+/*
+ * Site-level overrides for dumi-theme-antd shell.
+ *
+ * Talon Sandbox design language §9: logo / wordmark is always monochrome
+ * (no gradient hero, no 3D, no colour combo). We therefore strip the
+ * default theme's gradient brand text and render it in --fg-0 with the
+ * Geist Mono wordmark style (per design.md §9 logo spec).
+ */
+
+.dumi-theme-antd-root header h1 a > span {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  color: var(--fg-0);
+  -webkit-text-fill-color: var(--fg-0);
+  font-family: var(--font-mono, 'Geist Mono', ui-monospace, monospace);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+}

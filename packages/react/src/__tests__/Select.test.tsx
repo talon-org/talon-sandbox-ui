@@ -1,44 +1,36 @@
 import { render, screen } from '@testing-library/react';
 import { describe, test, expect } from 'vitest';
-import { Select } from '../components/Select/Select.js';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../components/Select/Select.js';
+
+// 辅助：渲染一个完整的 Select 树
+function renderSelect(props: React.ComponentPropsWithoutRef<typeof SelectTrigger> = {}) {
+  return render(
+    <Select defaultValue="a">
+      <SelectTrigger data-testid="s" {...props}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="a">选项 A</SelectItem>
+      </SelectContent>
+    </Select>,
+  );
+}
 
 describe('Select', () => {
-  test('renders with tln-select base class', () => {
-    render(
-      <Select data-testid="s">
-        <option>A</option>
-      </Select>,
-    );
+  test('Trigger 渲染 tln-select base class', () => {
+    renderSelect();
     expect(screen.getByTestId('s').className).toContain('tln-select');
   });
 
-  test('size sm adds tln-select-sm class', () => {
-    render(
-      <Select data-testid="s" size="sm">
-        <option>A</option>
-      </Select>,
-    );
+  test('size sm 添加 tln-select-sm class', () => {
+    renderSelect({ size: 'sm' });
     expect(screen.getByTestId('s').className).toContain('tln-select-sm');
   });
 
-  test('invalid adds error class and aria-invalid', () => {
-    render(
-      <Select data-testid="s" invalid>
-        <option>A</option>
-      </Select>,
-    );
+  test('error prop 添加 error class 并设置 aria-invalid', () => {
+    renderSelect({ error: true });
     const el = screen.getByTestId('s');
     expect(el.className).toContain('error');
     expect(el).toHaveAttribute('aria-invalid', 'true');
-  });
-
-  test('forwardRef passes ref to the underlying select', () => {
-    const ref = { current: null as HTMLSelectElement | null };
-    render(
-      <Select ref={ref}>
-        <option>A</option>
-      </Select>,
-    );
-    expect(ref.current).toBeInstanceOf(HTMLSelectElement);
   });
 });

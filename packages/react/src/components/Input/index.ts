@@ -1,2 +1,2 @@
-export { Input } from './Input.js';
-export type { InputProps, InputSize } from './Input.types.js';
+export { Input, inputVariants } from './Input.js';
+export type { InputProps } from './Input.types.js';

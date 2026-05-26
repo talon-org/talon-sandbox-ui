@@ -1,0 +1,34 @@
+/* Talon · FileUpload styles — 1:1 from .design-source/project/app/ui-forms.jsx */
+.tln-upload {
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-3);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+/* 规范化选择器（cva 生成） */
+.tln-upload.tln-upload-sm { padding: 14px; gap: 6px; }
+.tln-upload.tln-upload-lg { padding: 36px; gap: 12px; }
+/* 旧版 alias，保留向后兼容 */
+.tln-upload.sm { padding: 14px; gap: 6px; }
+.tln-upload.lg { padding: 36px; gap: 12px; }
+.tln-upload:hover, .tln-upload.dragover {
+  border-color: var(--acc); background: var(--acc-soft);
+}
+.tln-upload .upload-icon {
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--fg-2);
+}
+.tln-upload .upload-title { font-size: var(--text-base); color: var(--fg-1); }
+.tln-upload .upload-title strong { color: var(--acc-strong); font-weight: 500; }
+.tln-upload .upload-meta {
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--fg-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}

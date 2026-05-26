@@ -1,0 +1,24 @@
+/* Talon · ProgressBar styles — 1:1 from prototype (ui*.jsx). */
+
+.tln-progress { height: 6px; background: var(--bg-3); border-radius: 3px; overflow: hidden; }
+
+.tln-progress .fill { height: 100%; background: var(--acc); border-radius: 3px; transition: width 220ms var(--ease-out); }
+
+/* variant="thin" / variant="thick" 新命名 + 旧别名 */
+.tln-progress-thin,
+.tln-progress.thin { height: 3px; }
+
+.tln-progress-thick,
+.tln-progress.thick { height: 10px; }
+
+.tln-progress-indet { height: 1.5px; background: var(--line); overflow: hidden; position: relative; border-radius: 1px; }
+
+.tln-progress-indet::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--acc), transparent);
+  animation: tln-indet 1.5s var(--ease-in-out) infinite;
+}
+
+@keyframes tln-indet { 0% { transform: translateX(-50%); } 100% { transform: translateX(150%); } }

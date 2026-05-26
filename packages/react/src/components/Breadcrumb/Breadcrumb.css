@@ -1,0 +1,94 @@
+/* Talon · Breadcrumb styles */
+
+.tln-crumb {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--fg-3);
+  flex-wrap: wrap;
+}
+
+.tln-crumb-sm { font-size: 10.5px; }
+.tln-crumb-lg { font-size: var(--text-base); }
+
+/* ─── List ───────────────────────────────────────────────────────── */
+.tln-crumb-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.tln-crumb-sm .tln-crumb-list { gap: 4px; }
+.tln-crumb-lg .tln-crumb-list { gap: 8px; }
+
+/* ─── Item ───────────────────────────────────────────────────────── */
+.tln-crumb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ─── Link ───────────────────────────────────────────────────────── */
+.tln-crumb-link {
+  color: var(--fg-2);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: color var(--dur-fast);
+}
+.tln-crumb-link:hover {
+  color: var(--fg-0);
+  background: var(--bg-hover);
+}
+
+/* ─── Page (current) ─────────────────────────────────────────────── */
+.tln-crumb-page {
+  color: var(--fg-0);
+  padding: 2px 4px;
+  cursor: default;
+}
+
+/* ─── Separator ──────────────────────────────────────────────────── */
+.tln-crumb-sep {
+  color: var(--fg-4);
+  user-select: none;
+}
+
+/* ─── Ellipsis ───────────────────────────────────────────────────── */
+.tln-crumb-ellipsis {
+  color: var(--fg-4);
+  padding: 2px 4px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   旧 class alias — 兼容历史 prototype 扁平用法
+   (nav.tln-crumb > a / .tln-crumb > span.sep 等)
+═══════════════════════════════════════════════════════════════ */
+/* 旧结构：.tln-crumb > a 当作链接 */
+.tln-crumb > a {
+  color: var(--fg-2);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: color var(--dur-fast);
+}
+.tln-crumb > a:hover {
+  color: var(--fg-0);
+  background: var(--bg-hover);
+}
+/* 旧结构：.tln-crumb > span:not(.sep) 当作当前页 */
+.tln-crumb > span:not(.tln-crumb-sep):not(.sep) {
+  color: var(--fg-0);
+  padding: 2px 4px;
+}
+/* 旧分隔符 .sep */
+.tln-crumb > .sep {
+  color: var(--fg-4);
+  user-select: none;
+}

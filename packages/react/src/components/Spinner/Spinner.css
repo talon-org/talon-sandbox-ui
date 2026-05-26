@@ -1,0 +1,30 @@
+/* Spinner 环形加载动画
+   来源: ui-forms.jsx SPINNER section */
+
+.tln-spin {
+  --sz: 14px;
+  width: var(--sz);
+  height: var(--sz);
+  border: 1.5px solid var(--line-strong);
+  border-top-color: var(--acc);
+  border-radius: 50%;
+  animation: tln-spin 0.9s linear infinite;
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+/* 新命名 + 旧别名 */
+.tln-spin-sm,
+.tln-spin.sm,
+.tln-spinner.sm { --sz: 11px; border-width: 1.2px; }
+
+.tln-spin-lg,
+.tln-spin.lg,
+.tln-spinner.lg { --sz: 18px; border-width: 2px; }
+
+/* 向后兼容 — tln-spinner 为 tln-spin 别名 */
+.tln-spinner { --sz: 14px; width: var(--sz); height: var(--sz); border: 1.5px solid var(--line-strong); border-top-color: var(--acc); border-radius: 50%; animation: tln-spin 0.9s linear infinite; display: inline-block; flex: 0 0 auto; }
+
+@keyframes tln-spin {
+  to { transform: rotate(360deg); }
+}

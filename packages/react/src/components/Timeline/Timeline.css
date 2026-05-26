@@ -1,0 +1,72 @@
+/* ─────── Timeline ───────────────────────────────────────────
+   来源：ui-extra.jsx Timeline 段（约 250-295 行）
+   Prototype classes: .tln-timeline / .tln-timeline-item
+                      .dot / .head / .title / .time / .desc
+   ─────────────────────────────────────────────────────────── */
+
+/* 容器：左侧 22px 空间放竖线 + 圆点 */
+.tln-timeline { position: relative; padding-left: 22px; }
+
+/* 贯穿竖线 */
+.tln-timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px; top: 4px; bottom: 4px;
+  width: 1px;
+  background: var(--line);
+}
+
+/* 每个事件条目 */
+.tln-timeline-item { position: relative; padding-bottom: 14px; }
+.tln-timeline-item:last-child { padding-bottom: 0; }
+
+/* 状态圆点 */
+.tln-timeline-item .dot {
+  position: absolute;
+  left: -20px; top: 4px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--bg-1);
+  border: 1.5px solid var(--fg-3);
+  box-sizing: border-box;
+}
+
+/* 状态颜色 */
+.tln-timeline-item.ok   .dot { border-color: var(--ok); }
+.tln-timeline-item.warn .dot { border-color: var(--warn); }
+.tln-timeline-item.err  .dot { border-color: var(--err); }
+.tln-timeline-item.info .dot { border-color: var(--info); }
+/* acc：实心填充 */
+.tln-timeline-item.acc  .dot { background: var(--acc); border-color: var(--acc); }
+
+/* 标题行（.head 或 .tln-timeline-title + .time 横向排列） */
+.tln-timeline-item .head {
+  display: flex; align-items: baseline;
+  gap: 10px;
+}
+/* TimelineTitle 新组件 class（不再包 .head 容器，消费者用 flex 父级排列） */
+.tln-timeline-title {
+  color: var(--fg-0);
+  font-weight: 500;
+  font-size: var(--text-base);
+  flex: 1;
+}
+.tln-timeline-item .title {
+  color: var(--fg-0);
+  font-weight: 500;
+  font-size: var(--text-base);
+}
+.tln-timeline-item .time {
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  margin-left: auto;
+}
+
+/* 描述文案 */
+.tln-timeline-item .desc {
+  color: var(--fg-2);
+  font-size: var(--text-sm);
+  margin-top: 2px;
+  line-height: 1.55;
+}
