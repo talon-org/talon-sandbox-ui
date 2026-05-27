@@ -325,7 +325,7 @@ export default function DocsHome({ locale }: { locale: Locale }) {
                 >
                   {copy.previewSubtitle}
                 </p>
-                <KV items={copy.previewKV} />
+                <KV rows={copy.previewKV.map((r) => ({ k: r.label, v: r.value }))} />
                 <div className="tln-home__preview-states">
                   {copy.states.map((s) => (
                     <StatusBadge key={s.status} status={s.status}>

@@ -29,10 +29,10 @@ export const dialogContentVariants = cva('tln-dialog', {
 });
 
 // ─── Dialog 根容器 ────────────────────────────────────────────────────────────
-// modal 默认 false：禁用 Radix 的 aria-hidden 广播，避免并发 Dialog 互相 aria-hidden
-// （方案 A：实现层真正默认 false，与文档/注释保持一致；Radix 原始默认是 true）
-export function Dialog({ modal = false, ...props }: React.ComponentPropsWithoutRef<typeof RadixDialog.Root>) {
-  return <RadixDialog.Root modal={modal} {...props} />;
+// modal 默认 true(Radix 默认):渲染 Overlay 模态遮罩 + 焦点陷阱。
+// 并发 Dialog 场景需要显式 modal={false} 避免互相 aria-hidden。
+export function Dialog(props: React.ComponentPropsWithoutRef<typeof RadixDialog.Root>) {
+  return <RadixDialog.Root {...props} />;
 }
 Dialog.displayName = 'Dialog';
 

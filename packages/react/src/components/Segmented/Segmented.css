@@ -30,13 +30,12 @@
 
 .tln-seg button:hover { color: var(--fg-1); background: var(--bg-hover); }
 
-/* Radix 输出 data-state="on"，同时保留 aria-pressed 兼容 */
+/* Radix 输出 data-state="on"，同时保留 aria-pressed 兼容
+   active 用 bg-1(浅色更亮 / 深色更暗)形成 inset toggle 视觉,
+   prototype 原值 bg-2 跟容器同色看不出分段,实测 bg-1 才有对比 */
 .tln-seg button[data-state='on'],
 .tln-seg button[aria-pressed='true'] {
   color: var(--fg-0);
-  /* 容器是 bg-2,active 用 bg-1(浅色模式更亮 / 深色模式更暗)
-     形成 inset toggle 视觉。prototype 原值 bg-2 在两种模式下都
-     跟容器同色,实测分段不清晰,这里收紧到 bg-1。 */
   background: var(--bg-1);
   box-shadow: 0 0 0 1px var(--line-strong) inset;
 }

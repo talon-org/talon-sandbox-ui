@@ -20,7 +20,7 @@ mono 字体。3~5 段为宜，过深用省略号折叠。
 
 ## 用法示例
 
-```tsx
+```tsx | pure
 <Breadcrumb size="md">
   <BreadcrumbList>
     <BreadcrumbItem>

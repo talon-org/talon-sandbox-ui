@@ -33,10 +33,10 @@ export const drawerContentVariants = cva('tln-drawer', {
 });
 
 // ─── Drawer 根容器 ────────────────────────────────────────────────────────────
-// modal 默认 false：禁用 Radix 的 aria-hidden 广播，与 Dialog 行为保持一致
-// （方案 A：实现层真正默认 false；Radix 原始默认是 true）
-export function Drawer({ modal = false, ...props }: React.ComponentPropsWithoutRef<typeof RadixDialog.Root>) {
-  return <RadixDialog.Root modal={modal} {...props} />;
+// modal 默认 true(Radix 默认):渲染 Overlay 遮罩 + 焦点陷阱。
+// 并发场景需显式 modal={false}。
+export function Drawer(props: React.ComponentPropsWithoutRef<typeof RadixDialog.Root>) {
+  return <RadixDialog.Root {...props} />;
 }
 Drawer.displayName = 'Drawer';
 

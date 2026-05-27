@@ -20,7 +20,7 @@ toc: content
 
 ## 用法示例
 
-```tsx
+```tsx | pure
 <Combobox value={val} onValueChange={setVal}>
   <ComboboxTrigger placeholder="选择框架" />
   <ComboboxContent>

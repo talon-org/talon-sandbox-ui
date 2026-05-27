@@ -49,13 +49,14 @@ button.tln-select,
   z-index: 50;
 }
 
-/* 单个选项（参考 Combobox .tln-combo-opt 视觉） */
+/* 单个选项（参考 Combobox .tln-combo-opt 视觉）
+   ✓ 图标 absolute 在左侧固定槽位,text 始终从同一位置开始,选中/未选中行对齐 */
 .tln-select-item {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
-  padding: 7px 10px;
+  padding: 7px 10px 7px 28px;
   border-radius: var(--r-1);
   font-size: var(--text-base);
   color: var(--fg-1);
@@ -83,8 +84,12 @@ button.tln-select,
   pointer-events: none;
 }
 
-/* check 图标容器（左侧） */
+/* check 图标容器(左侧固定槽位,与 padding-left 对齐) */
 .tln-select-item-check {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
   display: inline-flex;
   align-items: center;
   color: var(--acc-strong);

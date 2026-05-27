@@ -48,6 +48,12 @@ interface MultiSelectCtx {
   size: 'sm' | 'md' | 'lg';
   /** 是否禁用 */
   disabled?: boolean;
+  /** 当前可见 item 数(>0 表示有结果) */
+  visibleCount: number;
+  /** Item mount/visible 时调用 */
+  registerVisible: (id: string) => void;
+  /** Item unmount/hidden 时调用 */
+  unregisterVisible: (id: string) => void;
 }
 
 const MultiSelectContext = createContext<MultiSelectCtx | null>(null);
@@ -99,6 +105,18 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState('');
 
+    // 可见 item 集合(用于 MultiSelectEmpty 判断)
+    const visibleIdsRef = useRef<Set<string>>(new Set());
+    const [visibleCount, setVisibleCount] = useState(0);
+    const registerVisible = useCallback((id: string) => {
+      visibleIdsRef.current.add(id);
+      setVisibleCount(visibleIdsRef.current.size);
+    }, []);
+    const unregisterVisible = useCallback((id: string) => {
+      visibleIdsRef.current.delete(id);
+      setVisibleCount(visibleIdsRef.current.size);
+    }, []);
+
     const toggle = useCallback(
       (v: string) => {
         const next = selectedValues.includes(v)
@@ -140,8 +158,11 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
         mono,
         size: size ?? 'md',
         disabled,
+        visibleCount,
+        registerVisible,
+        unregisterVisible,
       }),
-      [selectedValues, toggle, remove, open, query, mono, size, disabled],
+      [selectedValues, toggle, remove, open, query, mono, size, disabled, visibleCount, registerVisible, unregisterVisible],
     );
 
     return (
@@ -354,17 +375,27 @@ export interface MultiSelectItemProps {
  */
 export const MultiSelectItem = forwardRef<HTMLDivElement, MultiSelectItemProps>(
   function MultiSelectItem({ value, hint, disabled, className, children }, ref) {
-    const { value: selectedValues, toggle, query, mono } = useMultiSelectContext();
+    const { value: selectedValues, toggle, query, mono, registerVisible, unregisterVisible } = useMultiSelectContext();
 
-    // 搜索过滤：item 文字包含 query 才显示
-    if (query) {
+    // 搜索过滤判断
+    const visible = (() => {
+      if (!query) return true;
       const text = typeof children === 'string' ? children.toLowerCase() : '';
       const hintText = typeof hint === 'string' ? hint.toLowerCase() : '';
       const q = query.toLowerCase();
-      if (!text.includes(q) && !value.toLowerCase().includes(q) && !hintText.includes(q)) {
-        return null;
+      return text.includes(q) || value.toLowerCase().includes(q) || hintText.includes(q);
+    })();
+
+    // 向 context 报告可见状态(让 MultiSelectEmpty 知道是否还有结果)
+    useEffect(() => {
+      if (visible) {
+        registerVisible(value);
+        return () => unregisterVisible(value);
       }
-    }
+      return;
+    }, [visible, value, registerVisible, unregisterVisible]);
+
+    if (!visible) return null;
 
     const isSelected = selectedValues.includes(value);
 
@@ -423,6 +454,8 @@ export interface MultiSelectEmptyProps {
  */
 export const MultiSelectEmpty = forwardRef<HTMLDivElement, MultiSelectEmptyProps>(
   function MultiSelectEmpty({ className, children = '无结果' }, ref) {
+    const { visibleCount } = useMultiSelectContext();
+    if (visibleCount > 0) return null;
     return (
       <div ref={ref} className={cn('tln-multiselect-empty', className)}>
         {children}

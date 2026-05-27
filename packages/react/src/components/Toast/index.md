@@ -22,7 +22,7 @@ toc: content
 
 在应用根部渲染 `<Toaster />` 一次，之后在任意位置调用 `toast()` 命令式 API：
 
-```tsx
+```tsx | pure
 import { toast, Toaster } from '@talon-sandbox/react';
 
 function App() {

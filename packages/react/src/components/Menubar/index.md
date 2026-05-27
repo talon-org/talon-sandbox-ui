@@ -20,7 +20,7 @@ Mac 风格顶部菜单栏。组合式 API：`Menubar > MenubarMenu > MenubarTrig
 
 ## 用法示例
 
-```tsx
+```tsx | pure
 <Menubar>
   <MenubarMenu>
     <MenubarTrigger>文件</MenubarTrigger>

@@ -16,7 +16,9 @@ toc: content
 
 ## 基础用法
 
-```tsx
+```tsx | pure
+import { InputGroup, InputGroupField, InputAddon } from '@talon-sandbox/react';
+
 <InputGroup size="md">
   <InputAddon side="left">https://</InputAddon>
   <InputGroupField placeholder="your-domain" />

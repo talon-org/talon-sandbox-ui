@@ -20,7 +20,7 @@ toc: content
 
 ## 组合式用法
 
-```tsx
+```tsx | pure
 <Timeline>
   <TimelineItem kind="ok">
     <TimelineDot />

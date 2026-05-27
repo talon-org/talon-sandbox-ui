@@ -44,6 +44,12 @@ interface ComboboxCtx {
   /** mono 字体 */
   mono?: boolean;
   size: 'sm' | 'md' | 'lg';
+  /** 当前可见 item 数(>0 表示有结果) */
+  visibleCount: number;
+  /** Item mount/visible 时调用 */
+  registerVisible: (id: string) => void;
+  /** Item unmount/hidden 时调用 */
+  unregisterVisible: (id: string) => void;
 }
 
 const ComboboxContext = createContext<ComboboxCtx | null>(null);
@@ -95,6 +101,18 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState('');
 
+    // 用 ref+state 跟踪可见 item 集合,避免每次 register 触发全树重渲染
+    const visibleIdsRef = useRef<Set<string>>(new Set());
+    const [visibleCount, setVisibleCount] = useState(0);
+    const registerVisible = useCallback((id: string) => {
+      visibleIdsRef.current.add(id);
+      setVisibleCount(visibleIdsRef.current.size);
+    }, []);
+    const unregisterVisible = useCallback((id: string) => {
+      visibleIdsRef.current.delete(id);
+      setVisibleCount(visibleIdsRef.current.size);
+    }, []);
+
     const onSelect = useCallback(
       (v: string) => {
         if (!isControlled) setInternalValue(v);
@@ -120,8 +138,11 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
         setQuery,
         mono,
         size: size ?? 'md',
+        visibleCount,
+        registerVisible,
+        unregisterVisible,
       }),
-      [selectedValue, onSelect, open, query, mono, size],
+      [selectedValue, onSelect, open, query, mono, size, visibleCount, registerVisible, unregisterVisible],
     );
 
     return (
@@ -263,17 +284,27 @@ export interface ComboboxItemProps {
  */
 export const ComboboxItem = forwardRef<HTMLDivElement, ComboboxItemProps>(
   function ComboboxItem({ value, hint, disabled, className, children }, ref) {
-    const { value: selectedValue, onSelect, query, mono } = useComboboxContext();
+    const { value: selectedValue, onSelect, query, mono, registerVisible, unregisterVisible } = useComboboxContext();
 
-    // 搜索过滤：item 文字包含 query 才显示
-    if (query) {
+    // 搜索过滤判断
+    const visible = (() => {
+      if (!query) return true;
       const text = typeof children === 'string' ? children.toLowerCase() : '';
       const hintText = typeof hint === 'string' ? hint.toLowerCase() : '';
       const q = query.toLowerCase();
-      if (!text.includes(q) && !value.toLowerCase().includes(q) && !hintText.includes(q)) {
-        return null;
+      return text.includes(q) || value.toLowerCase().includes(q) || hintText.includes(q);
+    })();
+
+    // 向 context 报告可见状态(让 ComboboxEmpty 知道是否还有结果)
+    useEffect(() => {
+      if (visible) {
+        registerVisible(value);
+        return () => unregisterVisible(value);
       }
-    }
+      return;
+    }, [visible, value, registerVisible, unregisterVisible]);
+
+    if (!visible) return null;
 
     const isSelected = selectedValue === value;
 
@@ -352,6 +383,9 @@ export interface ComboboxEmptyProps {
  */
 export const ComboboxEmpty = forwardRef<HTMLDivElement, ComboboxEmptyProps>(
   function ComboboxEmpty({ className, children = '无结果' }, ref) {
+    const { visibleCount } = useComboboxContext();
+    // 有可见 item 时不渲染,避免误显示"无结果"
+    if (visibleCount > 0) return null;
     return (
       <div ref={ref} className={cn('tln-combo-empty', className)}>
         {children}

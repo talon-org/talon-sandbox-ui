@@ -15,9 +15,11 @@
   appearance: none;
   -webkit-appearance: none;
   font: inherit;
-  color: inherit;
   margin: 0;
 }
+/* color 不在全局 reset 中重置:让各组件自己声明 button 颜色,
+   避免 [class*="tln-"] button:not(...):not(...) 的高特异性(0,3,1)
+   把组件内 .tln-pager button.active 等规则覆盖 */
 
 /* ─────────────────────────────────────────────────────────────
    SVG 对齐统一处理

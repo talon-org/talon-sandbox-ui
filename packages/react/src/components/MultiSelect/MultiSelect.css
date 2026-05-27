@@ -98,16 +98,18 @@
   background: var(--bg-hover);
 }
 
-/* ─── Content panel ──────────────────────────────────────────── */
+/* ─── Content panel(对齐 Combobox `.tln-combo-panel` 视觉) ──── */
 .tln-multiselect-content {
   background: var(--bg-1);
-  border: 1px solid var(--line);
-  border-radius: var(--r-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
   box-shadow: var(--shadow-3);
-  z-index: 40;
+  z-index: 50;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  max-height: 280px;
+  animation: tln-fade-in var(--dur-fast) var(--ease-out);
 }
 
 /* ─── Search box ─────────────────────────────────────────────── */
@@ -116,7 +118,8 @@
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  border-bottom: 1px solid var(--line-subtle);
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--bg-2);
   color: var(--fg-3);
 }
 .tln-multiselect-search input {
@@ -205,9 +208,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 10px;
-  border-top: 1px solid var(--line-subtle);
-  font-size: 11px;
+  padding: 6px 10px;
+  border-top: 1px solid var(--line-soft);
+  background: var(--bg-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--fg-3);
 }
 .tln-multiselect-foot-keys span {
