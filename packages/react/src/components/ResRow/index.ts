@@ -1,2 +1,2 @@
 export { ResRow } from './ResRow.js';
-export type { ResRowProps, ResRowColor } from './ResRow.types.js';
+export type { ResRowProps } from './ResRow.types.js';

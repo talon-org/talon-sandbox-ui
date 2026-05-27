@@ -1,0 +1,58 @@
+/* ResRow — 资源用量行（label + progress bar + used/max 值）
+   来源: .design-source/project/app/page-sandbox-detail.jsx，ResRow 函数 */
+
+.tln-res-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 顶行：label（左）+ 数值（右） */
+.tln-res-row__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* label — micro 风格（mono · uppercase · 淡色） */
+.tln-res-row__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* 数值区 */
+.tln-res-row__value {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--fg-1);
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.tln-res-row__used {
+  color: var(--fg-1);
+}
+
+.tln-res-row__sep {
+  color: var(--fg-3);
+  margin: 0 2px;
+}
+
+.tln-res-row__max {
+  color: var(--fg-3);
+}
+
+.tln-res-row__unit {
+  color: var(--fg-3);
+  margin-left: 3px;
+}
+
+/* progress bar 容器 */
+.tln-res-row__bar {
+  /* ProgressBar 组件接管，这里只允许组件继承 row 宽度 */
+  width: 100%;
+}

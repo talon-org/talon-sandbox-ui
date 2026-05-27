@@ -1,0 +1,69 @@
+/* PageHeader — 页面标题区（eyebrow + title + num + desc + actions）
+   来源: .design-source/project/app/shell.jsx，PageHeader 组件 */
+
+.tln-page-header {
+  padding: 28px 32px 20px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* noBorder 变体 */
+.tln-page-header--no-border {
+  border-bottom: 0;
+}
+
+/* 主行：title 区 + actions 区 */
+.tln-page-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* eyebrow — 页面分类标签（mono · uppercase） */
+.tln-page-header__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 6px;
+}
+
+/* title 行 */
+.tln-page-header__title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--fg-0);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* num — 数量角标（mono · 较小 · 低对比） */
+.tln-page-header__num {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  color: var(--fg-3);
+  font-weight: 400;
+}
+
+/* desc — 页面说明文字 */
+.tln-page-header__desc {
+  font-size: 13px;
+  color: var(--fg-2);
+  margin-top: 6px;
+  max-width: 720px;
+  line-height: 1.55;
+}
+
+/* actions — 右上角操作按钮组 */
+.tln-page-header__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  flex-shrink: 0;
+  align-items: center;
+}

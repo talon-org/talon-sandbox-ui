@@ -1,0 +1,156 @@
+/* LoginLayout — 登录页两栏布局壳
+   来源: .design-source/project/app/page-login.jsx */
+
+/* ─── 外层容器 ──────────────────────────────────────────────── */
+.tln-login-layout {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--bg-1);
+}
+
+/* ─── 左侧品牌面板 ──────────────────────────────────────────── */
+.tln-login-brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 56px 64px;
+  border-right: 1px solid var(--line);
+}
+
+/* 顶部品牌行：logo + wordmark + badge */
+.tln-login-brand__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tln-login-brand__wordmark {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--fg-0);
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+.tln-login-brand__pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--acc-strong);
+  border: 1px solid var(--acc-line);
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: var(--acc-soft);
+}
+
+/* 主标语 */
+.tln-login-brand__headline {
+  font-size: 36px;
+  letter-spacing: -0.03em;
+  color: var(--fg-0);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 24px 0 16px;
+}
+
+.tln-login-brand__headline .acc {
+  color: var(--acc-strong);
+}
+
+/* 副标 */
+.tln-login-brand__sub {
+  font-size: 15px;
+  color: var(--fg-2);
+  line-height: 1.55;
+  max-width: 380px;
+}
+
+/* 代码演示块 */
+.tln-login-brand__code {
+  background: var(--bg-0);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--acc);
+  border-radius: var(--r-2);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--fg-1);
+  margin-top: 18px;
+  overflow: hidden;
+}
+
+.tln-login-brand__code-head {
+  padding: 10px 14px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+}
+
+.tln-login-brand__code-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: tln-pulse 1.6s var(--ease-in-out, ease-in-out) infinite;
+}
+
+.tln-login-brand__code-body {
+  padding: 14px 16px;
+  line-height: 1.6;
+}
+
+/* 代码语法着色辅助类（由消费方自行填充内容，组件提供容器） */
+.tln-login-brand__code .c-key { color: var(--info); }
+.tln-login-brand__code .c-str { color: var(--ok); }
+.tln-login-brand__code .c-com { color: var(--fg-3); font-style: italic; }
+
+/* 底部页脚链接 */
+.tln-login-brand__foot {
+  display: flex;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-3);
+}
+
+.tln-login-brand__foot a {
+  color: var(--fg-2);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.tln-login-brand__foot a:hover {
+  color: var(--fg-0);
+}
+
+/* 向后兼容别名（旧 slot 模式 left prop 渲染时附加） */
+.tln-login-layout__left { /* 等同 .tln-login-brand */ }
+.tln-login-layout__right { /* 等同 .tln-login-form */ }
+
+/* ─── 右侧表单区 ─────────────────────────────────────────────── */
+.tln-login-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px;
+}
+
+/* ─── 响应式：小屏隐藏左侧 ────────────────────────────────────── */
+@media (max-width: 920px) {
+  .tln-login-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tln-login-brand {
+    display: none;
+  }
+}

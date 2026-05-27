@@ -1,7 +1,9 @@
-import type { ReactNode } from 'react';
-
-export interface LoginLayoutProps {
-  left: ReactNode;
-  children: ReactNode;
-  className?: string;
-}
+export type {
+  LoginLayoutProps,
+  LoginLayoutBrandProps,
+  LoginLayoutBrandHeadProps,
+  LoginLayoutBrandWordmarkProps,
+  LoginLayoutBrandPillProps,
+  LoginLayoutBrandFootProps,
+  LoginLayoutFormProps,
+} from './LoginLayout.js';

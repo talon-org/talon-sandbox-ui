@@ -1,12 +1,12 @@
-// Talon Sandbox UI · public surface (v0.2 atomic catalog).
+// Talon Sandbox UI · public surface (v0.3 atomic catalog).
 //
 // Categories mirror components.html sections:
 //   Action / Form / Data / Navigation / Feedback / Surfaces / Overlays / Layout
 //
-// Removed in v0.2: PageHeader / StatCard / TerminalChrome / FilterBar /
-// LoginLayout / SandboxStateBar / TweaksPanel / RecordingPlayer /
-// MemberRow / ResRow / CmdKOverlay / FormSection / FormItem / Table
-// (business shells; replaced by atomic primitives below).
+// v0.3: PageHeader / FilterBar / LoginLayout / ResRow 已按新原型重新实现，
+// 重新加入公开导出。StatCard / TerminalChrome / SandboxStateBar /
+// TweaksPanel / RecordingPlayer / MemberRow / CmdKOverlay /
+// FormSection / FormItem / Table 仍未恢复（纯业务壳，由 app 自行组合）。
 
 // ── Action ──────────────────────────────────────────────────────────
 export { Button, buttonVariants } from './components/Button/index.js';
@@ -141,6 +141,9 @@ export type { TagProps, TagSize } from './components/Tag/index.js';
 export { FilterChip } from './components/FilterChip/index.js';
 export type { FilterChipProps } from './components/FilterChip/index.js';
 
+export { FilterBar } from './components/FilterBar/index.js';
+export type { FilterBarProps, FilterBarGroup, FilterBarItem, FilterBarSearch } from './components/FilterBar/index.js';
+
 export {
   Avatar,
   AvatarImage,
@@ -171,6 +174,9 @@ export type { StatProps, StatLabelProps, StatValueProps, StatDeltaProps, StatHin
 
 export { Sparkline } from './components/Sparkline/index.js';
 export type { SparklineProps } from './components/Sparkline/index.js';
+
+export { ResRow } from './components/ResRow/index.js';
+export type { ResRowProps } from './components/ResRow/index.js';
 
 export { Timeline, TimelineItem, TimelineDot, TimelineContent, TimelineTitle, TimelineTime, TimelineDesc, timelineItemVariants } from './components/Timeline/index.js';
 export type { TimelineProps, TimelineItemProps, TimelineDotProps, TimelineContentProps, TimelineTitleProps, TimelineTimeProps, TimelineDescProps, TimelineItemKind } from './components/Timeline/index.js';
@@ -390,6 +396,28 @@ export type { FlexProps, FlexGap } from './components/Flex/index.js';
 
 export { Grid, gridVariants } from './components/Grid/index.js';
 export type { GridProps, GridGap } from './components/Grid/index.js';
+
+export { PageHeader } from './components/PageHeader/index.js';
+export type { PageHeaderProps } from './components/PageHeader/index.js';
+
+export {
+  LoginLayout,
+  LoginLayoutBrand,
+  LoginLayoutBrandHead,
+  LoginLayoutBrandWordmark,
+  LoginLayoutBrandPill,
+  LoginLayoutBrandFoot,
+  LoginLayoutForm,
+} from './components/LoginLayout/index.js';
+export type {
+  LoginLayoutProps,
+  LoginLayoutBrandProps,
+  LoginLayoutBrandHeadProps,
+  LoginLayoutBrandWordmarkProps,
+  LoginLayoutBrandPillProps,
+  LoginLayoutBrandFootProps,
+  LoginLayoutFormProps,
+} from './components/LoginLayout/index.js';
 
 // ── Overlays ────────────────────────────────────────────────────────
 export {

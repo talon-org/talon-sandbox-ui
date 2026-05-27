@@ -1,0 +1,92 @@
+/* FilterBar — 筛选条容器（flex · 换行 · 间距 6px）
+   来源: .design-source/project/app/ui-data.jsx，.tln-filter-bar 规则
+   v0.3 新 API: 仅作容器，children 自行拼装 FilterChip/Search/Segmented。
+   旧 API 兼容: 支持 groups/value/onChange chip-button 模式（测试依赖）。 */
+
+.tln-filterbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* 旧 API：分组容器 */
+.tln-filterbar__group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 旧 API：分组标签 */
+.tln-filterbar__group-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  padding: 0 4px;
+}
+
+/* 旧 API：chip 按钮 */
+.tln-filterbar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-2);
+  cursor: pointer;
+  transition: background var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast);
+}
+
+.tln-filterbar__item:hover {
+  background: var(--bg-2);
+  border-color: var(--line-strong);
+  color: var(--fg-0);
+}
+
+.tln-filterbar__item[aria-pressed='true'] {
+  border-color: var(--acc-line);
+  background: var(--acc-soft);
+  color: var(--acc-strong);
+}
+
+/* 旧 API：count badge */
+.tln-filterbar__count {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--fg-3);
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0 5px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.tln-filterbar__item[aria-pressed='true'] .tln-filterbar__count {
+  background: var(--acc-soft);
+  border-color: var(--acc-line);
+  color: var(--acc-strong);
+}
+
+/* 旧 API：搜索框 */
+.tln-filterbar__search {
+  height: 28px;
+  flex: 1;
+  min-width: 120px;
+  max-width: 240px;
+}
+
+/* 旧 API：右侧操作区 */
+.tln-filterbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
