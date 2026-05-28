@@ -1,3 +1,6 @@
+// eslint-disable react-doctor/prefer-tag-over-role
+// Table 使用 CSS grid 布局（display:grid），无法使用原生 <table>。
+// 行列必须是 grid 子项，因此以 div+role 实现 table/row/cell ARIA 语义。
 import './Table.css';
 import { cx } from '../../primitives/clsx.js';
 import type { TableProps } from './Table.types.js';

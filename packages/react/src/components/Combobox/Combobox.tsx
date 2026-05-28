@@ -313,11 +313,20 @@ export const ComboboxItem = forwardRef<HTMLDivElement, ComboboxItemProps>(
         ref={ref}
         role="option"
         aria-selected={isSelected}
+        aria-disabled={disabled || undefined}
         data-disabled={disabled ? 'true' : undefined}
         className={cn('tln-combo-opt', mono && 'mono', isSelected && 'selected', className)}
+        // listbox option：tabIndex=-1，由父级 listbox 管理焦点顺序
+        tabIndex={-1}
         onMouseDown={(e) => {
           e.preventDefault();
           if (!disabled) onSelect(value);
+        }}
+        onKeyDown={(e) => {
+          if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            onSelect(value);
+          }
         }}
       >
         {/* 选中标记 */}

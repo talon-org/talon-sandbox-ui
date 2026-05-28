@@ -103,19 +103,21 @@ function InlineCalendar({ range, anchor, onSelect }: InlineCalendarProps) {
           <div key={d} className="tln-cal-dow" role="columnheader" aria-label={d}>{d}</div>
         ))}
         {/* 日期格子 */}
-        {days.map((d, i) => {
+        {days.map((d) => {
           const inMonth = d.getMonth() === view.getMonth();
           const isStart = sameDay(d, rA);
           const isEnd   = sameDay(d, rB);
           const inRange = between(d, rA, rB);
           const isToday = sameDay(d, today);
+          // 用 ISO 日期字符串作 key，唯一且稳定
+          const dateKey = d.toISOString().slice(0, 10);
 
           return (
             <span
-              key={i}
+              key={dateKey}
               role="gridcell"
               aria-label={fmtDate(d)}
-              aria-pressed={isStart || isEnd ? true : undefined}
+              aria-selected={isStart || isEnd ? true : undefined}
               className={cn(
                 'tln-cal-day',
                 !inMonth && 'muted',
@@ -283,12 +285,14 @@ export const DateRangePicker = forwardRef<HTMLSpanElement, DateRangePickerProps>
             {/* 预设列 */}
             {presets && presets.length > 0 && (
               <div className="tln-daterange-presets">
-                {presets.map((p, i) => {
+                {presets.map((p) => {
                   const isActive = from && to
                     && sameDay(from, p.range[0]) && sameDay(to, p.range[1]);
+                  // 用预设标签文本作 key（preset label 在同一列表内唯一）
+                  const presetKey = typeof p.label === 'string' ? p.label : String(p.range[0].getTime());
                   return (
                     <button
-                      key={i}
+                      key={presetKey}
                       type="button"
                       className={cn(isActive && 'active')}
                       onClick={() => applyPreset(p.range)}

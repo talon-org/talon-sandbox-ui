@@ -1,6 +1,6 @@
 import { useEffect, useRef, useMemo } from 'react';
 import { cx } from '../../primitives/clsx.js';
-import type { RecordingPlayerProps } from './RecordingPlayer.types.js';
+import type { AgentStep, RecordingPlayerProps } from './RecordingPlayer.types.js';
 
 function fmtT(s: number): string {
   return `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
@@ -23,11 +23,13 @@ export function binarySearch(frames: { time: number }[], target: number): number
 }
 
 const DEFAULT_SPEED_OPTIONS = [0.5, 1, 2];
+/** 稳定的空步骤数组引用，避免每次 render 产生新引用导致子组件重渲染 */
+const EMPTY_STEPS: AgentStep[] = [];
 
 export function RecordingPlayer({
   recording,
   frames,
-  steps = [],
+  steps = EMPTY_STEPS,
   currentTime,
   onSeek,
   isPlaying,
@@ -110,7 +112,8 @@ export function RecordingPlayer({
       <div className="tln-rec-player__stage recp-stage">
         <div className="tln-rec-player__stage-inner recp-stage-inner">
           {visibleFrames.map((f, i) => (
-            <div key={i} className={cx('line', 'frame', f.kind && `frame--${f.kind}`)}>
+            // 帧序列仅追加不重排；用 time+index 复合 key 避免同一时间戳多帧冲突
+            <div key={`${f.time}-${i}`} className={cx('line', 'frame', f.kind && `frame--${f.kind}`)}>
               {f.text}
             </div>
           ))}
@@ -129,27 +132,22 @@ export function RecordingPlayer({
           </div>
           <div className="steps">
             {steps.map((step, i) => (
-              <div
-                key={i}
-                role="button"
-                tabIndex={0}
+              /* 使用原生 <button> 取代 <div role="button"> */
+              /* step.time 在同一录制中唯一，作 key 语义稳定 */
+              <button
+                key={step.time}
+                type="button"
                 className={cx(
                   'recp-step',
                   i === currentStepIdx && 'active',
                   step.time <= currentTime && i !== currentStepIdx && 'done',
                 )}
                 onClick={() => onSeek(step.time)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    onSeek(step.time);
-                  }
-                }}
               >
                 <span className="ix">#{i + 1}</span>
                 <span className="ts">{fmtT(step.time)}</span>
                 <span className="what">{step.title}</span>
-              </div>
+              </button>
             ))}
           </div>
         </div>

@@ -36,12 +36,13 @@ export const FilterChip = forwardRef<HTMLSpanElement, FilterChipProps>(
       <span className="key">{filterKey}</span>
       {/* 操作符 */}
       <span className="op">{op}</span>
-      {/* 值区域，可点击编辑 */}
+      {/* 值区域，可点击编辑；有 onEdit 时才挂交互属性，无 onEdit 时为纯展示 span */}
+      {/* eslint-disable-next-line react-doctor/no-static-element-interactions */}
       <span
         className={cn('val', accent && 'acc')}
-        onClick={onEdit}
         role={onEdit ? 'button' : undefined}
         tabIndex={onEdit ? 0 : undefined}
+        onClick={onEdit ? () => onEdit() : undefined}
         onKeyDown={
           onEdit
             ? (e) => {

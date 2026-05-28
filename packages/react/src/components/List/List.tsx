@@ -24,17 +24,17 @@ export const listVariants = cva('tln-list', {
   defaultVariants: {},
 });
 
-export interface ListProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ListProps extends React.HTMLAttributes<HTMLUListElement> {
   className?: string;
 }
 
-export const List = forwardRef<HTMLDivElement, ListProps>(
+export const List = forwardRef<HTMLUListElement, ListProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      // role="list" 是正确的语义，listbox 是 select-like 组件专用，此处为普通列表
-      <div ref={ref} className={cn(listVariants(), className)} role="list" aria-label="list" {...props}>
+      /* 使用原生 <ul> 取代 <div role="list">；此处是普通列表，非 listbox */
+      <ul ref={ref} className={cn(listVariants(), className)} aria-label="list" {...props}>
         {children}
-      </div>
+      </ul>
     );
   },
 );
@@ -42,27 +42,28 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
 List.displayName = 'List';
 
 /* ── ListItem ── */
-export interface ListItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ListItemProps extends React.HTMLAttributes<HTMLLIElement> {
   /** 是否选中 */
   selected?: boolean;
   className?: string;
 }
 
-export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
+export const ListItem = forwardRef<HTMLLIElement, ListItemProps>(
   ({ selected, className, children, onClick, onKeyDown, ...props }, ref) => {
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLLIElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        onClick?.(e as unknown as React.MouseEvent<HTMLDivElement>);
+        onClick?.(e as unknown as React.MouseEvent<HTMLLIElement>);
       }
       onKeyDown?.(e);
     };
 
     return (
-      <div
+      /* 使用原生 <li> 取代 <div role="listitem">；
+         listitem 不支持 aria-selected，改用 data-selected 属性 */
+      <li
         ref={ref}
-        role="listitem"
-        aria-selected={selected}
+        data-selected={selected ? 'true' : undefined}
         className={cn('tln-list-item', selected && 'selected', className)}
         onClick={onClick}
         onKeyDown={handleKeyDown}
@@ -70,7 +71,7 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
         {...props}
       >
         {children}
-      </div>
+      </li>
     );
   },
 );

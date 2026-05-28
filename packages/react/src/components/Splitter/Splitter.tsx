@@ -111,6 +111,7 @@ export const Splitter = forwardRef<HTMLDivElement, SplitterProps>(
         <div
           className={cn('tln-splitter-handle', isDragging && 'dragging')}
           role="separator"
+          aria-label="拖动调整面板大小"
           aria-orientation={isVertical ? 'horizontal' : 'vertical'}
           aria-valuenow={ratio}
           aria-valuemin={10}

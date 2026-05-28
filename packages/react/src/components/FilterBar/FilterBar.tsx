@@ -70,7 +70,8 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(function Fil
     <div ref={ref} className={cn('tln-filterbar', className)} {...rest}>
       {/* 旧 API：chip-group 渲染 */}
       {groups && groups.map((group, gi) => (
-        <div key={gi} className="tln-filterbar__group">
+        // group.label 作 key；无 label 时降级用 index（兼容旧 API，groups 不重排）
+        <div key={group.label ?? `group-${gi}`} className="tln-filterbar__group">
           {group.label && (
             <span className="tln-filterbar__group-label">{group.label}</span>
           )}
@@ -95,6 +96,7 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(function Fil
         <input
           className="tln-filterbar__search tln-input"
           type="search"
+          aria-label="搜索"
           value={search.value}
           onChange={(e) => search.onChange(e.target.value)}
           placeholder={search.placeholder ?? 'Search…'}

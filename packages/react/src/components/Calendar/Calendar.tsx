@@ -158,7 +158,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
           ))}
 
           {/* 日期格子 */}
-          {days.map((d, i) => {
+          {days.map((d) => {
             const inMonth = d.getMonth() === view.getMonth();
             const isToday = sameDay(d, today);
             const isSel = !range && sameDay(d, selected);
@@ -166,10 +166,12 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
             const isEnd = !!range && sameDay(d, rB);
             const inRange = !!range && between(d, rA, rB);
             const isDisabled = (min != null && d < min) || (max != null && d > max);
+            // 用 ISO 日期字符串作 key，唯一且稳定
+            const dateKey = d.toISOString().slice(0, 10);
 
             return (
               <span
-                key={i}
+                key={dateKey}
                 role="gridcell"
                 className={cn(
                   'tln-cal-day',

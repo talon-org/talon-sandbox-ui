@@ -81,8 +81,14 @@ export function CmdKOverlay({
 
   const activeItemId = filtered.length > 0 ? `${baseId}-opt-${activeIdx}` : undefined;
 
+  // role="presentation" 背景遮罩层，点击/Escape 关闭浮层
   return createPortal(
-    <div className="tln-cmdk-back" onClick={onClose} role="presentation">
+    <div
+      className="tln-cmdk-back"
+      role="presentation"
+      onClick={onClose}
+      onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
+    >
       <div
         ref={modalRef}
         className={cx('tln-cmdk-modal', className)}
@@ -96,6 +102,7 @@ export function CmdKOverlay({
             <circle cx="6.5" cy="6.5" r="4.5"/>
             <path d="M10.5 10.5l3 3"/>
           </svg>
+          {/* role="combobox" 在 <input> 上是冗余的 implicit role，删除 */}
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -104,7 +111,6 @@ export function CmdKOverlay({
             aria-controls={listboxId}
             aria-activedescendant={activeItemId}
             aria-autocomplete="list"
-            role="combobox"
             aria-expanded={true}
             autoComplete="off"
           />
@@ -127,7 +133,16 @@ export function CmdKOverlay({
                     className={cx('tln-cmdk-item', isActive && 'tln-cmdk-item--active')}
                     role="option"
                     aria-selected={isActive}
+                    // listbox 子项由父级 arrow key 管理焦点，tabIndex=-1 让它可接受 focus 但不进入 tab 序列
+                    tabIndex={-1}
                     onClick={() => { it.action(); onClose(); }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        it.action();
+                        onClose();
+                      }
+                    }}
                     onMouseEnter={() => setActiveIdx(it.idx)}
                   >
                     {it.icon != null && (

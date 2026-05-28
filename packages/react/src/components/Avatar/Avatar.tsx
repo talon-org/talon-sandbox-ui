@@ -1,4 +1,4 @@
-import { forwardRef, createContext, useContext, Children, isValidElement, Fragment } from 'react';
+import { forwardRef, createContext, useContext, useMemo, Children, isValidElement, Fragment } from 'react';
 import * as RadixAvatar from '@radix-ui/react-avatar';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils.js';
@@ -63,8 +63,11 @@ export interface AvatarProps
  * </Avatar>
  */
 export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(
-  ({ size = 'md', square = false, className, children, ...rest }, ref) => (
-    <AvatarContext.Provider value={{ size: size ?? 'md' }}>
+  ({ size = 'md', square = false, className, children, ...rest }, ref) => {
+    // memo context value 避免消费方在 Avatar 重渲时全量重渲
+    const ctx = useMemo(() => ({ size: size ?? 'md' as const }), [size]);
+    return (
+    <AvatarContext.Provider value={ctx}>
       <RadixAvatar.Root
         ref={ref}
         className={cn(
@@ -77,7 +80,8 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(
         {children}
       </RadixAvatar.Root>
     </AvatarContext.Provider>
-  ),
+    );
+  },
 );
 Avatar.displayName = 'Avatar';
 

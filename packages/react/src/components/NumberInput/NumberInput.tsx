@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   useState,
   useCallback,
+  useMemo,
   createContext,
   useContext,
   type KeyboardEvent,
@@ -166,8 +167,14 @@ export const NumberInput = forwardRef<HTMLDivElement, NumberInputProps>(function
     onValueChange?.(next);
   }, [clamp, isControlled, onValueChange]);
 
+  // useMemo 稳定 context 对象，避免每次 render 重新创建引用触发下游重渲染
+  const ctxValue = useMemo(
+    () => ({ current, set, step, min, max, disabled, size }),
+    [current, set, step, min, max, disabled, size],
+  );
+
   return (
-    <NumberInputContext.Provider value={{ current, set, step, min, max, disabled, size }}>
+    <NumberInputContext.Provider value={ctxValue}>
       <div
         ref={ref}
         className={cn(numberInputVariants({ size }), className)}

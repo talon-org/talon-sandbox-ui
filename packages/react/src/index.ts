@@ -4,9 +4,11 @@
 //   Action / Form / Data / Navigation / Feedback / Surfaces / Overlays / Layout
 //
 // v0.3: PageHeader / FilterBar / LoginLayout / ResRow / FormSection /
-// FormGrid 已按新原型重新实现，重新加入公开导出。StatCard / TerminalChrome /
-// SandboxStateBar / TweaksPanel / RecordingPlayer / MemberRow / CmdKOverlay /
-// FormItem / Table 仍未恢复（纯业务壳，由 app 自行组合）。
+// FormGrid 已按新原型重新实现，重新加入公开导出。
+// 业务壳(v0.2 → v0.3 复活):TerminalChrome / TweaksPanel / RecordingPlayer /
+// CmdKOverlay / SandboxStateBar 已被 console 实际消费,公开导出。
+// 仍未恢复:StatCard / MemberRow / FormItem / Table
+// (纯业务壳,暂由 app 自行组合)。
 
 // ── Action ──────────────────────────────────────────────────────────
 export { Button, buttonVariants } from './components/Button/index.js';
@@ -195,8 +197,8 @@ export {
 } from './components/Tabs/index.js';
 export type { TabsProps } from './components/Tabs/index.js';
 
-export { SegmentedGroup, SegmentedItem, segmentedVariants } from './components/Segmented/index.js';
-export type { SegmentedGroupProps, SegmentedItemProps, SegmentedOption, SegmentedSize } from './components/Segmented/index.js';
+export { SegmentedGroup, SegmentedItem, Segmented, segmentedVariants } from './components/Segmented/index.js';
+export type { SegmentedGroupProps, SegmentedItemProps, SegmentedOption, SegmentedSize, SegmentedLegacyProps, SegmentedProps } from './components/Segmented/index.js';
 
 export {
   Breadcrumb,
@@ -569,3 +571,21 @@ export type {
   DropdownMenuCheckboxItemProps,
   DropdownMenuRadioItemProps,
 } from './components/DropdownMenu/index.js';
+
+// ── Business shells ────────────────────────────────────────────────
+// 业务壳(被 console 等 app 实际消费,虽然不属于 atomic catalog)
+export { TerminalChrome } from './components/TerminalChrome/index.js';
+export type { TerminalChromeProps, TerminalChromeSandbox } from './components/TerminalChrome/index.js';
+
+export { TweaksPanel, THEME_SWATCHES } from './components/TweaksPanel/index.js';
+export type { TweaksPanelProps, TweaksTheme, TweaksMode, TweaksDensity, TweaksFont, TweaksLang } from './components/TweaksPanel/index.js';
+
+export { RecordingPlayer, binarySearch } from './components/RecordingPlayer/index.js';
+export type { RecordingPlayerProps, RecordingFrame, AgentStep, RecordingMeta, FrameKind } from './components/RecordingPlayer/index.js';
+
+export { CmdKOverlay } from './components/CmdKOverlay/index.js';
+export type { CmdKOverlayProps, CmdKItem } from './components/CmdKOverlay/index.js';
+
+export { SandboxStateBar, DEFAULT_STATE_ORDER, DEFAULT_STATE_COLORS } from './components/SandboxStateBar/index.js';
+// 注:SandboxState 类型与 Badge 的同名 union 等价,由 Badge 统一公开;此处只导出 SandboxStateBar 独有的类型
+export type { SandboxStateBarProps, StateCountMap } from './components/SandboxStateBar/index.js';

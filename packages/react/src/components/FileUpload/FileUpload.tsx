@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState, createContext, useContext, useCallback } from 'react';
+import React, { forwardRef, useRef, useState, createContext, useContext, useCallback, useMemo } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils.js';
 import './FileUpload.css';
@@ -68,8 +68,11 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
       e.target.value = '';
     };
 
+    // memo context value 避免 FileUpload 重渲时下钻消费方全量重渲
+    const ctx = useMemo(() => ({ openPicker, accept, multiple }), [openPicker, accept, multiple]);
+
     return (
-      <FileUploadContext.Provider value={{ openPicker, accept, multiple }}>
+      <FileUploadContext.Provider value={ctx}>
         <div
           ref={ref}
           className={cn(fileUploadVariants({ size }), className)}
