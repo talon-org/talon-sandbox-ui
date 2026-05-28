@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import * as RadixToggleGroup from '@radix-ui/react-toggle-group';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils.js';
-import type { SegmentedGroupProps, SegmentedItemProps } from './Segmented.types.js';
+import type { SegmentedGroupProps, SegmentedItemProps, SegmentedOption } from './Segmented.types.js';
 import './Segmented.css';
 
 // ─── cva 变体定义 ─────────────────────────────────────────────────
@@ -79,3 +79,34 @@ SegmentedItem.displayName = 'SegmentedItem';
 
 // ─── 向后兼容别名（旧 Segmented options-based API → 新 SegmentedGroup）──
 export type { SegmentedGroupProps as SegmentedProps };
+
+/**
+ * @deprecated 老 options-based API,仅为兼容 console v0.2 调用保留。
+ * 新代码请用 `<SegmentedGroup>` + `<SegmentedItem>` 组合式 API。
+ */
+export interface SegmentedLegacyProps
+  extends Omit<SegmentedGroupProps, 'onValueChange' | 'children'> {
+  /** 选项数据数组(数据驱动写法) */
+  options: SegmentedOption[];
+  /** 值变化回调(老 prop 名,新代码用 onValueChange) */
+  onChange?: (value: string) => void;
+}
+
+/**
+ * @deprecated 使用 `<SegmentedGroup>` + `<SegmentedItem>`(shadcn 组合式)。
+ * 此别名只为 console v0.2 等老调用方保留,内部转发到新 API。
+ */
+export const Segmented = forwardRef<HTMLDivElement, SegmentedLegacyProps>(
+  function Segmented({ options, onChange, ...rest }, ref) {
+    return (
+      <SegmentedGroup ref={ref} onValueChange={onChange} {...rest}>
+        {options.map((o) => (
+          <SegmentedItem key={o.value} value={o.value} disabled={o.disabled}>
+            {o.label}
+          </SegmentedItem>
+        ))}
+      </SegmentedGroup>
+    );
+  },
+);
+Segmented.displayName = 'Segmented';
