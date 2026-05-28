@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -54,6 +55,8 @@ interface MultiSelectCtx {
   registerVisible: (id: string) => void;
   /** Item unmount/hidden 时调用 */
   unregisterVisible: (id: string) => void;
+  /** listbox(options 容器)DOM id,供 trigger 的 aria-controls 引用 */
+  listboxId: string;
 }
 
 const MultiSelectContext = createContext<MultiSelectCtx | null>(null);
@@ -104,6 +107,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
 
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState('');
+    const listboxId = useId();
 
     // 可见 item 集合(用于 MultiSelectEmpty 判断)
     const visibleIdsRef = useRef<Set<string>>(new Set());
@@ -125,6 +129,8 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
         if (!isControlled) setInternalValue(next);
         onValueChange?.(next);
       },
+      // setInternalValue 是 useState setter,React 保证稳定,无需进入 deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [selectedValues, isControlled, onValueChange],
     );
 
@@ -134,6 +140,8 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
         if (!isControlled) setInternalValue(next);
         onValueChange?.(next);
       },
+      // 同上:setInternalValue 稳定
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [selectedValues, isControlled, onValueChange],
     );
 
@@ -161,8 +169,11 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
         visibleCount,
         registerVisible,
         unregisterVisible,
+        listboxId,
       }),
-      [selectedValues, toggle, remove, open, query, mono, size, disabled, visibleCount, registerVisible, unregisterVisible],
+      // setOpen / setQuery 是 useState setter,React 保证稳定,无需进入 deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [selectedValues, toggle, remove, open, query, mono, size, disabled, visibleCount, registerVisible, unregisterVisible, listboxId],
     );
 
     return (
@@ -197,7 +208,7 @@ export interface MultiSelectTriggerProps {
  */
 export const MultiSelectTrigger = forwardRef<HTMLDivElement, MultiSelectTriggerProps>(
   function MultiSelectTrigger({ placeholder = '选择…', className }, ref) {
-    const { value, remove, open, setOpen, disabled, mono } = useMultiSelectContext();
+    const { value, remove, open, setOpen, disabled, mono, listboxId } = useMultiSelectContext();
 
     // Enter/Space 触发打开，Esc 由 Radix 处理
     const onTriggerKey = useCallback(
@@ -219,6 +230,7 @@ export const MultiSelectTrigger = forwardRef<HTMLDivElement, MultiSelectTriggerP
           tabIndex={disabled ? -1 : 0}
           aria-haspopup="listbox"
           aria-expanded={open}
+          aria-controls={listboxId}
           className={cn('tln-multiselect-trigger', className)}
           onKeyDown={onTriggerKey}
         >
@@ -312,7 +324,7 @@ export const MultiSelectContent = forwardRef<HTMLDivElement, MultiSelectContentP
     { placeholder = '过滤…', className, children, sideOffset = 4 },
     ref,
   ) {
-    const { open, query, setQuery, value } = useMultiSelectContext();
+    const { open, query, setQuery, value, listboxId } = useMultiSelectContext();
     const inputRef = useRef<HTMLInputElement>(null);
 
     // 打开时聚焦搜索框
@@ -341,8 +353,8 @@ export const MultiSelectContent = forwardRef<HTMLDivElement, MultiSelectContentP
               aria-label="搜索选项"
             />
           </div>
-          {/* 选项列表 */}
-          <div className="tln-multiselect-options">{children}</div>
+          {/* 选项列表(role=listbox + id 与 trigger 的 aria-controls 对齐) */}
+          <div id={listboxId} role="listbox" aria-multiselectable className="tln-multiselect-options">{children}</div>
           {/* 底部状态栏 */}
           <div className="tln-multiselect-foot">
             <span>{value.length} 已选</span>
@@ -404,6 +416,7 @@ export const MultiSelectItem = forwardRef<HTMLDivElement, MultiSelectItemProps>(
         ref={ref}
         role="option"
         aria-selected={isSelected}
+        aria-disabled={disabled || undefined}
         data-disabled={disabled ? 'true' : undefined}
         className={cn(
           'tln-multiselect-item',
@@ -411,9 +424,17 @@ export const MultiSelectItem = forwardRef<HTMLDivElement, MultiSelectItemProps>(
           isSelected && 'selected',
           className,
         )}
+        // listbox option：tabIndex=-1，父级 listbox 管理焦点顺序
+        tabIndex={-1}
         onMouseDown={(e) => {
           e.preventDefault();
           if (!disabled) toggle(value);
+        }}
+        onKeyDown={(e) => {
+          if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            toggle(value);
+          }
         }}
       >
         {/* 选中标记 */}

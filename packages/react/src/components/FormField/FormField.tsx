@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, createContext, useContext } from 'react';
+import React, { forwardRef, useId, createContext, useContext, useMemo } from 'react';
 import { cn } from '../../lib/utils.js';
 import { FormFieldContext, type FormFieldContextValue } from '../../primitives/FormFieldContext.js';
 import './FormField.css';
@@ -58,10 +58,15 @@ export const FormField = forwardRef<HTMLDivElement, FormFieldProps>(function For
   // error prop 为真时 hasError=true，控件通过 context 读取后自动加 aria-invalid
   const hasError = !!error;
 
-  const ctx: FormFieldInternalContext = { controlId, hasError, messageId, descriptionId };
+  // useMemo 稳定 context 对象，避免每次 render 构造新引用触发 Provider 下游重渲染
+  const outerCtx = useMemo(() => ({ controlId, hasError }), [controlId, hasError]);
+  const ctx = useMemo<FormFieldInternalContext>(
+    () => ({ controlId, hasError, messageId, descriptionId }),
+    [controlId, hasError, messageId, descriptionId],
+  );
 
   return (
-    <FormFieldContext.Provider value={{ controlId, hasError }}>
+    <FormFieldContext.Provider value={outerCtx}>
       <FormFieldInternalCtx.Provider value={ctx}>
         <div
           ref={ref}

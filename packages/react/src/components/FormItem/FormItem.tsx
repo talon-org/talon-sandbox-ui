@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { AnyFieldApi } from '@tanstack/react-form';
-import { FormField, FormLabel, FormDescription, FormMessage } from '../FormField/index.js';
+import { FormField, FormLabel, FormDescription, FormMessage } from '../FormField/FormField.js';
 
 /**
  * FormItem — TanStack Form 字段的样式化包装层。

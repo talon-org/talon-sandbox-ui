@@ -200,6 +200,8 @@ export const Tree = forwardRef<HTMLDivElement, TreeProps>(
         ref={ref}
         className={cn('tln-tree', className)}
         role="tree"
+        // tree 是复合 widget，tabIndex=0 让其进入 tab 序列，内部节点用 arrow key 导航
+        tabIndex={0}
         onKeyDown={handleTreeKeyDown}
       >
         {items.map((n) => (

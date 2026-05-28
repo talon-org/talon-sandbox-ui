@@ -1,4 +1,4 @@
-import { createContext, forwardRef, useContext } from 'react';
+import { createContext, forwardRef, useContext, useMemo } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils.js';
 import './InputGroup.css';
@@ -39,8 +39,10 @@ const InputGroupContext = createContext<InputGroupContextValue>({ size: 'md' });
  */
 export const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
   function InputGroup({ size = 'md', className, children, ...rest }, ref) {
+    // useMemo 稳定 context 对象，防止每次 render 创建新引用
+    const ctx = useMemo(() => ({ size }), [size]);
     return (
-      <InputGroupContext.Provider value={{ size }}>
+      <InputGroupContext.Provider value={ctx}>
         <div
           ref={ref}
           className={cn(inputGroupVariants({ size }), className)}

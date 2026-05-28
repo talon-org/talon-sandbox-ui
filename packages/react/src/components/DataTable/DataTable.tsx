@@ -1,6 +1,7 @@
 import {
   createContext,
   forwardRef,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -8,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { cn } from '../../lib/utils.js';
-import { Checkbox } from '../Checkbox/index.js';
+import { Checkbox } from '../Checkbox/Checkbox.js';
 import './DataTable.css';
 import type { ColumnDef, SortState } from './DataTable.types.js';
 
@@ -124,10 +125,11 @@ export function DataTable<T extends object>({
   const [internalSelection, setInternalSelection] = useState<string[]>([]);
   const isSelectionControlled = selection !== undefined;
   const resolvedSelection = isSelectionControlled ? selection : internalSelection;
-  const handleSelectionChange = (ids: string[]) => {
+  // 稳定 handleSelectionChange,避免 inline 函数让 ctx memo 失效
+  const handleSelectionChange = useCallback((ids: string[]) => {
     if (!isSelectionControlled) setInternalSelection(ids);
     onSelectionChange?.(ids);
-  };
+  }, [isSelectionControlled, onSelectionChange]);
 
   const ctx = useMemo<DataTableCtx<T>>(
     () => ({
@@ -144,8 +146,7 @@ export function DataTable<T extends object>({
       empty,
       onRowClick,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, columns, rowKey, selectable, resolvedSelection, onSelectionChange, sort, onSortChange, loading, loadingRows, empty, onRowClick],
+    [data, columns, rowKey, selectable, resolvedSelection, handleSelectionChange, sort, onSortChange, loading, loadingRows, empty, onRowClick],
   );
 
   return (
@@ -360,6 +361,7 @@ export const DataTableContent = forwardRef<HTMLDivElement, DataTableContentProps
         {columns.map((c) => {
           const isActive = sort?.key === c.key;
           return (
+            // eslint-disable-next-line react-doctor/no-static-element-interactions
             <div
               key={c.key}
               className={cn(
@@ -369,7 +371,16 @@ export const DataTableContent = forwardRef<HTMLDivElement, DataTableContentProps
                 isActive && 'active',
                 isActive && sort?.dir,
               )}
-              onClick={() => handleSort(c)}
+              // 可排序列：加 role/tabIndex/onClick/onKeyDown；不可排序列不挂任何交互事件
+              role={c.sort ? 'button' : undefined}
+              tabIndex={c.sort ? 0 : undefined}
+              onClick={c.sort ? () => handleSort(c) : undefined}
+              onKeyDown={c.sort ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleSort(c);
+                }
+              } : undefined}
               aria-sort={
                 isActive
                   ? sort?.dir === 'asc'
@@ -415,15 +426,30 @@ export const DataTableContent = forwardRef<HTMLDivElement, DataTableContentProps
         const key = getRowKey(row, rowKey);
         const selected = selection.includes(key);
         return (
+          // eslint-disable-next-line react-doctor/no-static-element-interactions
           <div
             key={key}
             className={cn('tln-dt-row', selected && 'selected')}
             style={{ ['--cols' as string]: gridCols }}
-            onClick={() => onRowClick?.(row)}
+            // 可点击行：加 role/tabIndex/onClick/onKeyDown；不可点击行不挂任何交互属性
+            role={onRowClick ? 'button' : undefined}
+            tabIndex={onRowClick ? 0 : undefined}
+            onClick={onRowClick ? () => onRowClick(row) : undefined}
+            onKeyDown={onRowClick ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onRowClick(row);
+              }
+            } : undefined}
           >
             {selectable && (
-              // 阻止勾选单击冒泡到行
-              <div className="cell align-center" onClick={(e) => e.stopPropagation()}>
+              // 阻止勾选单击冒泡到行；role="presentation" 表示此 div 仅作布局容器
+              <div
+                className="cell align-center"
+                role="presentation"
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => e.stopPropagation()}
+              >
                 <Checkbox
                   size="sm"
                   checked={selected}
@@ -433,10 +459,14 @@ export const DataTableContent = forwardRef<HTMLDivElement, DataTableContentProps
               </div>
             )}
             {columns.map((c) => (
+              // eslint-disable-next-line react-doctor/no-static-element-interactions
               <div
                 key={c.key}
                 className={cn('cell', c.align && `align-${c.align}`, c.truncate && 'truncate')}
-                onClick={(e) => c.stopClick && e.stopPropagation()}
+                // role="presentation" 仅作布局容器，stopClick 仅阻止行级 onClick 冒泡
+                role={c.stopClick ? 'presentation' : undefined}
+                onClick={c.stopClick ? (e) => e.stopPropagation() : undefined}
+                onKeyDown={c.stopClick ? (e) => e.stopPropagation() : undefined}
               >
                 {c.render ? c.render(row) : (row as Record<string, ReactNode>)[c.key]}
               </div>

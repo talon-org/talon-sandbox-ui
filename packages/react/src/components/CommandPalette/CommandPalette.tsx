@@ -122,9 +122,11 @@ export const Command = forwardRef<HTMLDivElement, CommandProps>(
 
     return (
       <CommandContext.Provider value={ctxValue}>
+        {/* role="presentation" + aria-label：外层容器仅作键盘事件捕获器，真实交互语义在内部 input/option 上 */}
         <div
           ref={ref}
           className={cn('tln-cmdk-root', className)}
+          role="presentation"
           onKeyDown={handleKeyDown}
           {...props}
         >
@@ -275,8 +277,9 @@ export const CommandGroup = forwardRef<HTMLDivElement, CommandGroupProps>(
   function CommandGroup({ className, heading, children, ...props }, ref) {
     return (
       <div ref={ref} className={cn('tln-cmdk-group', className)} {...props}>
+        {/* role="presentation" 是冗余的，直接删除 */}
         {heading && (
-          <div className="tln-cmdk-section" role="presentation">
+          <div className="tln-cmdk-section">
             {heading}
           </div>
         )}
@@ -337,10 +340,18 @@ export const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
         role="option"
         aria-selected={isActive}
         aria-disabled={disabled || undefined}
+        // listbox option：tabIndex=-1，由父级 arrow key 管理焦点；Enter/Space 激活
+        tabIndex={-1}
         onMouseEnter={() => !disabled && setActiveId(id)}
         onClick={() => {
           if (!disabled) {
             // 通过 ref.current() 调用，始终是最新回调
+            onSelectRef.current?.();
+          }
+        }}
+        onKeyDown={(e) => {
+          if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
             onSelectRef.current?.();
           }
         }}
@@ -354,12 +365,13 @@ export const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
 CommandItem.displayName = 'CommandItem';
 
 // ─── CommandSeparator ─────────────────────────────────────────────────────────
-export interface CommandSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface CommandSeparatorProps extends React.HTMLAttributes<HTMLHRElement> {}
 
-export const CommandSeparator = forwardRef<HTMLDivElement, CommandSeparatorProps>(
+export const CommandSeparator = forwardRef<HTMLHRElement, CommandSeparatorProps>(
   function CommandSeparator({ className, ...props }, ref) {
+    /* 使用原生 <hr> 取代 <div role="separator"> */
     return (
-      <div ref={ref} className={cn('tln-cmdk-sep', className)} role="separator" {...props} />
+      <hr ref={ref} className={cn('tln-cmdk-sep', className)} {...props} />
     );
   }
 );

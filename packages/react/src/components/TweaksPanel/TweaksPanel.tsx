@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cx } from '../../primitives/clsx.js';
-import { SegmentedGroup, SegmentedItem } from '../Segmented/index.js';
+import { SegmentedGroup, SegmentedItem } from '../Segmented/Segmented.js';
 import type { TweaksPanelProps } from './TweaksPanel.types.js';
 
 const THEME_SWATCHES = [

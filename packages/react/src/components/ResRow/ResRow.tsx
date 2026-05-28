@@ -1,7 +1,7 @@
 import './ResRow.css';
 import { forwardRef } from 'react';
 import { cn } from '../../lib/utils.js';
-import { ProgressBar } from '../ProgressBar/index.js';
+import { ProgressBar } from '../ProgressBar/ProgressBar.js';
 
 // ─── ResRow ───────────────────────────────────────────────────────────────
 // 资源用量行：label + progress bar + used / max 数值

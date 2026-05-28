@@ -64,13 +64,19 @@ export interface AlertTitleProps extends React.HTMLAttributes<HTMLHeadingElement
  * AlertTitle — 提示标题（h5 元素），shadcn 标准子组件。
  */
 export const AlertTitle = forwardRef<HTMLHeadingElement, AlertTitleProps>(
-  ({ className, ...props }, ref) => (
-    <h5
-      ref={ref}
-      className={cn('tln-alert-title', className)}
-      {...props}
-    />
-  ),
+  ({ className, children, ...props }, ref) => {
+    /* 无 children 时不渲染空标题（heading-has-content 规则要求） */
+    if (!children) return null;
+    return (
+      <h5
+        ref={ref}
+        className={cn('tln-alert-title', className)}
+        {...props}
+      >
+        {children}
+      </h5>
+    );
+  },
 );
 AlertTitle.displayName = 'AlertTitle';
 

@@ -18,16 +18,17 @@ import './Timeline.css';
  */
 
 /* ── Timeline 根容器 ── */
-export interface TimelineProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TimelineProps extends React.HTMLAttributes<HTMLUListElement> {
   className?: string;
 }
 
-export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
+export const Timeline = forwardRef<HTMLUListElement, TimelineProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn('tln-timeline', className)} role="list" {...props}>
+      /* 使用原生 <ul> 取代 <div role="list"> */
+      <ul ref={ref} className={cn('tln-timeline', className)} {...props}>
         {children}
-      </div>
+      </ul>
     );
   },
 );
@@ -52,22 +53,22 @@ export const timelineItemVariants = cva('tln-timeline-item', {
 export type TimelineItemKind = 'ok' | 'warn' | 'err' | 'info' | 'acc' | 'default';
 
 export interface TimelineItemProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends React.HTMLAttributes<HTMLLIElement>,
     VariantProps<typeof timelineItemVariants> {
   className?: string;
 }
 
-export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
+export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(
   ({ kind, className, children, ...props }, ref) => {
     return (
-      <div
+      /* 使用原生 <li> 取代 <div role="listitem"> */
+      <li
         ref={ref}
         className={cn(timelineItemVariants({ kind }), className)}
-        role="listitem"
         {...props}
       >
         {children}
-      </div>
+      </li>
     );
   },
 );

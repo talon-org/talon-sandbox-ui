@@ -1,4 +1,4 @@
-import { forwardRef, createContext, useContext, Children, isValidElement } from 'react';
+import { forwardRef, createContext, useContext, Children, isValidElement, useMemo } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils.js';
 import './Stepper.css';
@@ -68,7 +68,7 @@ export interface StepperProps extends VariantProps<typeof stepperVariants> {
   className?: string;
 }
 
-export const Stepper = forwardRef<HTMLDivElement, StepperProps>(
+export const Stepper = forwardRef<HTMLUListElement, StepperProps>(
   ({ current = 0, vertical, orientation, size, children, className, ...props }, ref) => {
     // 收集所有 StepperStep 子元素，按渲染顺序分配索引
     const stepIds: symbol[] = [];
@@ -89,9 +89,12 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       if (isValidElement(child)) {
         // 只给 StepperStep 注入索引
         const idx = stepIndex++;
+        // 优先使用 React.Children.toArray 派生的 key（字符串形如 ".0"），
+        // 降级到 idx（步骤顺序语义上不变，不重排）
+        const stableKey = child.key ?? `step-${idx}`;
         return (
           <StepperStepWithIndex
-            key={idx}
+            key={stableKey}
             index={idx}
             current={current}
             totalSteps={totalSteps}
@@ -104,15 +107,15 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(
     });
 
     return (
-      <div
+      /* 使用原生 <ul> 取代 <div role="list"> */
+      <ul
         ref={ref}
         className={cn(stepperVariants({ orientation: resolvedOrientation as 'horizontal' | 'vertical', size }), className)}
-        role="list"
         aria-label="步骤进度"
         {...props}
       >
         {enrichedChildren}
-      </div>
+      </ul>
     );
   },
 );
@@ -132,12 +135,14 @@ function StepperStepWithIndex({ index, current, totalSteps, isLast, stepProps }:
   const state: 'done' | 'active' | '' =
     index < current ? 'done' : index === current ? 'active' : '';
 
+  // useMemo 稳定 StepItemContext 值，防止每次渲染创建新对象
+  const stepItemCtx = useMemo<StepItemContextValue>(() => ({ index, state }), [index, state]);
+
   return (
-    <StepItemContext.Provider value={{ index, state }}>
-      {/* 步骤项 */}
-      <div
+    <StepItemContext.Provider value={stepItemCtx}>
+      {/* 步骤项：使用原生 <li> 取代 <div role="listitem"> */}
+      <li
         className={cn('tln-stepper-step step-item', state)}
-        role="listitem"
         aria-current={index === current ? 'step' : undefined}
       >
         {/* 序号/勾选 bullet */}
@@ -166,7 +171,7 @@ function StepperStepWithIndex({ index, current, totalSteps, isLast, stepProps }:
         <span className="label">
           {stepProps['children'] as React.ReactNode}
         </span>
-      </div>
+      </li>
 
       {/* 步骤间连接线（最后一项后不渲染） */}
       {!isLast && (
