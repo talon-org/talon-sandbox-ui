@@ -3,10 +3,10 @@
 // Categories mirror components.html sections:
 //   Action / Form / Data / Navigation / Feedback / Surfaces / Overlays / Layout
 //
-// v0.3: PageHeader / FilterBar / LoginLayout / ResRow 已按新原型重新实现，
-// 重新加入公开导出。StatCard / TerminalChrome / SandboxStateBar /
-// TweaksPanel / RecordingPlayer / MemberRow / CmdKOverlay /
-// FormSection / FormItem / Table 仍未恢复（纯业务壳，由 app 自行组合）。
+// v0.3: PageHeader / FilterBar / LoginLayout / ResRow / FormSection /
+// FormGrid 已按新原型重新实现，重新加入公开导出。StatCard / TerminalChrome /
+// SandboxStateBar / TweaksPanel / RecordingPlayer / MemberRow / CmdKOverlay /
+// FormItem / Table 仍未恢复（纯业务壳，由 app 自行组合）。
 
 // ── Action ──────────────────────────────────────────────────────────
 export { Button, buttonVariants } from './components/Button/index.js';
@@ -24,6 +24,9 @@ export {
   FormMessage,
 } from './components/FormField/index.js';
 export type { FormFieldProps, FormLabelProps } from './components/FormField/index.js';
+
+export { FormSection, FormGrid } from './components/FormSection/index.js';
+export type { FormSectionProps, FormGridProps } from './components/FormSection/index.js';
 
 export { useFormField } from './primitives/FormFieldContext.js';
 export type { FormFieldContextValue } from './primitives/FormFieldContext.js';
@@ -163,8 +166,8 @@ export type {
   AvatarStatusKind,
 } from './components/Avatar/index.js';
 
-export { Kbd } from './components/Kbd/index.js';
-export type { KbdProps, KbdSize } from './components/Kbd/index.js';
+export { Kbd, Shortcut } from './components/Kbd/index.js';
+export type { KbdProps, KbdSize, ShortcutProps } from './components/Kbd/index.js';
 
 export { Tree } from './components/Tree/index.js';
 export type { TreeProps, TreeNode } from './components/Tree/index.js';

@@ -13,6 +13,17 @@
   align-items: baseline;
 }
 
+/* Control row — guaranteed minimum height matches the standard form
+ * control (28px). This keeps fields with short controls (checkbox,
+ * switch) aligned to the same baseline as fields with full-height
+ * controls (input, select), so that descriptions below the controls
+ * line up across columns in a FormGrid. */
+.tln-field-control {
+  min-height: var(--ctrl-h-md);
+  display: flex;
+  align-items: center;
+}
+
 .tln-field-hint { font-size: 11.5px; color: var(--fg-3); }
 
 .tln-field-hint.error { color: var(--err); }
@@ -36,5 +47,7 @@
 
 .tln-field-horizontal .tln-field-control {
   display: flex; flex-direction: column; gap: 6px;
+  align-items: stretch;
+  min-height: 0;
   min-width: 0;
 }

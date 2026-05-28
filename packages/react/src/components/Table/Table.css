@@ -1,0 +1,93 @@
+/* Talon · Table — grid-based list rows.
+ *
+ * Why grid (not <table>):
+ *   Every row in the product is a grid with mixed alignment (mono ids,
+ *   text labels, right-aligned numeric, trailing action column). A CSS
+ *   grid lets callers declare `grid-template-columns` once and have
+ *   header + rows share the layout via a sibling rule.
+ *
+ * Container vs content roles:
+ *   .tln-tbl is the *outer* container — it draws the border + radius.
+ *   .tln-tbl-head / .tln-tbl-row are the *rows themselves*, with the
+ *   grid declared inline (or via a caller-defined modifier class such
+ *   as `.sbx-row`).
+ *
+ * Where the dashed border / actionable container belongs: NOT here.
+ * Tables already supply their own boundary; if a table is nested in a
+ * Card, the host should set `.tln-tbl--bare` to suppress the border so
+ * the two visual containers don't stack.
+ */
+
+.tln-tbl {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  overflow: hidden;
+  background: var(--bg-1);
+}
+
+/* Inside a Card / Drawer / any wrapper that already provides the
+ * boundary, opt out of the table's own border so callers no longer
+ * need ad-hoc inline `style={{ border: 0, borderRadius: 0 }}` patches. */
+.tln-tbl--bare {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.tln-tbl-head,
+.tln-tbl-row {
+  display: grid;
+  align-items: center;
+  gap: 0;
+  padding: 0 16px;
+  min-height: 40px;
+}
+
+.tln-tbl-head {
+  background: var(--bg-2);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-3);
+  height: 36px;
+  min-height: 36px;
+}
+
+.tln-tbl-row {
+  background: var(--bg-1);
+  border-top: 1px solid var(--line-soft);
+  cursor: pointer;
+  transition: background var(--dur-fast, 0.12s);
+}
+
+.tln-tbl-row:hover { background: var(--bg-2); }
+
+/* `no-click` is emitted by <Table> when no onRowClick handler is supplied
+ * — opt out of the affordance so static rows don't lie about being
+ * interactive. */
+.tln-tbl-row.no-click {
+  cursor: default;
+}
+.tln-tbl-row.no-click:hover {
+  background: var(--bg-1);
+}
+
+/* Useful row content modifiers used by multiple callers. Keep them in
+ * the library so a row's mono cells / trailing action cluster look the
+ * same everywhere instead of each page redeclaring them. */
+.tln-tbl-row .mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tln-tbl-row .actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}

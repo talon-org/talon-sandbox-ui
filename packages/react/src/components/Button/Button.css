@@ -27,8 +27,28 @@
 
 .tln-btn:active { transform: translateY(0.5px); }
 
+/* Disabled — preserves variant identity (primary stays primary-ish, danger
+ * stays red-ish) via opacity, rather than collapsing every button into a
+ * gray outline. The user needs to see which action is the affirmative
+ * one even when it's currently unavailable. */
 .tln-btn[disabled], .tln-btn[aria-disabled='true'] {
-  color: var(--fg-3); cursor: not-allowed; background: var(--bg-1); border-color: var(--line-soft);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.tln-btn[disabled]:hover, .tln-btn[aria-disabled='true']:hover {
+  /* Suppress hover effect when disabled — keep the same background/border
+   * as the resting state so users don't get visual feedback for clicks
+   * that won't fire. */
+  background: inherit;
+  border-color: inherit;
+}
+/* Default (no variant) disabled — explicitly reset to bg-1 so opacity 0.5
+ * applies on a known base rather than transparent. */
+.tln-btn:not(.tln-btn-primary):not(.tln-btn-ghost):not(.tln-btn-danger)[disabled],
+.tln-btn:not(.tln-btn-primary):not(.tln-btn-ghost):not(.tln-btn-danger)[aria-disabled='true'] {
+  background: var(--bg-1);
+  border-color: var(--line-soft);
+  color: var(--fg-3);
 }
 
 .tln-btn-primary {

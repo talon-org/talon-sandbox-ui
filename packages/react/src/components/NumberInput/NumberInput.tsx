@@ -33,8 +33,10 @@ export const numberInputStepperVariants = cva('tln-number-steps', {
 });
 
 // ─── Context（传递 value/set/step/min/max/disabled 给子组件）────────────
+// current 允许 undefined：受控且 value=undefined 时表示"空"，让 Field 渲染
+// 占位符而不是把 0 显示出来。Stepper 操作时 undefined 视作 0。
 interface NumberInputCtx {
-  current: number;
+  current: number | undefined;
   set: (v: number) => void;
   step: number;
   min?: number;
@@ -139,9 +141,17 @@ export const NumberInput = forwardRef<HTMLDivElement, NumberInputProps>(function
   },
   ref,
 ) {
-  const isControlled = controlledValue !== undefined;
-  const [internalValue, setInternalValue] = useState<number>(defaultValue ?? 0);
-  const current = isControlled ? (controlledValue ?? 0) : internalValue;
+  // Controlled when either `value` is a number or an `onValueChange` handler
+  // is provided. We can't use `value !== undefined` alone because callers
+  // may legitimately pass `value={undefined}` to mean "empty" — and they
+  // still want it controlled (otherwise the field would diverge from React
+  // state once stepper buttons fire).
+  const isControlled = typeof controlledValue === 'number' || onValueChange !== undefined;
+  // Track "empty" state when value is undefined so the Field renders its
+  // placeholder. Uncontrolled mode also starts undefined when no defaultValue
+  // is given, so placeholder behavior is the default everywhere.
+  const [internalValue, setInternalValue] = useState<number | undefined>(defaultValue);
+  const current: number | undefined = isControlled ? controlledValue : internalValue;
 
   const clamp = useCallback((v: number): number => {
     let r = v;
@@ -179,31 +189,42 @@ export const NumberInputField = forwardRef<
   const { current, set, step, disabled, min, max } = useNumberInput();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const n = Number(e.target.value.replace(/[^\d\-.]/g, ''));
+    const raw = e.target.value.replace(/[^\d\-.]/g, '');
+    if (raw === '' || raw === '-') {
+      // Allow clearing the input — propagate as 0 if min ≥ 0, otherwise
+      // the empty string is just a transient editing state. Callers that
+      // want "empty" should pass `undefined` to the value prop on next
+      // render; we don't fire onValueChange(undefined) since the public
+      // contract is number.
+      return;
+    }
+    const n = Number(raw);
     if (!isNaN(n)) set(n);
   };
 
+  // Treat undefined as 0 for arithmetic so arrow keys still work when empty
+  const base = current ?? 0;
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case 'ArrowUp':
         // 向上增加一个步长
         e.preventDefault();
-        set(current + step);
+        set(base + step);
         break;
       case 'ArrowDown':
         // 向下减少一个步长
         e.preventDefault();
-        set(current - step);
+        set(base - step);
         break;
       case 'PageUp':
         // 快速增加 10 倍步长
         e.preventDefault();
-        set(current + step * 10);
+        set(base + step * 10);
         break;
       case 'PageDown':
         // 快速减少 10 倍步长
         e.preventDefault();
-        set(current - step * 10);
+        set(base - step * 10);
         break;
       case 'Home':
         // 跳到最小值（仅在 min 已定义时生效）
@@ -231,7 +252,10 @@ export const NumberInputField = forwardRef<
       aria-valuemin={min}
       aria-valuemax={max}
       className={cn('tln-number-field', className)}
-      value={current}
+      // Render '' (not 0) when current is undefined so the placeholder
+      // shows. Callers that want "no value yet" pass `value={undefined}`
+      // (e.g. `useState<number | undefined>(undefined)`).
+      value={current ?? ''}
       disabled={disabled}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
@@ -273,17 +297,20 @@ export const NumberInputStepper = forwardRef<HTMLDivElement, NumberInputStepperP
   function NumberInputStepper({ layout = 'stack', className }, ref) {
     const { current, set, step, disabled, size } = useNumberInput();
     const sz = size === 'sm' ? 7 : size === 'lg' ? 11 : 9;
+    // Use 0 as the arithmetic base when current is empty so the first
+    // click on +/- still produces a sensible value.
+    const base = current ?? 0;
 
     if (layout === 'inline') {
       return (
         <>
           <button type="button" className="step" aria-label="减少" disabled={disabled}
-            onClick={() => set(current - step)}>
+            onClick={() => set(base - step)}>
             <MinusIcon sz={sz} />
           </button>
           {/* inline 减号放在左侧，加号放右侧，由父容器负责位置 */}
           <button type="button" className="step" aria-label="增加" disabled={disabled}
-            onClick={() => set(current + step)}>
+            onClick={() => set(base + step)}>
             <PlusIcon sz={sz} />
           </button>
         </>
@@ -296,11 +323,11 @@ export const NumberInputStepper = forwardRef<HTMLDivElement, NumberInputStepperP
         className={cn('tln-number-steps', className)}
       >
         <button type="button" className="step" aria-label="增加" disabled={disabled}
-          onClick={() => set(current + step)}>
+          onClick={() => set(base + step)}>
           <UpIcon sz={sz} />
         </button>
         <button type="button" className="step" aria-label="减少" disabled={disabled}
-          onClick={() => set(current - step)}>
+          onClick={() => set(base - step)}>
           <DownIcon sz={sz} />
         </button>
       </div>

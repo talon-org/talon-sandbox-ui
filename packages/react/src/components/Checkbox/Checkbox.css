@@ -36,8 +36,10 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  transition: background var(--dur-fast) var(--ease-out),
-              border-color var(--dur-fast) var(--ease-out);
+  /* No state transition — checked is a binary commitment, not a journey.
+   * Animating bg/border on toggle reads as a "jump" because the focus
+   * ring and color change land simultaneously. Instant feedback matches
+   * the directness users expect from a checkbox. */
   color: transparent;
   /* Radix 渲染 <button>，重置 button 默认样式 */
   padding: 0;

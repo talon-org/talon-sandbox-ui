@@ -1,34 +1,61 @@
 /* ─────── Kbd ────────────────────────────────────────────────
-   来源：ui-forms.jsx KBD 段（约 773-791 行）
-   Prototype class: .tln-kbd + .sm / .lg
+   单键 keycap chip。
+   设计要点:
+   - mono 字体, 微字号但加粗 (weight 500), 比周围正文高对比
+   - 1px 全边 + 1px bottom shadow 营造"按键凸起"感, 不用 2px border 避免顶下边变粗
+   - bg-2 浅灰填充, fg-2 中灰文字 — 安静, 不抢戏
+   - 三档尺寸: sm (10px / 16px) / md (11px / 20px) / lg (13px / 24px)
    ─────────────────────────────────────────────────────────── */
 
-/*
- * 字体稍大于周围 mono caps，让字形对齐 x 高度。
- * border-bottom-width: 2px 营造立体键帽感。
- */
 .tln-kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 11px;
+  font-weight: 500;
   line-height: 1;
-  padding: 2px 6px;
-  height: 18px;
-  min-width: 18px;
+  padding: 0 6px;
+  height: 20px;
+  min-width: 20px;
   background: var(--bg-2);
   border: 1px solid var(--line);
-  border-bottom-width: 2px;
-  border-radius: 4px;
+  border-radius: var(--r-1, 4px);
+  box-shadow: 0 1px 0 var(--line);
   color: var(--fg-2);
-  font-weight: 500;
+  user-select: none;
 }
 
-/* 小号 — 新命名 + 旧别名 */
+/* 小号 — menu / cmd palette / tooltip 内联 */
 .tln-kbd-sm,
-.tln-kbd.sm { font-size: 10px;   height: 15px; min-width: 15px; padding: 1px 4px; }
+.tln-kbd.sm {
+  font-size: 10px;
+  height: 16px;
+  min-width: 16px;
+  padding: 0 4px;
+}
 
-/* 大号 — 新命名 + 旧别名 */
+/* 大号 — onboarding / hint card / cheatsheet */
 .tln-kbd-lg,
-.tln-kbd.lg { font-size: 13.5px; height: 22px; min-width: 22px; padding: 3px 8px; }
+.tln-kbd.lg {
+  font-size: 13px;
+  height: 24px;
+  min-width: 24px;
+  padding: 0 8px;
+}
+
+/* ─────── Shortcut ──────────────────────────────────────────
+   多键组合 / 顺序按键的容器,内部由 Kbd 渲染单键。
+   ─────────────────────────────────────────────────────────── */
+.tln-shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+.tln-shortcut-sep {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-3);
+  user-select: none;
+}

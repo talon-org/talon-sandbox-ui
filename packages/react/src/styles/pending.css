@@ -909,31 +909,10 @@
 
 .tln-stat-card-grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
 
-.tln-res-row {
-  display: grid;
-  grid-template-columns: 56px 1fr 100px;
-  gap: 10px;
-  align-items: center;
-}
-
-.tln-res-row__label {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  color: var(--fg-2);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.tln-res-row__value {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  color: var(--fg-2);
-  display: flex; align-items: center; gap: 4px;
-}
-
-.tln-res-row__sep { color: var(--fg-4); }
-
-.tln-res-row__unit { color: var(--fg-3); margin-left: 2px; }
+/* ResRow base rules — see components/ResRow/ResRow.css for the canonical
+ * definition. The old grid-based pending.css block has been removed because
+ * it left an `align-items: center` value that bled into the new flex-column
+ * layout and centered every child instead of stretching it. */
 
 .tln-term-chrome {
   display: flex; flex-direction: column;
@@ -1519,23 +1498,9 @@
 
 .tln-stat-card--lg .tln-stat-card__label { font-size: 11px; }
 
-.tln-res-row--sm {
-  grid-template-columns: 44px 1fr 88px;
-  gap: 7px;
-}
-
-.tln-res-row--sm .tln-res-row__label { font-size: 9.5px; }
-
-.tln-res-row--sm .tln-res-row__value { font-size: 10.5px; }
-
-.tln-res-row--lg {
-  grid-template-columns: 72px 1fr 120px;
-  gap: 14px;
-}
-
-.tln-res-row--lg .tln-res-row__label { font-size: 12px; }
-
-.tln-res-row--lg .tln-res-row__value { font-size: 13px; }
+/* sm/lg modifiers for the old grid layout were removed alongside the base
+ * grid block above. The current flex-column ResRow only exposes the default
+ * size; size variants can be reintroduced through ResRow.css if needed. */
 
 .tln-member-row:hover { background: var(--bg-hover); border-radius: var(--r-2); }
 

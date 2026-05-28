@@ -104,14 +104,13 @@
 }
 
 /* CommandShortcut：键位提示 */
+/* CommandShortcut — 仅负责右对齐布局容器,边框/背景由内部 Kbd/Shortcut 自己渲染,
+ * 避免视觉双重边框(早期版本曾在此处加 border,与新版 Kbd 重叠). */
 .tln-cmdk-shortcut {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  color: var(--fg-3);
-  padding: 1px 5px;
-  border: 1px solid var(--line);
-  border-radius: 3px;
   margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* 旧别名：.kbd 类兼容历史用法 */

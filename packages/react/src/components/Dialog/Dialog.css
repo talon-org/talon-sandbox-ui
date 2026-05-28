@@ -25,21 +25,25 @@
   z-index: calc(var(--z-dialog) + 1);
 }
 
+/* Head padding kept compact (14px top / 8px bottom) so the title sits
+ * close to the content instead of floating in a tall ribbon. The earlier
+ * 18/10 padding read as a "header band" — fine for OS dialogs with toolbars,
+ * too much weight for a single-decision app modal. */
 .tln-dialog-head {
-  padding: 18px 20px 10px;
+  padding: 14px 20px 8px;
   display: flex; align-items: center; justify-content: space-between;
 }
 
-.tln-dialog-title { font-size: var(--text-lg); color: var(--fg-0); font-weight: 600; letter-spacing: -0.015em; }
+.tln-dialog-title { font-size: var(--text-md); color: var(--fg-0); font-weight: 600; letter-spacing: -0.015em; line-height: 1.3; }
 
 /* DialogDescription：视觉辅助描述，字号偏小 */
-.tln-dialog-desc { padding: 0 20px 8px; color: var(--fg-3); font-size: var(--text-sm); }
+.tln-dialog-desc { padding: 0 20px 8px; color: var(--fg-3); font-size: var(--text-sm); line-height: 1.55; }
 
 .tln-dialog-body { padding: 0 20px 16px; color: var(--fg-2); font-size: var(--text-base); line-height: 1.6; }
 
 .tln-dialog-foot {
   display: flex; justify-content: flex-end; gap: 8px;
-  padding: 12px 20px 16px;
+  padding: 12px 20px 14px;
   border-top: 1px solid var(--line-soft);
 }
 

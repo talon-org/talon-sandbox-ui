@@ -1,3 +1,4 @@
+import './Table.css';
 import { cx } from '../../primitives/clsx.js';
 import type { TableProps } from './Table.types.js';
 
