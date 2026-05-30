@@ -35,12 +35,32 @@
   cursor: not-allowed;
   opacity: 0.5;
 }
-.tln-btn[disabled]:hover, .tln-btn[aria-disabled='true']:hover {
-  /* Suppress hover effect when disabled — keep the same background/border
-   * as the resting state so users don't get visual feedback for clicks
-   * that won't fire. */
-  background: inherit;
-  border-color: inherit;
+/* Suppress hover effect when disabled — each variant keeps its OWN resting
+ * background/border, not the parent's. Earlier this used `inherit`, which
+ * pulls the *parent* element's background (e.g. a white card/form), turning a
+ * disabled primary button white on hover. Pin each variant to its resting
+ * color instead so disabled hover is a true no-op. */
+.tln-btn-primary[disabled]:hover, .tln-btn-primary[aria-disabled='true']:hover {
+  background: var(--acc);
+  border-color: var(--acc);
+  color: var(--acc-fg);
+}
+.tln-btn-ghost[disabled]:hover, .tln-btn-ghost[aria-disabled='true']:hover {
+  background: transparent;
+  border-color: transparent;
+  color: var(--fg-2);
+}
+.tln-btn-danger[disabled]:hover, .tln-btn-danger[aria-disabled='true']:hover {
+  background: transparent;
+  border-color: var(--err);
+  color: var(--err);
+}
+/* Default (no variant) disabled hover — keep the explicit disabled base below. */
+.tln-btn:not(.tln-btn-primary):not(.tln-btn-ghost):not(.tln-btn-danger)[disabled]:hover,
+.tln-btn:not(.tln-btn-primary):not(.tln-btn-ghost):not(.tln-btn-danger)[aria-disabled='true']:hover {
+  background: var(--bg-1);
+  border-color: var(--line-soft);
+  color: var(--fg-3);
 }
 /* Default (no variant) disabled — explicitly reset to bg-1 so opacity 0.5
  * applies on a known base rather than transparent. */
